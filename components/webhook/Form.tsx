@@ -84,7 +84,7 @@ const Form = ({
             color="primary"
             loading={formik.isSubmitting}
             active={formik.dirty}
-            size='md'
+            size="md"
           >
             {t('create-webhook')}
           </Button>
@@ -95,7 +95,7 @@ const Form = ({
               setVisible(!visible);
               formik.resetForm();
             }}
-            size='md'
+            size="md"
           >
             {t('close')}
           </Button>

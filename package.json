@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "docker": "./scripts/dev.sh",
     "dev": "next dev --port 4002",
     "build": "prisma generate && prisma db push && next build",
     "start": "next start --port 4002",
@@ -18,7 +19,6 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage --env=jsdom",
     "postinstall": "npx prisma generate"
-
   },
   "dependencies": {
     "@boxyhq/saml-jackson": "1.11.2",

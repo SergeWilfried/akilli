@@ -72,7 +72,7 @@ const ForgotPassword: NextPageWithLayout<
               loading={formik.isSubmitting}
               active={formik.dirty}
               fullWidth
-              size='md'
+              size="md"
             >
               {t('email-password-reset-link')}
             </Button>

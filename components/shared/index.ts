@@ -6,6 +6,8 @@ export { default as Card } from './Card';
 export { default as LetterAvatar } from './LetterAvatar';
 export { default as EmptyState } from './EmptyState';
 export { default as InputWithLabel } from './InputWithLabel';
+export { default as SelectWithLabel } from './SelectWithLabel';
+
 export { default as Loading } from './Loading';
 export { default as Error } from './Error';
 export { default as WithLoadingAndError } from './WithLoadingAndError';
