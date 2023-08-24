@@ -58,6 +58,8 @@ model User {
   id            String       @id @default(uuid())
   name          String
   email         String       @unique
+  mobileNumber  String       @unique
+  country       String
   emailVerified DateTime?
   password      String?
   image         String?
@@ -68,6 +70,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   invitations   Invitation[]
+  Language      Language[]
 }
 
 model Team {
@@ -82,6 +85,7 @@ model Team {
   members     TeamMember[]
   invitations Invitation[]
   apiKeys     ApiKey[]
+  Language    Language[]
 }
 
 model TeamMember {
@@ -114,6 +118,22 @@ model Invitation {
   team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
 
   @@unique([teamId, email])
+}
+
+model Language {
+  id          String   @id @default(uuid())
+  teamId      String
+  name        String
+  description String
+  createdBy   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+  spokenIn    String[]
+
+  team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+
+  @@unique([teamId, name])
 }
 
 model PasswordReset {
