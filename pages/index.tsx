@@ -17,7 +17,7 @@ const Home: NextPageWithLayout = () => {
       <div className="navbar bg-base-100">
         <div className="flex-1">
           <Link href="/" className="btn-ghost btn text-xl normal-case">
-            BoxyHQ
+            AkilliAI
           </Link>
         </div>
         <div className="flex-none">

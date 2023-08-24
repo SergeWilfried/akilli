@@ -4,14 +4,14 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
-  // directUrl         = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
-  // shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING") // used for migrations
+  url      = env("POSTGRES_PRISMA_URL")
+  directUrl         = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+  shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING") // used for migrations
 }
 
 enum Role {
   ADMIN
-  OWNER
+  TRANSCRIPTOR
   MEMBER
 }
 
@@ -58,19 +58,20 @@ model User {
   id            String       @id @default(uuid())
   name          String
   email         String       @unique
-  mobileNumber  String       @unique
-  country       String
   emailVerified DateTime?
   password      String?
+  mobileNumber  String       @unique
+  country       String
+  gender        String?
+  age           String?
   image         String?
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @default(now())
-  addresses     Address[]
-  teamMembers   TeamMember[]
+  translators   Translator[]
   accounts      Account[]
   sessions      Session[]
   invitations   Invitation[]
-  Language      Language[]
+  languages     Language[]
 }
 
 model Team {
@@ -82,22 +83,27 @@ model Team {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now())
 
-  members     TeamMember[]
+  languages   Language[]
+  translators Translator[]
+  
   invitations Invitation[]
   apiKeys     ApiKey[]
-  Language    Language[]
 }
 
-model TeamMember {
-  id        String   @id @default(uuid())
-  teamId    String
-  userId    String
+model Translator {
+  id      String  @id @default(uuid())
+  teamId  String
+  userId  String
+  address Address @relation(fields: [addressId], references: [id])
+
   role      Role     @default(MEMBER)
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
-
-  team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  team              Team              @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  user              User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  audiosTranscripts AudioTranscript[]
+  transcripts       Transcript[]
+  addressId         Int
 
   @@unique([teamId, userId])
   @@index([userId])
@@ -121,19 +127,53 @@ model Invitation {
 }
 
 model Language {
-  id          String   @id @default(uuid())
+  id          String            @id @default(uuid())
   teamId      String
   name        String
   description String
   createdBy   String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @default(now())
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @default(now())
   spokenIn    String[]
+  transcripts Transcript[]
+  audios      AudioTranscript[]
 
   team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
   user User @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+}
 
-  @@unique([teamId, name])
+model Transcript {
+  id                  String    @id @default(uuid())
+  topic               String?
+  text                String    @db.Text
+  textLang            String
+  transcript          String    @db.Text
+  transcriptionLang   Language? @relation(fields: [transcriptionLangId], references: [id])
+  transcriptionLangId String?
+
+  audios AudioTranscript[]
+
+  translator   Translator? @relation(fields: [translatorId], references: [id])
+  translatorId String?
+
+  createdBy String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+model AudioTranscript {
+  id String @id @default(uuid())
+
+  transcript   Transcript? @relation(fields: [transcriptId], references: [id])
+  transcriptId String?
+  language     Language?   @relation(fields: [languageId], references: [id])
+  languageId   String?
+  url          String
+  fileFormat   String
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @default(now())
+  translator   Translator? @relation(fields: [translatorId], references: [id])
+  translatorId String?
 }
 
 model PasswordReset {
@@ -159,12 +199,9 @@ model ApiKey {
 }
 
 model Address {
-  id      Int    @id @default(autoincrement())
-  street  String
-  city    String
-  state   String
-  zip     String
-  country String
-  userId  String
-  entity  User   @relation(fields: [userId], references: [id])
+  id         Int          @id @default(autoincrement())
+  city       String
+  state      String
+  country    String
+  translator Translator[]
 }

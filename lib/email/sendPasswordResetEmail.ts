@@ -4,11 +4,11 @@ import { sendEmail } from './sendEmail';
 export const sendPasswordResetEmail = async (email: string, url: string) => {
   await sendEmail({
     to: email,
-    subject: 'Reset Your BoxyHQ Password',
+    subject: 'Reset Your AkilliAI Password',
     html: `
         Dear User,
         <br/><br/>
-        We have received a request to reset your BoxyHQ password. If you did not request a password reset, please ignore this email.
+        We have received a request to reset your AkilliAI password. If you did not request a password reset, please ignore this email.
         <br/><br/>
         To reset your password, please click on the link below:
         <br/><br/>
@@ -16,11 +16,11 @@ export const sendPasswordResetEmail = async (email: string, url: string) => {
         <br/><br/>
         This link will expire in 60 minutes. After that, you will need to request another password reset.
         <br/><br/>
-        Thank you for using BoxyHQ.
+        Thank you for using AkilliAI.
         <br/><br/>
         Best regards,
         <br/><br/>
-        The BoxyHQ Team
+        The AkilliAI Team
      `,
   });
 };
