@@ -34,10 +34,10 @@ export const updateUser = async (param: {
   id: string;
   name: string;
   email: string;
-  mobile: string;
+  mobileNumber: string;
   country: string;
 }) => {
-  const { name, email, mobile, country } = param;
+  const { name, email, mobileNumber, country } = param;
 
   return await prisma.user.update({
     where: {
@@ -45,7 +45,7 @@ export const updateUser = async (param: {
     },
     data: {
       name,
-      mobileNumber: mobile,
+      mobileNumber: mobileNumber,
       country: country,
     },
   });

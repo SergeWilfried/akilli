@@ -106,7 +106,7 @@ const handlePOST = async (req: NextApiRequest, res: NextApiResponse) => {
 
 // Update the user
 const handlePUT = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { id, name, email, mobile, country } = req.body;
+  const { id, name, email, mobileNumber, country } = req.body;
 
   const existingUser = await getUser({ id });
 
@@ -118,7 +118,7 @@ const handlePUT = async (req: NextApiRequest, res: NextApiResponse) => {
     id,
     name,
     email,
-    mobile: mobile ? mobile : '',
+    mobileNumber: mobileNumber ? mobileNumber : '',
     country: country ? country : '',
   });
 
