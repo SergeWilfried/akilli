@@ -22,7 +22,9 @@ const ResetPassword = () => {
       confirmPassword: '',
     },
     validationSchema: Yup.object().shape({
-      password: Yup.string().required().min(8),
+      password: Yup.string()
+        .required()
+        .min(8, 'Password must be at least 8 characters long'),
       confirmPassword: Yup.string().test(
         'passwords-match',
         'Passwords must match',
