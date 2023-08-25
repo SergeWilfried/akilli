@@ -21,7 +21,7 @@ const Join = () => {
       password: '',
       team: '',
       country: '',
-      phone: '',
+      mobileNumber: '',
     },
     validationSchema: Yup.object().shape({
       name: Yup.string().required(),
@@ -29,7 +29,7 @@ const Join = () => {
       password: Yup.string().required().min(7),
       team: Yup.string().required().min(3),
       country: Yup.string().required(),
-      phone: Yup.string().required(),
+      mobileNumber: Yup.string().required(),
     }),
     onSubmit: async (values) => {
       try {
@@ -88,10 +88,10 @@ const Join = () => {
         <InputWithLabel
           type="text"
           label={t('mobile-number')}
-          name="phone"
+          name="mobileNumber"
           placeholder={t('your-mobile-number')}
-          value={formik.values.phone}
-          error={formik.touched.phone ? formik.errors.phone : undefined}
+          value={formik.values.mobileNumber}
+          error={formik.touched.mobileNumber ? formik.errors.mobileNumber : undefined}
           onChange={formik.handleChange}
         />
         <InputWithLabel
