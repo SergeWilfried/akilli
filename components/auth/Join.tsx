@@ -26,7 +26,9 @@ const Join = () => {
     validationSchema: Yup.object().shape({
       name: Yup.string().required(),
       email: Yup.string().required().email(),
-      password: Yup.string().required().min(7),
+      password: Yup.string()
+        .required()
+        .min(8, 'Password must be at least 8 characters long'),
       team: Yup.string().required().min(3),
       country: Yup.string().required(),
       mobileNumber: Yup.string().required(),
@@ -91,7 +93,9 @@ const Join = () => {
           name="mobileNumber"
           placeholder={t('your-mobile-number')}
           value={formik.values.mobileNumber}
-          error={formik.touched.mobileNumber ? formik.errors.mobileNumber : undefined}
+          error={
+            formik.touched.mobileNumber ? formik.errors.mobileNumber : undefined
+          }
           onChange={formik.handleChange}
         />
         <InputWithLabel

@@ -1,5 +1,5 @@
-import { Error, InputWithLabel, Loading } from '@/components/shared';
-import { getAxiosError } from '@/lib/common';
+import { Error, InputWithLabel, Loading, SelectWithLabel } from '@/components/shared';
+import { countryOptions, getAxiosError } from '@/lib/common';
 import type { User } from '@prisma/client';
 import axios from 'axios';
 import { useFormik } from 'formik';
@@ -28,11 +28,17 @@ const JoinWithInvitation = ({
       name: '',
       email: invitation?.email,
       password: '',
+      country: '',
+      mobileNumber: '',
     },
     validationSchema: Yup.object().shape({
       name: Yup.string().required(),
       email: Yup.string().required().email(),
-      password: Yup.string().required().min(7),
+      country: Yup.string().required(),
+      mobileNumber: Yup.string().required(),
+      password: Yup.string()
+        .required()
+        .min(8, 'Password must be at least 8 characters long'),
     }),
     enableReinitialize: true,
     onSubmit: async (values) => {
@@ -68,6 +74,25 @@ const JoinWithInvitation = ({
         placeholder={t('your-name')}
         value={formik.values.name}
         error={formik.touched.name ? formik.errors.name : undefined}
+        onChange={formik.handleChange}
+      />
+      <InputWithLabel
+        type="text"
+        label={t('mobile-number')}
+        name="mobileNumber"
+        placeholder={t('your-mobile-number')}
+        value={formik.values.mobileNumber}
+        error={
+          formik.touched.mobileNumber ? formik.errors.mobileNumber : undefined
+        }
+        onChange={formik.handleChange}
+      />
+      <SelectWithLabel
+        label={t('country')}
+        name="country"
+        options={countryOptions}
+        value={formik.values.country}
+        error={formik.touched.country ? formik.errors.country : undefined}
         onChange={formik.handleChange}
       />
       <InputWithLabel
