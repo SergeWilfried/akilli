@@ -1,6 +1,10 @@
 import { enc, lib } from 'crypto-js';
 import type { NextApiRequest } from 'next';
-
+export interface SelectObject {
+  id: string | number;
+  name: string;
+  value: string;
+}
 export const createRandomString = (length = 6) => {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
   const charactersLength = characters.length;
@@ -38,6 +42,24 @@ export const extractAuthToken = (req: NextApiRequest): string | null => {
 
   return authHeader ? authHeader.split(' ')[1] : null;
 };
+
+export const countryOptions: SelectObject[] = [
+  {
+    id: 0,
+    name: 'Burkina Faso',
+    value: 'Burkina Faso',
+  },
+  {
+    id: 1,
+    name: 'Benin',
+    value: 'Benin',
+  },
+  {
+    id: 2,
+    name: 'Nigeria',
+    value: 'Nigeria',
+  },
+];
 
 export const getAxiosError = (error: any): string => {
   if (error.response) {

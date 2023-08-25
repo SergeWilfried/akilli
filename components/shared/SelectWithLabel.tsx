@@ -1,21 +1,19 @@
 import { Select } from 'react-daisyui';
+import { SelectObject } from '../../lib/common';
 
 interface SelectWithLabelProps {
   label: string;
-  name: string; 
+  name: string;
   onChange: any;
   error?: string;
   value: string;
   descriptionText?: string;
   options: SelectObject[];
 }
-export interface SelectObject {
-  id: string | number;
-  name: string;
-  value: string;
-}
+
 const SelectWithLabel = (props: SelectWithLabelProps) => {
-  const { label, error, options, descriptionText, onChange, value, name } = props;
+  const { label, error, options, descriptionText, onChange, value, name } =
+    props;
 
   const classes = Array<string>();
 

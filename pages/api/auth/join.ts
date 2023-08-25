@@ -6,7 +6,7 @@ import { isBusinessEmail } from '@/lib/email/utils';
 import env from '@/lib/env';
 import { ApiError } from '@/lib/errors';
 import { createTeam, isTeamExists } from 'models/team';
-import { createUser, getUser } from 'models/user';
+import { createUser, getUser, updateUser } from 'models/user';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(
@@ -19,6 +19,9 @@ export default async function handler(
     switch (method) {
       case 'POST':
         await handlePOST(req, res);
+        break;
+      case 'PUT':
+        await handlePUT(req, res);
         break;
       default:
         res.setHeader('Allow', 'POST');
@@ -97,6 +100,31 @@ const handlePOST = async (req: NextApiRequest, res: NextApiResponse) => {
     data: {
       user,
       confirmEmail: env.confirmEmail,
+    },
+  });
+};
+
+// Update the user
+const handlePUT = async (req: NextApiRequest, res: NextApiResponse) => {
+  const { id, name, email, mobile, country } = req.body;
+
+  const existingUser = await getUser({ id });
+
+  if (!existingUser) {
+    throw new ApiError(400, 'No user found with this id.');
+  }
+
+  const updatedUser = await updateUser({
+    id,
+    name,
+    email,
+    mobile: mobile ? mobile : '',
+    country: country ? country : '',
+  });
+
+  res.status(200).json({
+    data: {
+      updatedUser,
     },
   });
 };
