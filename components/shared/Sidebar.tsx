@@ -42,13 +42,29 @@ export default function Sidebar() {
     ],
     team: [
       {
-        name: t('all-products'),
+        name: t('dashboard'),
         href: `/teams/${slug}/products`,
+        icon: CodeBracketIcon,
+        isBeta: true,
+      },
+      {
+        name: t('languages'),
+        href: `#`,
+        icon: CodeBracketIcon,
+      },
+      {
+        name: t('transcripts'),
+        href: `#`,
+        icon: CodeBracketIcon,
+      },
+      {
+        name: t('insights'),
+        href: `#`,
         icon: CodeBracketIcon,
       },
       {
         name: t('settings'),
-        href: `/teams/${slug}/settings`,
+        href: `#`,
         icon: Cog6ToothIcon,
       },
     ],
