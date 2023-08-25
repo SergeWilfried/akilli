@@ -124,7 +124,7 @@ const CreateConnection = (props: CreateConnectionProps) => {
             color="primary"
             loading={formik.isSubmitting}
             active={formik.dirty}
-            size='md'
+            size="md"
           >
             {t('save-changes')}
           </Button>
@@ -136,7 +136,7 @@ const CreateConnection = (props: CreateConnectionProps) => {
               setTab(0);
               formik.resetForm();
             }}
-            size='md'
+            size="md"
           >
             {t('close')}
           </Button>

@@ -74,7 +74,7 @@ const CreateTeam = ({
             color="primary"
             loading={formik.isSubmitting}
             active={formik.dirty}
-            size='md'
+            size="md"
           >
             {t('create-team')}
           </Button>
@@ -84,7 +84,7 @@ const CreateTeam = ({
             onClick={() => {
               setVisible(!visible);
             }}
-            size='md'
+            size="md"
           >
             {t('close')}
           </Button>

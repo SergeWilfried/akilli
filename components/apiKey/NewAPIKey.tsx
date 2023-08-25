@@ -99,7 +99,7 @@ const CreateAPIKeyForm = ({
           type="submit"
           loading={submitting}
           disabled={!name}
-          size='md'
+          size="md"
         >
           {t('create-api-key')}
         </Button>
@@ -107,7 +107,7 @@ const CreateAPIKeyForm = ({
           type="button"
           variant="outline"
           onClick={() => setCreateModalVisible(false)}
-          size='md'
+          size="md"
         >
           {t('close')}
         </Button>
@@ -142,7 +142,7 @@ const DisplayAPIKey = ({
             setCreateModalVisible(false);
             clearApiKey();
           }}
-          size='md'
+          size="md"
         >
           {t('close')}
         </Button>

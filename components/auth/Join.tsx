@@ -1,4 +1,4 @@
-import { InputWithLabel } from '@/components/shared';
+import { InputWithLabel, SelectWithLabel } from '@/components/shared';
 import { getAxiosError } from '@/lib/common';
 import type { User } from '@prisma/client';
 import axios from 'axios';
@@ -9,7 +9,24 @@ import { Button } from 'react-daisyui';
 import toast from 'react-hot-toast';
 import type { ApiResponse } from 'types';
 import * as Yup from 'yup';
-
+import { SelectObject } from '../shared/SelectWithLabel';
+const countryOptions: SelectObject[] = [
+  {
+    id: 0,
+    name: 'Burkina Faso',
+    value: 'Burkina Faso',
+  },
+  {
+    id:1,
+    name: 'Benin',
+    value: "Benin"
+  },
+  {
+    id: 2,
+    name: 'Nigeria',
+    value: 'Nigeria'
+  }
+];
 const Join = () => {
   const router = useRouter();
   const { t } = useTranslation('common');
@@ -20,12 +37,16 @@ const Join = () => {
       email: '',
       password: '',
       team: '',
+      country: '',
+      phone: '',
     },
     validationSchema: Yup.object().shape({
       name: Yup.string().required(),
       email: Yup.string().required().email(),
       password: Yup.string().required().min(7),
       team: Yup.string().required().min(3),
+      country: Yup.string().required(),
+      phone: Yup.string().required(),
     }),
     onSubmit: async (values) => {
       try {
@@ -56,6 +77,15 @@ const Join = () => {
       <div className="space-y-1">
         <InputWithLabel
           type="text"
+          label={t('team')}
+          name="team"
+          placeholder={t('team-name')}
+          value={formik.values.team}
+          error={formik.touched.team ? formik.errors.team : undefined}
+          onChange={formik.handleChange}
+        />
+         <InputWithLabel
+          type="text"
           label={t('name')}
           name="name"
           placeholder={t('your-name')}
@@ -63,13 +93,22 @@ const Join = () => {
           error={formik.touched.name ? formik.errors.name : undefined}
           onChange={formik.handleChange}
         />
-        <InputWithLabel
+
+        <SelectWithLabel
+          label={t('country')}
+          name="country"
+          options={countryOptions}
+          value={formik.values.country}
+          error={formik.touched.country ? formik.errors.country : undefined}
+          onChange={formik.handleChange}
+        />
+                <InputWithLabel
           type="text"
-          label={t('team')}
-          name="team"
-          placeholder={t('team-name')}
-          value={formik.values.team}
-          error={formik.touched.team ? formik.errors.team : undefined}
+          label={t('mobile-number')}
+          name="phone"
+          placeholder={t('your-mobile-number')}
+          value={formik.values.phone}
+          error={formik.touched.phone ? formik.errors.phone : undefined}
           onChange={formik.handleChange}
         />
         <InputWithLabel
@@ -90,6 +129,7 @@ const Join = () => {
           error={formik.touched.password ? formik.errors.password : undefined}
           onChange={formik.handleChange}
         />
+        
       </div>
       <div className="mt-3 space-y-3">
         <Button
@@ -98,7 +138,7 @@ const Join = () => {
           loading={formik.isSubmitting}
           active={formik.dirty}
           fullWidth
-          size='md'
+          size="md"
         >
           {t('create-account')}
         </Button>

@@ -93,7 +93,7 @@ const InviteMember = ({
             color="primary"
             loading={formik.isSubmitting}
             active={formik.dirty}
-            size='md'
+            size="md"
           >
             {t('send-invite')}
           </Button>
@@ -103,7 +103,7 @@ const InviteMember = ({
             onClick={() => {
               setVisible(!visible);
             }}
-            size='md'
+            size="md"
           >
             {t('close')}
           </Button>

@@ -33,7 +33,7 @@ const APIKeysContainer = () => {
           <Button
             variant="outline"
             color="primary"
-            size='md'
+            size="md"
             onClick={() => setCreateModalVisible(true)}
           >
             {t('new-api-key')}

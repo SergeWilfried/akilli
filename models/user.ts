@@ -1,21 +1,25 @@
 import { ApiError } from '@/lib/errors';
 import { Action, Resource, permissions } from '@/lib/permissions';
 import { prisma } from '@/lib/prisma';
-import { Role, TeamMember } from '@prisma/client';
+import { Role, Translator } from '@prisma/client';
 import type { Session } from 'next-auth';
 
 export const createUser = async (param: {
   name: string;
   email: string;
   password?: string;
+  mobile: string;
+  country: string;
 }) => {
-  const { name, email, password } = param;
+  const { name, email, password, mobile, country } = param;
 
   return await prisma.user.create({
     data: {
       name,
       email,
       password: password ? password : '',
+      mobileNumber: mobile,
+      country: country,
     },
   });
 };
@@ -65,7 +69,7 @@ export const isAllowed = (role: Role, resource: Resource, action: Action) => {
 };
 
 export const throwIfNotAllowed = (
-  teamMember: TeamMember,
+  teamMember: Translator,
   resource: Resource,
   action: Action
 ) => {

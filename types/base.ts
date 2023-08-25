@@ -26,7 +26,7 @@ export type SPSAMLConfig = {
 export type TeamWithMemberCount = Prisma.TeamGetPayload<{
   include: {
     _count: {
-      select: { members: true };
+      select: { translators: true };
     };
   };
 }>;

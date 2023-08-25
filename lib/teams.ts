@@ -1,7 +1,7 @@
-import { Role, TeamMember } from '@prisma/client';
+import { Role, Translator } from '@prisma/client';
 import type { User } from 'next-auth';
 
-export const isTeamAdmin = (user: User, members: TeamMember[]) => {
+export const isTeamAdmin = (user: User, members: Translator[]) => {
   return (
     members.filter(
       (member) =>
