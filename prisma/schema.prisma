@@ -13,6 +13,7 @@ enum Role {
   ADMIN
   TRANSCRIPTOR
   MEMBER
+  OWNER
 }
 
 enum EntityType {
@@ -94,7 +95,7 @@ model Translator {
   id      String  @id @default(uuid())
   teamId  String
   userId  String
-  address Address @relation(fields: [addressId], references: [id])
+  address Address? @relation(fields: [addressId], references: [id])
 
   role      Role     @default(MEMBER)
   createdAt DateTime @default(now())
@@ -103,7 +104,7 @@ model Translator {
   user              User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   audiosTranscripts AudioTranscript[]
   transcripts       Transcript[]
-  addressId         Int
+  addressId         Int?
 
   @@unique([teamId, userId])
   @@index([userId])

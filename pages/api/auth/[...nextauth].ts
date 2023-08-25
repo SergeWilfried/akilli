@@ -133,6 +133,8 @@ export const authOptions: NextAuthOptions = {
         const newUser = await createUser({
           name: `${user.name}`,
           email: `${user.email}`,
+          mobile: ``,
+          country: ``,
         });
 
         await linkAccount(newUser, account);

@@ -1,9 +1,9 @@
 import fetcher from '@/lib/fetcher';
-import type { TeamMember, User } from '@prisma/client';
+import type { Translator, User } from '@prisma/client';
 import useSWR, { mutate } from 'swr';
 import type { ApiResponse } from 'types';
 
-type TeamMemberWithUser = TeamMember & { user: User };
+type TeamMemberWithUser = Translator & { user: User };
 
 const useTeamMembers = (slug: string) => {
   const url = `/api/teams/${slug}/members`;

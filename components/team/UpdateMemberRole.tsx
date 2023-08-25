@@ -1,18 +1,18 @@
 import { availableRoles } from '@/lib/permissions';
-import { Team, TeamMember } from '@prisma/client';
+import { Team, Translator } from '@prisma/client';
 import axios from 'axios';
 import { useTranslation } from 'next-i18next';
 import toast from 'react-hot-toast';
 
 interface UpdateMemberRoleProps {
   team: Team;
-  member: TeamMember;
+  member: Translator;
 }
 
 const UpdateMemberRole = ({ team, member }: UpdateMemberRoleProps) => {
   const { t } = useTranslation('common');
 
-  const updateRole = async (member: TeamMember, role: string) => {
+  const updateRole = async (member: Translator, role: string) => {
     await axios.patch(`/api/teams/${team.slug}/members`, {
       memberId: member.userId,
       role,

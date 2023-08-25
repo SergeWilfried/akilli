@@ -1,5 +1,5 @@
 import { Card, Error, LetterAvatar, Loading } from '@/components/shared';
-import { Team, TeamMember } from '@prisma/client';
+import { Team, Translator } from '@prisma/client';
 import axios from 'axios';
 import useCanAccess from 'hooks/useCanAccess';
 import useTeamMembers from 'hooks/useTeamMembers';
@@ -31,7 +31,7 @@ const Members = ({ team }: { team: Team }) => {
     return null;
   }
 
-  const removeTeamMember = async (member: TeamMember) => {
+  const removeTeamMember = async (member: Translator) => {
     const sp = new URLSearchParams({ memberId: member.userId });
 
     await axios.delete(`/api/teams/${team.slug}/members?${sp.toString()}`);
@@ -41,13 +41,13 @@ const Members = ({ team }: { team: Team }) => {
     toast.success(t('member-deleted'));
   };
 
-  const canUpdateRole = (member: TeamMember) => {
+  const canUpdateRole = (member: Translator) => {
     return (
       session?.user.id != member.userId && canAccess('team_member', ['update'])
     );
   };
 
-  const canRemoveMember = (member: TeamMember) => {
+  const canRemoveMember = (member: Translator) => {
     return (
       session?.user.id != member.userId && canAccess('team_member', ['delete'])
     );

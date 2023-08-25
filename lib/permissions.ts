@@ -111,4 +111,5 @@ export const permissions: RolePermissions = {
       actions: ['read', 'leave'],
     },
   ],
+  TRANSCRIPTOR: [],
 };

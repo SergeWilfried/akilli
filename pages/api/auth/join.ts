@@ -36,7 +36,7 @@ export default async function handler(
 
 // Signup the user
 const handlePOST = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { name, email, password, team } = req.body;
+  const { name, email, password, mobile, country, team } = req.body;
 
   const existingUser = await getUser({ email });
 
@@ -66,6 +66,8 @@ const handlePOST = async (req: NextApiRequest, res: NextApiResponse) => {
     name,
     email,
     password: await hashPassword(password),
+    mobile: mobile ? mobile : '',
+    country: country ? country : '',
   });
 
   if (team) {

@@ -64,6 +64,8 @@ const handleEvents = async (event: DirectorySyncEvent) => {
         name: `${data.first_name} ${data.last_name}`,
         email: data.email,
         password: await hashPassword(createRandomString()),
+        mobileNumber: '',
+        country: '',
       },
     });
 
@@ -84,6 +86,8 @@ const handleEvents = async (event: DirectorySyncEvent) => {
           name: `${data.first_name} ${data.last_name}`,
           email: data.email,
           password: await hashPassword(createRandomString()),
+          mobileNumber: '',
+          country: '',
         },
       });
 
