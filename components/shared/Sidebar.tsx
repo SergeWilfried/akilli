@@ -1,9 +1,12 @@
 import {
-  CodeBracketIcon,
   Cog6ToothIcon,
   LockClosedIcon,
   RectangleStackIcon,
   UserCircleIcon,
+  ChatBubbleLeftRightIcon,
+  LanguageIcon,
+  SquaresPlusIcon,
+  PresentationChartBarIcon,
 } from '@heroicons/react/24/outline';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
@@ -29,6 +32,12 @@ export default function Sidebar() {
         href: '/teams',
         icon: RectangleStackIcon,
       },
+
+      {
+        name: t('insights'),
+        href: `#`,
+        icon: PresentationChartBarIcon,
+      },
       {
         name: t('account'),
         href: '/settings/account',
@@ -44,24 +53,20 @@ export default function Sidebar() {
       {
         name: t('dashboard'),
         href: `/teams/${slug}/products`,
-        icon: CodeBracketIcon,
+        icon: SquaresPlusIcon,
         isBeta: true,
       },
       {
         name: t('languages'),
         href: `#`,
-        icon: CodeBracketIcon,
+        icon: LanguageIcon,
       },
       {
         name: t('transcripts'),
         href: `#`,
-        icon: CodeBracketIcon,
+        icon: ChatBubbleLeftRightIcon,
       },
-      {
-        name: t('insights'),
-        href: `#`,
-        icon: CodeBracketIcon,
-      },
+
       {
         name: t('settings'),
         href: `#`,
@@ -92,6 +97,7 @@ export default function Sidebar() {
                         icon={menu.icon}
                         active={router.asPath === menu.href}
                         items={menu.items}
+                        isBeta={menu.isBeta}
                       />
                       <div className="flex-1">
                         <div className="mt-1 space-y-1">
@@ -102,6 +108,7 @@ export default function Sidebar() {
                               name={submenu.name}
                               active={router.asPath === submenu.href}
                               className="pl-8"
+                              isBeta={menu.isBeta}
                             />
                           ))}
                         </div>

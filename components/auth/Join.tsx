@@ -1,5 +1,5 @@
 import { InputWithLabel, SelectWithLabel } from '@/components/shared';
-import { getAxiosError } from '@/lib/common';
+import { countryOptions, getAxiosError } from '@/lib/common';
 import type { User } from '@prisma/client';
 import axios from 'axios';
 import { useFormik } from 'formik';
@@ -9,24 +9,7 @@ import { Button } from 'react-daisyui';
 import toast from 'react-hot-toast';
 import type { ApiResponse } from 'types';
 import * as Yup from 'yup';
-import { SelectObject } from '../shared/SelectWithLabel';
-const countryOptions: SelectObject[] = [
-  {
-    id: 0,
-    name: 'Burkina Faso',
-    value: 'Burkina Faso',
-  },
-  {
-    id:1,
-    name: 'Benin',
-    value: "Benin"
-  },
-  {
-    id: 2,
-    name: 'Nigeria',
-    value: 'Nigeria'
-  }
-];
+
 const Join = () => {
   const router = useRouter();
   const { t } = useTranslation('common');
@@ -38,7 +21,7 @@ const Join = () => {
       password: '',
       team: '',
       country: '',
-      phone: '',
+      mobileNumber: '',
     },
     validationSchema: Yup.object().shape({
       name: Yup.string().required(),
@@ -46,7 +29,7 @@ const Join = () => {
       password: Yup.string().required().min(7),
       team: Yup.string().required().min(3),
       country: Yup.string().required(),
-      phone: Yup.string().required(),
+      mobileNumber: Yup.string().required(),
     }),
     onSubmit: async (values) => {
       try {
@@ -84,7 +67,7 @@ const Join = () => {
           error={formik.touched.team ? formik.errors.team : undefined}
           onChange={formik.handleChange}
         />
-         <InputWithLabel
+        <InputWithLabel
           type="text"
           label={t('name')}
           name="name"
@@ -102,13 +85,13 @@ const Join = () => {
           error={formik.touched.country ? formik.errors.country : undefined}
           onChange={formik.handleChange}
         />
-                <InputWithLabel
+        <InputWithLabel
           type="text"
           label={t('mobile-number')}
-          name="phone"
+          name="mobileNumber"
           placeholder={t('your-mobile-number')}
-          value={formik.values.phone}
-          error={formik.touched.phone ? formik.errors.phone : undefined}
+          value={formik.values.mobileNumber}
+          error={formik.touched.mobileNumber ? formik.errors.mobileNumber : undefined}
           onChange={formik.handleChange}
         />
         <InputWithLabel
@@ -129,7 +112,6 @@ const Join = () => {
           error={formik.touched.password ? formik.errors.password : undefined}
           onChange={formik.handleChange}
         />
-        
       </div>
       <div className="mt-3 space-y-3">
         <Button

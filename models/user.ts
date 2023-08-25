@@ -30,6 +30,27 @@ export const getUser = async (key: { id: string } | { email: string }) => {
   });
 };
 
+export const updateUser = async (param: {
+  id: string;
+  name: string;
+  email: string;
+  mobileNumber: string;
+  country: string;
+}) => {
+  const { name, email, mobileNumber, country } = param;
+
+  return await prisma.user.update({
+    where: {
+      email: email,
+    },
+    data: {
+      name,
+      mobileNumber: mobileNumber,
+      country: country,
+    },
+  });
+};
+
 export const getUserBySession = async (session: Session | null) => {
   if (session === null || session.user === null) {
     return null;

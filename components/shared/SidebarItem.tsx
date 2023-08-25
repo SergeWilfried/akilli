@@ -33,7 +33,7 @@ const SidebarItem = ({
       <div className="flex gap-2">
         {Icon && <Icon className="h-5 w-5" />}
         <span>{name}</span>
-        {isBeta && <span className="badge bg-accent text-accent-content ml-2">Beta</span>}
+        {isBeta && <span className="badge badge-accent ml-2">Beta</span>}
       </div>
     </NextLink>
   );

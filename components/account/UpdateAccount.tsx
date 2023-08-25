@@ -1,5 +1,5 @@
-import { Card, InputWithLabel } from '@/components/shared';
-import { getAxiosError } from '@/lib/common';
+import { Card, InputWithLabel, SelectWithLabel } from '@/components/shared';
+import { countryOptions, getAxiosError } from '@/lib/common';
 import { User } from '@prisma/client';
 import axios from 'axios';
 import { useFormik } from 'formik';
@@ -28,6 +28,8 @@ const schema = Yup.object().shape({
 
       return allowedExtensions.includes(fileExtension.toLowerCase());
     }),
+  country: Yup.string().required(),
+  mobileNumber: Yup.string().required(),
 });
 
 const UpdateAccount = ({ user }: { user: User }) => {
@@ -38,6 +40,8 @@ const UpdateAccount = ({ user }: { user: User }) => {
       name: user.name,
       email: user.email,
       image: user.image,
+      country: user.country,
+      mobileNumber: user.mobileNumber,
     },
     validationSchema: schema,
     onSubmit: async (values) => {
@@ -75,6 +79,27 @@ const UpdateAccount = ({ user }: { user: User }) => {
               placeholder={t('your-email')}
               value={formik.values.email}
               error={formik.touched.email ? formik.errors.email : undefined}
+              onChange={formik.handleChange}
+            />
+            <InputWithLabel
+              type="text"
+              label={t('mobile-number')}
+              name="mobileNumber"
+              placeholder={t('your-mobile-number')}
+              value={formik.values.mobileNumber}
+              error={
+                formik.touched.mobileNumber
+                  ? formik.errors.mobileNumber
+                  : undefined
+              }
+              onChange={formik.handleChange}
+            />
+            <SelectWithLabel
+              label={t('country')}
+              name="country"
+              options={countryOptions}
+              value={formik.values.country}
+              error={formik.touched.country ? formik.errors.country : undefined}
               onChange={formik.handleChange}
             />
           </div>

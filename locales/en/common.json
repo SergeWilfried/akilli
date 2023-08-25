@@ -44,7 +44,7 @@
   "leave-team-success": "You have left the team successfully.",
   "choose-team": "Choose your team",
   "allow-team": "Allow team members to login using an Identity Provider.",
-  "members-of-a-team": "Members of a team have access to specific areas, such as a new release or a new application feature.",
+  "members-of-a-team": "Members of a team have access to specific areas, such as a new languages or a new transcriptions projects.",
   "accept-invite": "You can accept the invitation to join the team by clicking the button below.",
   "invite-create-account": "To continue, you must either create a new account or login to an existing account.",
   "no-active-team": "You do not have any active team.",
@@ -179,5 +179,5 @@
   "no-credentials": "No credentials found.",
   "confirm-email": "Confirm your email address",
   "confirm-email-description": "Please click the verification link sent to your email to activate your account.",
-  "allow-only-work-email": "Please use your work email to create an account.",
+  "allow-only-work-email": "Please use your work email to create an account."
 }

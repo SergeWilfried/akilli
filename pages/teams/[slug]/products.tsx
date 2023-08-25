@@ -5,9 +5,7 @@ import type { NextPageWithLayout } from 'types';
 const Products: NextPageWithLayout = () => {
   return (
     <div className="p-3">
-      <p className="text-sm">
-        This is just a placeholder for the dashboard.
-      </p>
+      <p className="text-sm">This is just a placeholder for the dashboard.</p>
     </div>
   );
 };
