@@ -135,7 +135,6 @@ model Language {
   createdBy   String
   createdAt   DateTime          @default(now())
   updatedAt   DateTime          @default(now())
-  spokenIn    String[]
   transcripts Transcript[]
   audios      AudioTranscript[]
 
