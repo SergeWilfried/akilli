@@ -15,10 +15,14 @@ const Dashboard: NextPageWithLayout = () => {
   const isAdmin = session?.user.roles.some((role) => role.role === 'ADMIN');
 
   if (teams) {
-    if (!isAdmin) {
-      router.push(`/teams/${teams[0]?.slug}/dashboard`);
+    if (teams.length > 0) {
+      if (!isAdmin) {
+        router.push(`/teams/${teams[0].slug}/dashboard`);
+      } else {
+        router.push(`/dashboard`);
+      }
     } else {
-      router.push(`/dashboard`);
+      router.push('teams?newTeam=true');
     }
   }
 
