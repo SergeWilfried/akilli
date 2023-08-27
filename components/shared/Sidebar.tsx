@@ -28,9 +28,20 @@ export default function Sidebar() {
   const sidebarMenus: SidebarMenus = {
     personal: [
       {
-        name: t('all-teams'),
-        href: '/teams',
-        icon: RectangleStackIcon,
+        name: t('dashboard'),
+        href: `/teams/${slug}/products`,
+        icon: SquaresPlusIcon,
+        isBeta: true,
+      },
+      {
+        name: t('languages'),
+        href: `#`,
+        icon: LanguageIcon,
+      },
+      {
+        name: t('transcripts'),
+        href: `#`,
+        icon: ChatBubbleLeftRightIcon,
       },
 
       {
@@ -39,9 +50,9 @@ export default function Sidebar() {
         icon: PresentationChartBarIcon,
       },
       {
-        name: t('account'),
-        href: '/settings/account',
-        icon: UserCircleIcon,
+        name: t('settings'),
+        href: `#`,
+        icon: Cog6ToothIcon,
       },
       {
         name: t('password'),
@@ -68,9 +79,9 @@ export default function Sidebar() {
       },
 
       {
-        name: t('settings'),
-        href: `#`,
-        icon: Cog6ToothIcon,
+        name: t('account'),
+        href: '/settings/account',
+        icon: UserCircleIcon,
       },
     ],
   };
