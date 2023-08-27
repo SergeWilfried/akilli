@@ -8,16 +8,17 @@ import useTeams from '../hooks/useTeams';
 import { useRouter } from 'next/router';
 
 const Dashboard: NextPageWithLayout = () => {
-    const router = useRouter();
+  const router = useRouter();
   const { teams } = useTeams();
   const { t } = useTranslation('common');
   const { data: session } = useSession();
+  const isAdmin = session?.user.roles.some((role) => role.role === 'ADMIN');
 
   if (teams) {
-    if (teams.length > 0) {
-      router.push(`/teams/${teams[0].slug}/dashboard`);
+    if (isAdmin) {
+      router.push(`/teams/dashboard`);
     } else {
-      router.push('teams?newTeam=true');
+      router.push(`/teams/${teams[0].slug}/dashboard`);
     }
   }
 
