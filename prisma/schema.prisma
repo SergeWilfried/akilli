@@ -65,6 +65,7 @@ model User {
   country       String
   gender        String?
   age           String?
+  role      Role     @default(ADMIN)
   image         String?
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @default(now())
