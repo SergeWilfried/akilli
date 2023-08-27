@@ -12,11 +12,11 @@ const Dashboard: NextPageWithLayout = () => {
   const { teams } = useTeams();
   const { t } = useTranslation('common');
   const { data: session } = useSession();
-  const isAdmin = session?.user.roles.some((role) => role.role === 'ADMIN');
+  const isNotAdmin = session?.user.roles.some((role) => role.role === 'MEMBER');
 
   if (teams) {
     if (teams.length > 0) {
-      if (isAdmin === false) {
+      if (isNotAdmin) {
         router.push(`/teams/${teams[0].slug}/dashboard`);
       } else {
         router.push(`/dashboard`);
