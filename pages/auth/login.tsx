@@ -48,12 +48,9 @@ const Login: NextPageWithLayout<
   }, [router, router.query]);
 
   if (status === 'authenticated') {
-    router.push('/');
+    router.push('/dashboard');
   }
 
-  if (status === 'authenticated') {
-    router.push(redirectAfterSignIn);
-  }
 
   const formik = useFormik({
     initialValues: {

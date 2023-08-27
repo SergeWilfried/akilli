@@ -32,7 +32,7 @@ const Signup: NextPageWithLayout<inferSSRProps<typeof getServerSideProps>> = ({
   }, [router.query]);
 
   if (status === 'authenticated') {
-    router.push('/');
+    router.push('/dashboard');
   }
 
   return (
