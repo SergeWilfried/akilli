@@ -40,7 +40,7 @@ const TeamDropdown = () => {
         {
           id: data?.user.id,
           name: data?.user?.name,
-          href: '/settings/account',
+          href: '/settings/dashboard',
           icon: UserCircleIcon,
         },
       ],
