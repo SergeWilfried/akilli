@@ -1,7 +1,6 @@
 import {
   Cog6ToothIcon,
   LockClosedIcon,
-  RectangleStackIcon,
   UserCircleIcon,
   ChatBubbleLeftRightIcon,
   LanguageIcon,
