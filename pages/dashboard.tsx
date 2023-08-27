@@ -16,7 +16,7 @@ const Dashboard: NextPageWithLayout = () => {
 
   if (teams) {
     if (teams.length > 0) {
-      if (!isAdmin) {
+      if (isAdmin === false) {
         router.push(`/teams/${teams[0].slug}/dashboard`);
       } else {
         router.push(`/dashboard`);
