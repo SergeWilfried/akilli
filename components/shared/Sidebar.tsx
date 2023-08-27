@@ -28,7 +28,7 @@ export default function Sidebar() {
     personal: [
       {
         name: t('dashboard'),
-        href: `/teams/${slug}/products`,
+        href: `/teams/dashboard`,
         icon: SquaresPlusIcon,
         isBeta: true,
       },
@@ -62,7 +62,7 @@ export default function Sidebar() {
     team: [
       {
         name: t('dashboard'),
-        href: `/teams/${slug}/products`,
+        href: `/teams/${slug}/dashboard`,
         icon: SquaresPlusIcon,
         isBeta: true,
       },
