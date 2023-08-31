@@ -44,9 +44,12 @@ const handleGET = async (req: NextApiRequest, res: NextApiResponse) => {
 };
 
 const handlePUT = async (req: NextApiRequest, res: NextApiResponse) => {
+  // fix this
   const { name } = req.query as { name: string };
+  const params = req.body;
 
-  const lang = await updateLanguage({ name });
+  const lang = await updateLanguage({ id: name }, params);
+
   res.status(200).json({ data: lang });
 };
 
