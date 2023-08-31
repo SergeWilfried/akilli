@@ -5,7 +5,7 @@ import useTeams from 'hooks/useTeams';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { Button, Input, Modal } from 'react-daisyui';
+import { Button, Input,Textarea, Modal } from 'react-daisyui';
 import toast from 'react-hot-toast';
 import type { ApiResponse, Language } from 'types';
 import * as Yup from 'yup';
@@ -43,7 +43,7 @@ const CreateLang = ({
           mutateTeams();
           formik.resetForm();
           setVisible(false);
-          router.push(`/langs`);
+          router.push(`/lang`);
         }
       } catch (error: any) {
         toast.error(getAxiosError(error));
@@ -54,10 +54,10 @@ const CreateLang = ({
   return (
     <Modal open={visible}>
       <form onSubmit={formik.handleSubmit} method="POST">
-        <Modal.Header className="font-bold">{t('create-team')}</Modal.Header>
+        <Modal.Header className="font-bold">{t('create-lang')}</Modal.Header>
         <Modal.Body>
           <div className="mt-2 flex flex-col space-y-4">
-            <p>{t('members-of-a-team')}</p>
+            <p>{t('lang-form-desc')}</p>
             <div className="flex justify-between space-x-3">
               <Input
                 name="name"
@@ -68,7 +68,7 @@ const CreateLang = ({
               />
             </div>
             <div className="flex justify-between space-x-3">
-              <Input
+              <Textarea
                 name="description"
                 className="flex-grow"
                 onChange={formik.handleChange}

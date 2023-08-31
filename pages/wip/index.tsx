@@ -1,13 +1,13 @@
-import { CreateTeam, Teams } from '@/components/team';
 import { GetServerSidePropsContext } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useState } from 'react';
 import { Button } from 'react-daisyui';
 import type { NextPageWithLayout } from 'types';
+import { CreateLang, Languages } from '@/components/lang';
 
 const AllLangs: NextPageWithLayout = () => {
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(false);
 
   const { t } = useTranslation('common');
 
@@ -26,18 +26,22 @@ const AllLangs: NextPageWithLayout = () => {
           {t('create-lang')}
         </Button>
       </div>
-      <CreateTeam visible={visible} setVisible={setVisible} />
-      <Teams />
+      <CreateLang visible={visible} setVisible={setVisible} />
+      <Languages />
     </>
   );
 };
 
-export async function getStaticProps({ locale }: GetServerSidePropsContext) {
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext
+) => {
+  const { locale }: GetServerSidePropsContext = context;
+
   return {
     props: {
       ...(locale ? await serverSideTranslations(locale, ['common']) : {}),
     },
   };
-}
+};
 
 export default AllLangs;
