@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getAllLanguages } from '../../../models/language';
+import { createLanguage, getAllLanguages } from '../../../models/language';
 
 export default async function handler(
   req: NextApiRequest,
@@ -30,7 +30,10 @@ export default async function handler(
 }
 
 const handlePOST = async (req: NextApiRequest, res: NextApiResponse) => {
-  res.status(200).json({ data: '' });
+  const { name, description } = req.body;
+
+  const lang = await createLanguage({ name, description });
+  res.status(200).json({ data: lang });
 };
 
 const handleGET = async (req: NextApiRequest, res: NextApiResponse) => {

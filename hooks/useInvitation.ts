@@ -1,20 +1,19 @@
 import fetcher from '@/lib/fetcher';
-import { Language } from '@prisma/client';
+import { Invitation, Team } from '@prisma/client';
 import useSWR from 'swr';
 import { ApiResponse } from 'types';
 
-const useInvitation = (name: string) => {
-  const url = `/api/lang/${name}`;
+const useInvitation = (token: string) => {
+  const url = `/api/invitations/${token}`;
 
-  const { data, error, isLoading } = useSWR<ApiResponse<Language>>(
-    name ? url : null,
-    fetcher
-  );
+  const { data, error, isLoading } = useSWR<
+    ApiResponse<Invitation & { team: Team }>
+  >(token ? url : null, fetcher);
 
   return {
     isLoading,
     isError: error,
-    language: data?.data,
+    invitation: data?.data,
   };
 };
 
