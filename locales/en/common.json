@@ -40,6 +40,7 @@
   "remove-team": "Remove Team",
   "remove-team-warning": "Deleting the team will delete all resources and data associated with the team forever. This action cannot be undone.",
   "team-created": "Team created successfully.",
+  "lang-created": "Language created successfully.",
   "leave-team": "Leave Team",
   "leave-team-success": "You have left the team successfully.",
   "choose-team": "Choose your team",
