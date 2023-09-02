@@ -39,11 +39,11 @@ const CreateLang = ({
         const { data: teamCreated } = response.data;
 
         if (teamCreated) {
-          toast.success(t('team-created'));
+          toast.success(t('lang-created'));
           mutateTeams();
           formik.resetForm();
           setVisible(false);
-          router.push(`/lang`);
+          router.push(`/language`);
         }
       } catch (error: any) {
         toast.error(getAxiosError(error));

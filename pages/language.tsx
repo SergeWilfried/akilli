@@ -3,11 +3,13 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { Button } from 'react-daisyui';
 import type { NextPageWithLayout } from 'types';
-import { Languages } from '@/components/lang';
+import { Languages , CreateLang} from '@/components/lang';
+import { useState } from 'react';
 
-const Langs: NextPageWithLayout = () => {
+const Language: NextPageWithLayout = () => {
 
   const { t } = useTranslation('common');
+  const [visible, setVisible] = useState(false);
 
   return (
     <>
@@ -18,13 +20,13 @@ const Langs: NextPageWithLayout = () => {
           size="md"
           variant="outline"
           onClick={() => {
-            // setVisible(!visible);
+            setVisible(!visible);
           }}
         >
           {t('create-lang')}
         </Button>
       </div>
-      {/* <CreateLang visible={visible} setVisible={setVisible} /> */}
+      <CreateLang visible={visible} setVisible={setVisible} />
       <Languages />
     </>
   );
@@ -42,4 +44,4 @@ export const getServerSideProps = async (
   };
 };
 
-export default Langs;
+export default Language;

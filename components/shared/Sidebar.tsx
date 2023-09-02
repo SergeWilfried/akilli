@@ -39,17 +39,17 @@ export default function Sidebar() {
       },
       {
         name: t('transcripts'),
-        href: `#`,
+        href: `/`,
         icon: ChatBubbleLeftRightIcon,
       },
       {
         name: t('insights'),
-        href: `#`,
+        href: `/`,
         icon: PresentationChartBarIcon,
       },
       {
         name: t('settings'),
-        href: `#`,
+        href: `/`,
         icon: Cog6ToothIcon,
       },
       {
@@ -67,7 +67,7 @@ export default function Sidebar() {
       },
       {
         name: t('languages'),
-        href: `/teams/${slug}/language`,
+        href: `/teams/${slug}/settings`,
         icon: LanguageIcon,
       },
       {
@@ -82,7 +82,7 @@ export default function Sidebar() {
         icon: UserCircleIcon,
       },
     ],
-  };
+  };  
 
   const menus = sidebarMenus[slug ? 'team' : 'personal'];
 
