@@ -34,7 +34,7 @@ export default function Sidebar() {
       },
       {
         name: t('languages'),
-        href: `/language`,
+        href: `/teams/${slug}/language`,
         icon: LanguageIcon,
       },
       {
@@ -67,7 +67,7 @@ export default function Sidebar() {
       },
       {
         name: t('languages'),
-        href: `/teams/${slug}/settings`,
+        href: `/teams/${slug}/language`,
         icon: LanguageIcon,
       },
       {
