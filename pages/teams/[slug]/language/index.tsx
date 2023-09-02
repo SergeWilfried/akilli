@@ -6,7 +6,7 @@ import { Button } from 'react-daisyui';
 import type { NextPageWithLayout } from 'types';
 import { CreateLang, Languages } from '@/components/lang';
 
-const AllLangs: NextPageWithLayout = () => {
+const Language: NextPageWithLayout = () => {
   const [visible, setVisible] = useState(false);
 
   const { t } = useTranslation('common');
@@ -44,4 +44,4 @@ export const getServerSideProps = async (
   };
 };
 
-export default AllLangs;
+export default Language;
