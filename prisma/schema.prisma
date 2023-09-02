@@ -93,7 +93,6 @@ model Translator {
   teamId  String
   userId  String
   address Address? @relation(fields: [addressId], references: [id])
-
   role              Role              @default(MEMBER)
   createdAt         DateTime          @default(now())
   updatedAt         DateTime          @default(now())
