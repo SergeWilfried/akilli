@@ -34,7 +34,7 @@ export default function Sidebar() {
       },
       {
         name: t('languages'),
-        href: `/teams/${slug}/language`,
+        href: `/teams/language`,
         icon: LanguageIcon,
       },
       {
