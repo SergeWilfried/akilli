@@ -29,7 +29,7 @@ const TeamDropdown = () => {
       items: (teams || []).map((team) => ({
         id: team.id,
         name: team.name,
-        href: `/teams/${team.slug}/settings`,
+        href: `/teams/${team.slug}/dashboard`,
         icon: FolderIcon,
       })),
     },
@@ -40,7 +40,7 @@ const TeamDropdown = () => {
         {
           id: data?.user.id,
           name: data?.user?.name,
-          href: '/settings/account',
+          href: '/dashboard',
           icon: UserCircleIcon,
         },
       ],

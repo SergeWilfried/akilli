@@ -51,7 +51,6 @@ const Login: NextPageWithLayout<
     router.push('/dashboard');
   }
 
-
   const formik = useFormik({
     initialValues: {
       email: '',

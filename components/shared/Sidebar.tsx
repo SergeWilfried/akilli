@@ -28,13 +28,13 @@ export default function Sidebar() {
     personal: [
       {
         name: t('dashboard'),
-        href: `/teams/${slug}/products`,
+        href: `/dashboard`,
         icon: SquaresPlusIcon,
         isBeta: true,
       },
       {
         name: t('languages'),
-        href: `#`,
+        href: `/lang`,
         icon: LanguageIcon,
       },
       {
@@ -62,13 +62,13 @@ export default function Sidebar() {
     team: [
       {
         name: t('dashboard'),
-        href: `/teams/${slug}/products`,
+        href: `/teams/${slug}/dashboard`,
         icon: SquaresPlusIcon,
         isBeta: true,
       },
       {
         name: t('languages'),
-        href: `#`,
+        href: `/teams/${slug}/lang`,
         icon: LanguageIcon,
       },
       {

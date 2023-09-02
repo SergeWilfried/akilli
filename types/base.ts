@@ -36,3 +36,29 @@ export type WebookFormSchema = {
   url: string;
   eventTypes: string[];
 };
+
+export type Transcript = {
+  id: string;
+  content: string;
+  language: Language;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export type AudioTranscript = {
+  id: string;
+  audioUrl: string;
+  transcript: Transcript;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export type Language = {
+  id: string;
+  name: string;
+  description: string;
+  createdAt: Date;
+  updatedAt: Date;
+  transcripts: Transcript[];
+  audios: AudioTranscript[];
+};
