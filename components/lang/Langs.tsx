@@ -54,7 +54,7 @@ const Languages = () => {
                 <th scope="col" className="px-6 py-3">
                   {t('created-at')}
                 </th>
-               
+
                 <th scope="col" className="px-6 py-3">
                   {t('actions')}
                 </th>
@@ -73,8 +73,12 @@ const Languages = () => {
                       <td className="px-6 py-3">
                         <Link href={`/lang/${team.name}/transcripts`}>
                           <div className="flex items-center justify-start space-x-2">
-                            <LetterAvatar name={team.transcripts?.length.toString() ?? '0'} />
-                            <span className="underline">{team.transcripts?.length.toString()}</span>
+                            <LetterAvatar
+                              name={team.transcripts?.length.toString() ?? '0'}
+                            />
+                            <span className="underline">
+                              {team.transcripts?.length.toString()}
+                            </span>
                           </div>
                         </Link>
                       </td>

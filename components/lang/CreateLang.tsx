@@ -5,7 +5,7 @@ import useTeams from 'hooks/useTeams';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { Button, Input,Textarea, Modal } from 'react-daisyui';
+import { Button, Input, Textarea, Modal } from 'react-daisyui';
 import toast from 'react-hot-toast';
 import type { ApiResponse, Language } from 'types';
 import * as Yup from 'yup';

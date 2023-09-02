@@ -82,7 +82,7 @@ export default function Sidebar() {
         icon: UserCircleIcon,
       },
     ],
-  };  
+  };
 
   const menus = sidebarMenus[slug ? 'team' : 'personal'];
 

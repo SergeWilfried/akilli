@@ -4,24 +4,10 @@ import { useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import type { NextPageWithLayout } from 'types';
-import useTeams from '../hooks/useTeams';
-import { useRouter } from 'next/router';
 
 const Dashboard: NextPageWithLayout = () => {
-  const router = useRouter();
-  const { teams } = useTeams();
   const { t } = useTranslation('common');
   const { data: session } = useSession();
-
-  if (teams) {
-    if (teams.length > 0) {
-     
-        router.push(`/dashboard`);
-      
-    } else {
-      router.push('teams?newTeam=true');
-    }
-  }
 
   return (
     <Card heading="Dashboard">
