@@ -39,7 +39,7 @@ export default function Sidebar() {
       },
       {
         name: t('transcripts'),
-        href: `/`,
+        href: `/transcripts`,
         icon: ChatBubbleLeftRightIcon,
       },
       {
