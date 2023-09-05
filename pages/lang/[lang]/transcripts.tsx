@@ -31,12 +31,17 @@ const AllTranscripts: NextPageWithLayout = () => {
   );
 };
 
-export async function getStaticProps({ locale }: GetServerSidePropsContext) {
-  return {
-    props: {
-      ...(locale ? await serverSideTranslations(locale, ['common']) : {}),
-    },
+export const getServerSideProps = async (
+    context: GetServerSidePropsContext
+  ) => {
+    const { locale }: GetServerSidePropsContext = context;
+  
+    return {
+      props: {
+        ...(locale ? await serverSideTranslations(locale, ['common']) : {}),
+      },
+    };
   };
-}
+  
 
 export default AllTranscripts;

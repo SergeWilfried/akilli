@@ -22,6 +22,12 @@
       "@/components/*": ["components/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "next-auth.d.ts", "prisma/delete.js"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "next-auth.d.ts",
+    "prisma/delete.js"
+  ],
   "exclude": ["node_modules"]
 }

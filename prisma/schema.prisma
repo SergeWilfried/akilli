@@ -3,8 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("POSTGRES_PRISMA_URL")
+  provider          = "postgresql"
+  url               = env("POSTGRES_PRISMA_URL")
   directUrl         = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
   shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING") // used for migrations
 }
@@ -86,13 +86,14 @@ model Team {
   translators Translator[]
   invitations Invitation[]
   apiKeys     ApiKey[]
+  transcripts Transcript[]
 }
 
 model Translator {
-  id      String   @id @default(uuid())
-  teamId  String
-  userId  String
-  address Address? @relation(fields: [addressId], references: [id])
+  id                String            @id @default(uuid())
+  teamId            String
+  userId            String
+  address           Address?          @relation(fields: [addressId], references: [id])
   role              Role              @default(MEMBER)
   createdAt         DateTime          @default(now())
   updatedAt         DateTime          @default(now())
@@ -141,8 +142,8 @@ model Transcript {
   text                String    @db.Text
   textLang            String
   transcript          String    @db.Text
-  transcriptionLang   Language? @relation(fields: [transcriptionLangId], references: [id])
-  transcriptionLangId String?
+  language   Language? @relation(fields: [languageId], references: [id])
+  languageId String?
 
   audios AudioTranscript[]
 
@@ -151,6 +152,8 @@ model Transcript {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
+  Team      Team?    @relation(fields: [teamId], references: [id])
+  teamId    String?
 }
 
 model AudioTranscript {

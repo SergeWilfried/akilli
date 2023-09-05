@@ -2,7 +2,6 @@ import { getAxiosError } from '@/lib/common';
 import type { Team } from '@prisma/client';
 import axios from 'axios';
 import { useFormik } from 'formik';
-import useTeams from 'hooks/useTeams';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -10,6 +9,7 @@ import { Button, Input, Modal } from 'react-daisyui';
 import toast from 'react-hot-toast';
 import type { ApiResponse } from 'types';
 import * as Yup from 'yup';
+import useTranscripts from 'hooks/useTranscripts';
 
 const CreateTranscript = ({
   visible,
@@ -19,7 +19,7 @@ const CreateTranscript = ({
   setVisible: (visible: boolean) => void;
 }) => {
   const { t } = useTranslation('common');
-  const { mutateTeams } = useTeams();
+  const { mutateTranscripts } = useTranscripts();
   const router = useRouter();
 
   const formik = useFormik({
@@ -38,8 +38,8 @@ const CreateTranscript = ({
         const { data: teamCreated } = response.data;
 
         if (teamCreated) {
-          toast.success(t('team-created'));
-          mutateTeams();
+          toast.success(t('transcript-created'));
+          mutateTranscripts();
           formik.resetForm();
           setVisible(false);
           router.push(`/teams/${teamCreated.slug}/settings`);
@@ -53,7 +53,9 @@ const CreateTranscript = ({
   return (
     <Modal open={visible}>
       <form onSubmit={formik.handleSubmit} method="POST">
-        <Modal.Header className="font-bold">{t('create-transcript')}</Modal.Header>
+        <Modal.Header className="font-bold">
+          {t('create-transcript')}
+        </Modal.Header>
         <Modal.Body>
           <div className="mt-2 flex flex-col space-y-4">
             <p>{t('members-of-a-team')}</p>
