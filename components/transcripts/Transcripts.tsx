@@ -74,18 +74,16 @@ const Teams = () => {
                       key={team.id}
                       className="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
                     >
-                      <td className="px-6 py-3">
-                        <Link href={`/teams/${team.slug}/members`}>
-                          <div className="flex items-center justify-start space-x-2">
-                            <LetterAvatar name={team.name} />
-                            <span className="underline">{team.name}</span>
-                          </div>
-                        </Link>
-                      </td>
+                                          <td className="px-6 py-3">{team.id}</td>
+
                       <td className="px-6 py-3">{team._count.translators}</td>
                       <td className="px-6 py-3">
                         {new Date(team.createdAt).toDateString()}
                       </td>
+                      <td className="px-6 py-3">{team._count.translators}</td>
+                      <td className="px-6 py-3">{team.name}</td>
+                      <td className="px-6 py-3">{new Date(team.createdAt).toDateString()}</td>
+
                       <td className="px-6 py-3">
                         <Button
                           variant="outline"
@@ -96,7 +94,7 @@ const Teams = () => {
                             setAskConfirmation(true);
                           }}
                         >
-                          {t('leave-team')}
+                          {t('delete-transcript')}
                         </Button>
                       </td>
                     </tr>
