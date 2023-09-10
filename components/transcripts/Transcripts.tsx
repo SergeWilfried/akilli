@@ -1,10 +1,9 @@
-import { Card, Error, LetterAvatar, Loading } from '@/components/shared';
+import { Card, Error, Loading } from '@/components/shared';
 import { getAxiosError } from '@/lib/common';
 import { Team } from '@prisma/client';
 import axios from 'axios';
 import useTeams from 'hooks/useTeams';
 import { useTranslation } from 'next-i18next';
-import Link from 'next/link';
 import { useState } from 'react';
 import { Button } from 'react-daisyui';
 import toast from 'react-hot-toast';
