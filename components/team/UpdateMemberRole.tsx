@@ -1,18 +1,18 @@
 import { availableRoles } from '@/lib/permissions';
-import { Team, Translator } from '@prisma/client';
+import { Team, Transcriber } from '@prisma/client';
 import axios from 'axios';
 import { useTranslation } from 'next-i18next';
 import toast from 'react-hot-toast';
 
 interface UpdateMemberRoleProps {
   team: Team;
-  member: Translator;
+  member: Transcriber;
 }
 
 const UpdateMemberRole = ({ team, member }: UpdateMemberRoleProps) => {
   const { t } = useTranslation('common');
 
-  const updateRole = async (member: Translator, role: string) => {
+  const updateRole = async (member: Transcriber, role: string) => {
     await axios.patch(`/api/teams/${team.slug}/members`, {
       memberId: member.userId,
       role,
@@ -27,7 +27,7 @@ const UpdateMemberRole = ({ team, member }: UpdateMemberRoleProps) => {
       onChange={(e) => updateRole(member, e.target.value)}
     >
       {availableRoles.map((role) => (
-        <option value={role.id} key={role.id} selected={role.id == member.role}>
+        <option value={role.id} key={role.id} selected={role.id == 'ADMIN'}>
           {role.id}
         </option>
       ))}

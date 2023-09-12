@@ -4,6 +4,7 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { Button } from 'react-daisyui';
 import type { NextPageWithLayout } from 'types';
 
 const AllTranscripts: NextPageWithLayout = () => {
@@ -24,6 +25,16 @@ const AllTranscripts: NextPageWithLayout = () => {
     <>
       <div className="flex items-center justify-between">
         <h4>{t('all-transcripts')}</h4>
+        <Button
+          color="primary"
+          size="md"
+          variant="outline"
+          onClick={() => {
+            setVisible(!visible);
+          }}
+        >
+          {t('create-team')}
+        </Button>
       </div>
       <CreateTranscript visible={visible} setVisible={setVisible} />
       <Transcripts />

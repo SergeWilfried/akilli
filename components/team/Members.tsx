@@ -1,5 +1,5 @@
 import { Card, Error, LetterAvatar, Loading } from '@/components/shared';
-import { Team, Translator } from '@prisma/client';
+import { Team, Transcriber } from '@prisma/client';
 import axios from 'axios';
 import useCanAccess from 'hooks/useCanAccess';
 import useTeamMembers from 'hooks/useTeamMembers';
@@ -31,7 +31,7 @@ const Members = ({ team }: { team: Team }) => {
     return null;
   }
 
-  const removeTeamMember = async (member: Translator) => {
+  const removeTeamMember = async (member: Transcriber) => {
     const sp = new URLSearchParams({ memberId: member.userId });
 
     await axios.delete(`/api/teams/${team.slug}/members?${sp.toString()}`);
@@ -41,13 +41,13 @@ const Members = ({ team }: { team: Team }) => {
     toast.success(t('member-deleted'));
   };
 
-  const canUpdateRole = (member: Translator) => {
+  const canUpdateRole = (member: Transcriber) => {
     return (
       session?.user.id != member.userId && canAccess('team_member', ['update'])
     );
   };
 
-  const canRemoveMember = (member: Translator) => {
+  const canRemoveMember = (member: Transcriber) => {
     return (
       session?.user.id != member.userId && canAccess('team_member', ['delete'])
     );
@@ -79,7 +79,7 @@ const Members = ({ team }: { team: Team }) => {
             {members.map((member) => {
               return (
                 <tr
-                  key={member.id}
+                  key={member.userId}
                   className="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
                 >
                   <td className="px-6 py-3">
@@ -93,7 +93,7 @@ const Members = ({ team }: { team: Team }) => {
                     {canUpdateRole(member) ? (
                       <UpdateMemberRole team={team} member={member} />
                     ) : (
-                      <span>{member.role}</span>
+                      <span>{``}</span>
                     )}
                   </td>
                   {canRemoveMember(member) && (

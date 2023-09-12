@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from '@/lib/session';
 import { createTranscript, getTranscript } from 'models/transcript';
-import { Transcript } from '../../../types';
+import { Task } from '../../../types';
 
 export default async function handler(
   req: NextApiRequest,
@@ -32,14 +32,19 @@ export default async function handler(
 }
 
 const handlePOST = async (req: NextApiRequest, res: NextApiResponse) => {
-  const tsc = req.body as Transcript;
+  const tsc = req.body as Task;
+  const session = await getSession(req, res);
+
   //FIXME
   const transcript = await createTranscript({
     ...tsc,
-    languageId: '',
-    topic: '',
-    translatorId: '',
-    teamId: '',
+    assignedTranscriberId: tsc.assignedTranscriberId
+      ? tsc.assignedTranscriberId
+      : '',
+    status: tsc.status ? tsc.status : '',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    userId: session?.user.id as string,
   });
   res.status(200).json({ data: transcript });
 };

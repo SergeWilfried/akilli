@@ -81,7 +81,7 @@ const handlePUT = async (req: NextApiRequest, res: NextApiResponse) => {
   const teamMember = await throwIfNoTeamAccess(req, res);
   throwIfNotAllowed(teamMember, 'team', 'leave');
 
-  const totalTeamOwners = await prisma.translator.count({
+  const totalTeamOwners = await prisma.transcriber.count({
     where: {
       role: Role.OWNER,
       teamId: teamMember.teamId,
@@ -104,7 +104,7 @@ const handlePATCH = async (req: NextApiRequest, res: NextApiResponse) => {
 
   const { memberId, role } = req.body as { memberId: string; role: Role };
 
-  const memberUpdated = await prisma.translator.update({
+  const memberUpdated = await prisma.transcriber.update({
     where: {
       teamId_userId: {
         teamId: teamMember.teamId,

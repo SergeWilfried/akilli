@@ -30,9 +30,9 @@ export default async function handler(
 }
 
 const handlePOST = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { name, description } = req.body;
+  const { name, description, code } = req.body;
 
-  const lang = await createLanguage({ name, description });
+  const lang = await createLanguage({ name, description, code });
   res.status(200).json({ data: lang });
 };
 

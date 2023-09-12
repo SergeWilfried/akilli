@@ -1,7 +1,7 @@
 import { ApiError } from '@/lib/errors';
 import { Action, Resource, permissions } from '@/lib/permissions';
 import { prisma } from '@/lib/prisma';
-import { Role, Translator } from '@prisma/client';
+import { Role, Transcriber } from '@prisma/client';
 import type { Session } from 'next-auth';
 
 export const createUser = async (param: {
@@ -90,7 +90,7 @@ export const isAllowed = (role: Role, resource: Resource, action: Action) => {
 };
 
 export const throwIfNotAllowed = (
-  teamMember: Translator,
+  teamMember: Transcriber,
   resource: Resource,
   action: Action
 ) => {

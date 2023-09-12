@@ -26,7 +26,7 @@ export type SPSAMLConfig = {
 export type TeamWithMemberCount = Prisma.TeamGetPayload<{
   include: {
     _count: {
-      select: { translators: true };
+      select: { transcribers: true };
     };
   };
 }>;
@@ -41,10 +41,10 @@ export type Language = {
   id: string;
   name: string;
   description: string;
+  code: string;
   createdAt: Date;
   updatedAt: Date;
-  transcripts: Transcript[];
-  audios: AudioTranscript[];
+  transcribers: Transcriber[];
 };
 
 interface User {
@@ -61,7 +61,7 @@ interface User {
   image?: string;
   createdAt: Date;
   updatedAt: Date;
-  translators: Translator[];
+  transcribers: Transcriber[];
   accounts: [];
   sessions: [];
   invitations: Invitation[];
@@ -75,25 +75,26 @@ interface Team {
   defaultRole: Role;
   createdAt: Date;
   updatedAt: Date;
-  translators: Translator[];
+  translators: Transcriber[];
   invitations: Invitation[];
   apiKeys: ApiKey[];
-  transcripts: Transcript[];
 }
 
-interface Translator {
+export interface Transcriber {
   id: string;
-  teamId: string;
-  userId: string;
-  address?: Address;
+  name?: string;
+  gender?: string;
   role: Role;
-  createdAt: Date;
-  updatedAt: Date;
+  age?: string;
+  email?: string;
+  languages: Language[];
+  tasks: Task[];
   team: Team;
+  teamId: string;
+  payments: Payment[];
+  rating: Rating[];
   user: User;
-  audiosTranscripts: AudioTranscript[];
-  transcripts: Transcript[];
-  addressId?: number;
+  userId: string;
 }
 
 export interface Invitation {
@@ -110,37 +111,28 @@ export interface Invitation {
   team: Team;
 }
 
-export interface Transcript {
+export interface Task {
   id: string;
-  topic?: string;
-  text: string;
-  textLang: string;
-  transcript: string;
-  transcriptionLang?: Language;
-  transcriptionLangId?: string;
-  audios: AudioTranscript[];
-  translator?: Translator;
-  translatorId?: string;
-  createdAt: Date;
-  updatedAt: Date;
-  Team?: Team;
-  teamId?: string;
+  audioFileUrl: string;
+  textFileUrl: string;
+  status?: string;
+  deadline: Date;
+  assignedTranscriber?: Transcriber | null;
+  assignedTranscriberId?: string | null;
+  createdAt?: Date;
+  updatedAt?: Date;
+  user?: User;
+  userId?: string;
 }
-
-export interface AudioTranscript {
-  id: string;
-  transcript?: Transcript;
-  transcriptId?: string;
-  language?: Language;
-  languageId?: string;
-  url: string;
+export interface NewTaskInput {
+  language: string;
+  name: string;
   fileFormat: string;
-  createdAt: Date;
-  updatedAt: Date;
-  translator?: Translator;
-  translatorId?: string;
+  contentSize: string;
+  type: string;
+  deadline: Date;
+  file: any;
 }
-
 export interface ApiKey {
   id: string;
   name: string;
@@ -158,5 +150,38 @@ export interface Address {
   city: string;
   state: string;
   country: string;
-  translator: Translator[];
+  translator: Transcriber[];
+}
+
+interface Payment {
+  id: string;
+  transcriber: Transcriber;
+  transcriberId: string;
+  amount: number;
+  date: Date;
+  status: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+interface Rating {
+  id: string;
+  transcriber: Transcriber;
+  transcriberId: string;
+  rating: number;
+  comment?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export const MAX_FILE_SIZE = 1024000; //100KB
+
+const validFileExtensions = {
+  audio: ['mp3', 'wav', 'flac', 'aac', 'ogg'],
+};
+export function isValidFileType(fileName, fileType) {
+  return (
+    fileName &&
+    validFileExtensions[fileType].indexOf(fileName.split('.').pop()) > -1
+  );
 }

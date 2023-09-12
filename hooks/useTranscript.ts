@@ -1,5 +1,5 @@
 import fetcher from '@/lib/fetcher';
-import type { Transcript } from '@prisma/client';
+import type { Task } from '@prisma/client';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import type { ApiResponse } from 'types';
@@ -9,7 +9,7 @@ const useTranscript = (lang?: string) => {
 
   const langCode = lang || (isReady ? query.lang : null);
 
-  const { data, error, isLoading } = useSWR<ApiResponse<Transcript>>(
+  const { data, error, isLoading } = useSWR<ApiResponse<Task>>(
     langCode ? `/api/lang/${lang}/transcripts` : null,
     fetcher
   );

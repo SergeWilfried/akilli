@@ -32,16 +32,15 @@ const AllTranscripts: NextPageWithLayout = () => {
 };
 
 export const getServerSideProps = async (
-    context: GetServerSidePropsContext
-  ) => {
-    const { locale }: GetServerSidePropsContext = context;
-  
-    return {
-      props: {
-        ...(locale ? await serverSideTranslations(locale, ['common']) : {}),
-      },
-    };
+  context: GetServerSidePropsContext
+) => {
+  const { locale }: GetServerSidePropsContext = context;
+
+  return {
+    props: {
+      ...(locale ? await serverSideTranslations(locale, ['common']) : {}),
+    },
   };
-  
+};
 
 export default AllTranscripts;

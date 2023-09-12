@@ -74,10 +74,10 @@ const Languages = () => {
                         <Link href={`/lang/${team.name}/transcripts`}>
                           <div className="flex items-center justify-start space-x-2">
                             <LetterAvatar
-                              name={team.transcripts?.length.toString() ?? '0'}
+                              name={team.transcribers?.length.toString() ?? '0'}
                             />
                             <span className="underline">
-                              {team.transcripts?.length.toString()}
+                              {team.transcribers?.length.toString()}
                             </span>
                           </div>
                         </Link>

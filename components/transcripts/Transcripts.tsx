@@ -11,7 +11,7 @@ import { ApiResponse } from 'types';
 
 import ConfirmationDialog from '../shared/ConfirmationDialog';
 
-const Teams = () => {
+const Transcripts = () => {
   const { t } = useTranslation('common');
   const [team, setTeam] = useState<Team | null>(null);
   const { isLoading, isError, teams, mutateTeams } = useTeams();
@@ -73,15 +73,17 @@ const Teams = () => {
                       key={team.id}
                       className="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
                     >
-                                          <td className="px-6 py-3">{team.id}</td>
+                      <td className="px-6 py-3">{team.id}</td>
 
-                      <td className="px-6 py-3">{team._count.translators}</td>
+                      <td className="px-6 py-3">{team._count.transcribers}</td>
                       <td className="px-6 py-3">
                         {new Date(team.createdAt).toDateString()}
                       </td>
-                      <td className="px-6 py-3">{team._count.translators}</td>
+                      <td className="px-6 py-3">{team._count.transcribers}</td>
                       <td className="px-6 py-3">{team.name}</td>
-                      <td className="px-6 py-3">{new Date(team.createdAt).toDateString()}</td>
+                      <td className="px-6 py-3">
+                        {new Date(team.createdAt).toDateString()}
+                      </td>
 
                       <td className="px-6 py-3">
                         <Button
@@ -120,4 +122,4 @@ const Teams = () => {
   );
 };
 
-export default Teams;
+export default Transcripts;
