@@ -5,7 +5,7 @@ import { useFormik } from 'formik';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import React, { useRef, useState, useEffect } from 'react';
-import { Button, Input, Modal, Select } from 'react-daisyui';
+import { Button, Input, Modal } from 'react-daisyui';
 import toast from 'react-hot-toast';
 import {
   isValidFileType,
@@ -16,6 +16,7 @@ import {
 import * as Yup from 'yup';
 import useTranscripts from 'hooks/useTranscripts';
 import { tasksType } from '../../lib/permissions';
+import { createFile } from '../../lib/storage/minio';
 
 const CreateTranscript = ({
   visible,
@@ -32,23 +33,17 @@ const CreateTranscript = ({
 
   const formik = useFormik<NewTaskInput>({
     initialValues: {
-      deadline: new Date(),
-      language: 'French',
-      name: `Task #1`,
-      fileFormat: '',
-      contentSize: '',
+      language: '',
+      name: ``,
       type: '',
       file: undefined,
     },
     validationSchema: Yup.object().shape({
-      name: Yup.string().required(),
-      deadline: Yup.date().optional(),
-      language: Yup.string().required(),
-      fileFormat: Yup.string().optional(),
-      contentSize: Yup.number().optional(),
-      type: Yup.string().required(),
+      name: Yup.string().required('Name is Required'),
+      language: Yup.string().required('Language is Required'),
+      type: Yup.string().required('Type Required'),
       file: Yup.mixed()
-        .required('Required')
+        .optional()
         .test('is-valid-type', 'Not a valid file type', (value) =>
           isValidFileType((value as File)?.name?.toLowerCase(), 'audio')
         )
@@ -60,8 +55,11 @@ const CreateTranscript = ({
     }),
     onSubmit: async (values) => {
       try {
-        const response = await axios.post<ApiResponse<Team>>('/api/teams/', {
+        const url = handleFileUpload(values.file); // Call the handleFileUpload function
+        console.log(url)
+        const response = await axios.post<ApiResponse<Team>>('/api/task', {
           ...values,
+          // url: url,
         });
 
         const { data: teamCreated } = response.data;
@@ -74,6 +72,7 @@ const CreateTranscript = ({
           router.push(`/teams/${teamCreated.slug}/settings`);
         }
       } catch (error: any) {
+        console.error(error)
         toast.error(getAxiosError(error));
       }
     },
@@ -82,6 +81,17 @@ const CreateTranscript = ({
   useEffect(() => {
     setAudioUrl('');
   }, [formik.values.type]);
+
+  const handleFileUpload = async (file) => {
+    try {
+      const fileUrl = await createFile(file);
+      return fileUrl;
+      // Do something with the file URL, such as saving it in state or sending it to a server
+    } catch (error) {
+      // Handle the error appropriately
+      toast.error('An error occurred while handling the file upload.');
+    }
+  };
 
   return (
     <Modal open={visible}>
@@ -111,21 +121,22 @@ const CreateTranscript = ({
               />
             </div>
             <div className="flex justify-between space-x-3">
-              <Select
+              <select
                 className="select-bordered select flex-grow"
                 name="type"
-                onChange={formik.handleChange}
-                value={formik.values.type}
+                onChange={(event) => {
+                  formik.handleChange(event);
+                }}
                 required
               >
                 {tasksType.map((task) => (
                   <option value={task.name} key={task.id}>
-                    {task.value}
+                    {task.name}
                   </option>
                 ))}
-              </Select>
+              </select>
             </div>
-            {formik.values.type === 'SPEECH_TO_TEXT' && (
+            {formik.values.type === 'SPEECH TO TEXT' && (
               <div className="flex justify-between space-x-3">
                 <input
                   type="file"
@@ -134,7 +145,6 @@ const CreateTranscript = ({
                   onChange={(event) => {
                     if (event.currentTarget.files) {
                       const file = event.currentTarget.files?.[0];
-
                       if (!file) return;
                       setAudioUrl(URL.createObjectURL(file));
                       formik.setFieldValue(

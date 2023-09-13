@@ -127,10 +127,7 @@ export interface Task {
 export interface NewTaskInput {
   language: string;
   name: string;
-  fileFormat: string;
-  contentSize: string;
   type: string;
-  deadline: Date;
   file: any;
 }
 export interface ApiKey {
@@ -174,8 +171,7 @@ interface Rating {
   updatedAt: Date;
 }
 
-export const MAX_FILE_SIZE = 1024000; //100KB
-
+export const MAX_FILE_SIZE = 10485760; // 10MB
 const validFileExtensions = {
   audio: ['mp3', 'wav', 'flac', 'aac', 'ogg'],
 };

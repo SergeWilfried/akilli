@@ -56,3 +56,16 @@ a {
 .btn-md {
   @apply min-h-8 h-10;
 }
+
+audio::-webkit-media-controls-panel {
+  background-color: #4406cb;
+}
+
+audio::-webkit-media-controls-play-button {
+  background-color: #b1d4e0;
+  border-radius: 50%;
+}
+
+audio::-webkit-media-controls-play-button:hover {
+  background-color: rgba(177, 212, 224, 0.7);
+}
