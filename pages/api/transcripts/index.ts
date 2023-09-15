@@ -26,7 +26,6 @@ export default async function handler(
   } catch (error: any) {
     const message = error.message || 'Something went wrong';
     const status = error.status || 500;
-
     res.status(status).json({ error: { message } });
   }
 }
@@ -45,6 +44,7 @@ const handlePOST = async (req: NextApiRequest, res: NextApiResponse) => {
     createdAt: new Date(),
     updatedAt: new Date(),
     userId: session?.user.id as string,
+    id: '',
   });
   res.status(200).json({ data: transcript });
 };

@@ -2,16 +2,14 @@ import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import env from '@/lib/env';
 
 const s3 = new S3Client({
-  region: 'us-east-1',
+  region: env.storage.region,
   credentials: {
-    accessKeyId: env.storage.accessKey
-      ? env.storage.accessKey
-      : '2u9Hv91cOIxyPpfgz537',
-    secretAccessKey: env.storage.secretKey
-      ? env.storage.secretKey
-      : 'p5V98MGID2YtQdiYPqfDyx1hnXZ7S34RomYB44Fm',
+    accessKeyId: env.storage.accessKey ? env.storage.accessKey : '',
+    secretAccessKey: env.storage.secretKey ? env.storage.secretKey : '',
   },
-  endpoint: env.storage.publicEndpoint ?? 'http://localhost:9000',
+  endpoint: env.storage.publicEndpoint
+    ? env.storage.publicEndpoint
+    : 'http://localhost:9000',
   forcePathStyle: true,
 });
 

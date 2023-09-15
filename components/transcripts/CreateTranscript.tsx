@@ -1,5 +1,4 @@
 import { getAxiosError } from '@/lib/common';
-import type { Team } from '@prisma/client';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import { useTranslation } from 'next-i18next';
@@ -12,6 +11,7 @@ import {
   type ApiResponse,
   type NewTaskInput,
   MAX_FILE_SIZE,
+  Task,
 } from 'types';
 import * as Yup from 'yup';
 import useTranscripts from 'hooks/useTranscripts';
@@ -55,12 +55,23 @@ const CreateTranscript = ({
     }),
     onSubmit: async (values) => {
       try {
-        const url = handleFileUpload(values.file); // Call the handleFileUpload function
-        console.log(url)
-        const response = await axios.post<ApiResponse<Team>>('/api/task', {
-          ...values,
-          // url: url,
-        });
+        /// FIXME: Handle multiple files
+        const url = await handleFileUpload(values.file); // Call the handleFileUpload function
+        console.log(url);
+        const task: Task = {
+          language: values.language,
+          type: values.type,
+          name: values.name,
+          status: 'CREATED',
+          assignedTranscriberId: '',
+          userId: '',
+        };
+        const response = await axios.post<ApiResponse<Task>>(
+          '/api/transcripts',
+          {
+            ...task,
+          }
+        );
 
         const { data: teamCreated } = response.data;
 
@@ -69,10 +80,9 @@ const CreateTranscript = ({
           mutateTranscripts();
           formik.resetForm();
           setVisible(false);
-          router.push(`/teams/${teamCreated.slug}/settings`);
+          router.push(`/teams/${teamCreated.name}/settings`);
         }
       } catch (error: any) {
-        console.error(error)
         toast.error(getAxiosError(error));
       }
     },
@@ -136,7 +146,7 @@ const CreateTranscript = ({
                 ))}
               </select>
             </div>
-            {formik.values.type === 'SPEECH TO TEXT' && (
+            {formik.values.type === 'VOICE TO TEXT' && (
               <div className="flex justify-between space-x-3">
                 <input
                   type="file"

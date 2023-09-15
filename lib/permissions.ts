@@ -117,10 +117,10 @@ export const permissions: RolePermissions = {
 export const tasksType = [
   {
     id: '0',
-    name: 'TEXT TO SPEECH',
+    name: 'TEXT TO VOICE',
   },
   {
     id: '1',
-    name: 'SPEECH TO TEXT',
+    name: 'VOICE TO TEXT',
   },
 ];

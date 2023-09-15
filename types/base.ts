@@ -112,17 +112,28 @@ export interface Invitation {
 }
 
 export interface Task {
-  id: string;
-  audioFileUrl: string;
-  textFileUrl: string;
+  id?: string;
   status?: string;
-  deadline: Date;
-  assignedTranscriber?: Transcriber | null;
-  assignedTranscriberId?: string | null;
+  name: string;
+  language: string;
+  type: string;
+  deadline?: Date;
+  assignedTranscriberId: string | null;
   createdAt?: Date;
   updatedAt?: Date;
-  user?: User;
-  userId?: string;
+  userId: string;
+}
+
+export enum TranscriptType {
+  VOICE_TO_TEXT,
+  TEXT_TO_VOICE,
+}
+
+export interface File {
+  id: string;
+  url: string;
+  fileFormat: string;
+  contentSize: number;
 }
 export interface NewTaskInput {
   language: string;
