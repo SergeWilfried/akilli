@@ -1,10 +1,9 @@
 import { Card, Error, Loading } from '@/components/shared';
 import { getAxiosError } from '@/lib/common';
 import axios from 'axios';
-import useTeams from 'hooks/useTeams';
 import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
-import { Button } from 'react-daisyui';
+import { Button, Link } from 'react-daisyui';
 import toast from 'react-hot-toast';
 import { ApiResponse, Task } from 'types';
 
@@ -14,9 +13,9 @@ import useTranscripts from '../../hooks/useTranscripts';
 const Transcripts = () => {
   const { t } = useTranslation('common');
   const [task, setTeam] = useState<Task | null>(null);
-  const { isLoading, isError, mutateTeams } = useTeams();
   const [askConfirmation, setAskConfirmation] = useState(false);
-  const { tasks } = useTranscripts();
+
+  const { tasks, isLoading, isError, mutateTasks } = useTranscripts();
   if (isLoading) {
     return <Loading />;
   }
@@ -25,11 +24,11 @@ const Transcripts = () => {
     return <Error message={isError.message} />;
   }
 
-  const leaveTeam = async (team: Task) => {
+  const leaveTeam = async (task: Task) => {
     try {
-      await axios.put<ApiResponse>(`/api/teams/${team.id}/members`);
+      await axios.delete<ApiResponse>(`/api/tasks/${task.id}`);
       toast.success(t('leave-team-success'));
-      mutateTeams();
+      mutateTasks();
     } catch (error: any) {
       toast.error(getAxiosError(error));
     }
@@ -43,9 +42,6 @@ const Transcripts = () => {
             <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
               <tr>
                 <th scope="col" className="px-6 py-3">
-                  {t('id')}
-                </th>
-                <th scope="col" className="px-6 py-3">
                   {t('name')}
                 </th>
                 <th scope="col" className="px-6 py-3">
@@ -57,7 +53,9 @@ const Transcripts = () => {
                 <th scope="col" className="px-6 py-3">
                   {t('files')}
                 </th>
-
+                <th scope="col" className="px-6 py-3">
+                  {t('status')}
+                </th>
                 <th scope="col" className="px-6 py-3">
                   {t('expires-in')}
                 </th>
@@ -77,12 +75,18 @@ const Transcripts = () => {
                       key={task.id}
                       className="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
                     >
-                      <td className="px-6 py-3">{task.id}</td>
-                      <td className="px-6 py-3">{task.name}</td>
+                      <td className="px-6 py-3">
+                        <Link href={`/tasks/${task.id}/transcripts`}>
+                          <div className="flex items-center justify-start space-x-2">
+                            <span className="underline">{task.name}</span>
+                          </div>
+                        </Link>
+                      </td>
                       <td className="px-6 py-3">{task.language}</td>
                       <td className="px-6 py-3">{task.type}</td>
 
-                      <td className="px-6 py-3">{task._count.files}</td>
+                      <td className="px-6 py-3">{task._count?.files ?? 0}</td>
+                      <td className="px-6 py-3">{task.status}</td>
 
                       <td className="px-6 py-3">
                         {new Date(task.deadline).toDateString()}

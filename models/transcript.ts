@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/prisma';
-import { Task } from '../types';
+import { Task } from '@prisma/client';
 
 export async function createTranscript(transcript: Task): Promise<Task> {
   try {
@@ -11,30 +11,76 @@ export async function createTranscript(transcript: Task): Promise<Task> {
       },
     });
   } catch (error) {
+    console.error(error);
     throw new Error('Failed to create transcript');
   }
 }
-
-export async function getTranscript(id: string): Promise<Task | null> {
+export async function addFilesToTask(
+  taskId: string,
+  files: File[]
+): Promise<Task> {
   try {
-    return await prisma.task.findUnique({ where: { id } });
+    const task = await prisma.task.findUnique({ where: { id: taskId } });
+    if (!task) {
+      throw new Error('Task not found');
+    }
+
+    const updatedTask = await prisma.task.update({
+      where: { id: taskId },
+      data: {
+        files: {
+          createMany: {
+            data: files.map((file) => ({
+              name: file.name,
+              url: '',
+              type: file.type,
+              contentSize: file.size,
+              fileFormat: file.type,
+            })),
+          },
+        },
+      },
+    });
+
+    return updatedTask;
+  } catch (error) {
+    throw new Error('Failed to add files to task');
+  }
+}
+
+export async function getAllTranscripts(key: { userId: string }): Promise<any> {
+  try {
+    return await prisma.task.findMany({ where: key });
   } catch (error) {
     throw new Error('Failed to retrieve transcript');
   }
 }
 
-export async function updateTranscript(transcript: Task): Promise<Task | null> {
+export async function getOneTranscript(key: {
+  userId: string;
+  id: string;
+}): Promise<any> {
   try {
-    const { id, ...data } = transcript;
+    return await prisma.task.findMany({ where: key });
+  } catch (error) {
+    throw new Error('Failed to retrieve transcript');
+  }
+}
+
+export async function updateTranscript(
+  id: string,
+  data: Partial<Task>
+): Promise<Task | null> {
+  try {
     return await prisma.task.update({ where: { id }, data });
   } catch (error) {
     throw new Error('Failed to update transcript');
   }
 }
 
-export async function deleteTranscript(id: string): Promise<void> {
+export async function deleteTranscript(key: { id: string }): Promise<void> {
   try {
-    await prisma.task.delete({ where: { id } });
+    await prisma.task.delete({ where: key });
   } catch (error) {
     throw new Error('Failed to delete transcript');
   }

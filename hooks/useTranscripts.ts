@@ -3,12 +3,14 @@ import useSWR, { mutate } from 'swr';
 import type { ApiResponse, TaskWithFilesCount } from 'types';
 
 const useTranscripts = () => {
-  const url = `/api/transcripts`;
+  const url = `/api/tasks`;
 
   const { data, error, isLoading } = useSWR<ApiResponse<TaskWithFilesCount[]>>(
     url,
     fetcher
   );
+
+  console.log(data);
 
   const mutateTasks = async () => {
     mutate(url);

@@ -126,10 +126,10 @@ export interface Task {
   language: string;
   type: string;
   deadline?: Date;
-  assignedTranscriberId: string | null;
   createdAt: Date;
   updatedAt?: Date;
   userId: string;
+  files?: [];
 }
 
 export enum TranscriptType {
@@ -137,18 +137,13 @@ export enum TranscriptType {
   TEXT_TO_VOICE,
 }
 
-export interface File {
-  id: string;
-  url: string;
-  fileFormat: string;
-  contentSize: number;
-}
 export interface NewTaskInput {
   language: string;
   name: string;
   type: string;
-  file: any;
+  files: File | File[];
 }
+
 export interface ApiKey {
   id: string;
   name: string;

@@ -10,7 +10,7 @@ const useTranscript = (lang?: string) => {
   const langCode = lang || (isReady ? query.lang : null);
 
   const { data, error, isLoading } = useSWR<ApiResponse<Task>>(
-    langCode ? `/api/lang/${lang}/transcripts` : null,
+    langCode ? `/api/lang/${lang}/tasks` : null,
     fetcher
   );
 

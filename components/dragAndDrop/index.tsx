@@ -28,6 +28,7 @@ export default function DragAndDrop(props: DragAndDropProps) {
       <input
         placeholder="fileInput"
         className="hidden"
+        name="files"
         ref={inputRef}
         type="file"
         multiple={true}

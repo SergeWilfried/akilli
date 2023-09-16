@@ -18,6 +18,7 @@ import useTranscripts from 'hooks/useTranscripts';
 import { tasksType } from '../../lib/permissions';
 import { createFile } from '../../lib/storage/minio';
 import DragAndDrop from '../dragAndDrop';
+import useLanguages from '../../hooks/useLanguages';
 
 const CreateTranscript = ({
   visible,
@@ -34,45 +35,46 @@ const CreateTranscript = ({
   const [dragActive, setDragActive] = useState<boolean>(false);
   const inputRef = useRef<any>(null);
   const [files, setFiles] = useState<any>([]);
-
+  const { languages } = useLanguages();
   const formik = useFormik<NewTaskInput>({
     initialValues: {
       language: '',
       name: ``,
       type: '',
-      file: undefined,
+      files: files,
     },
     validationSchema: Yup.object().shape({
       name: Yup.string().required('Name is Required'),
       language: Yup.string().required('Language is Required'),
       type: Yup.string().required('Type Required'),
-      file: Yup.mixed()
-        .optional()
-        .test('is-valid-type', 'Not a valid file type', (value) =>
-          isValidFileType((value as File)?.name?.toLowerCase(), 'audio')
-        )
-        .test(
-          'is-valid-size',
-          'Max allowed size is 1024KB',
-          (value) => value && (value as File).size <= MAX_FILE_SIZE
-        ),
+      files: Yup.array().of(
+        Yup.mixed()
+          .optional()
+          .test('is-valid-type', 'Not a valid file type', (value) =>
+            isValidFileType((value as File)?.name?.toLowerCase(), 'audio')
+          )
+          .test(
+            'is-valid-size',
+            'Max allowed size is 1024KB',
+            (value) => value && (value as File).size <= MAX_FILE_SIZE
+          )
+      ),
     }),
     onSubmit: async (values) => {
       try {
         /// FIXME: Handle multiple files
-        const url = await handleFileUpload(values.file); // Call the handleFileUpload function
+        const url = await handleFileUpload(values.files); // Call the handleFileUpload function
         console.log(url);
         const task: Task = {
           language: values.language,
           type: values.type,
           name: values.name,
           status: 'CREATED',
-          assignedTranscriberId: '',
           userId: '',
           createdAt: new Date(),
         };
         const response = await axios.post<ApiResponse<Task>>(
-          '/api/transcripts',
+          '/api/tasks',
           {
             ...task,
           }
@@ -85,7 +87,7 @@ const CreateTranscript = ({
           mutateTasks();
           formik.resetForm();
           setVisible(false);
-          router.push(`/teams/${teamCreated.name}/settings`);
+          router.push(`/tasks`);
         }
       } catch (error: any) {
         toast.error(getAxiosError(error));
@@ -182,22 +184,31 @@ const CreateTranscript = ({
                 className="flex-grow"
                 onChange={formik.handleChange}
                 value={formik.values.name}
-                placeholder={t('team-name')}
-              />
-            </div>
-            <div className="flex justify-between space-x-3">
-              <Input
-                name="language"
-                className="flex-grow"
-                onChange={formik.handleChange}
-                value={formik.values.language}
-                placeholder={t('task-lang')}
+                placeholder={t('task-name')}
               />
             </div>
             <div className="flex justify-between space-x-3">
               <select
                 className="select-bordered select flex-grow"
+                name="language"
+                defaultValue={t('select-lang')}
+                onChange={(event) => {
+                  formik.handleChange(event);
+                }}
+                required
+              >
+                {languages?.map((task) => (
+                  <option value={task.name} key={task.id}>
+                    {task.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="flex justify-between space-x-3">
+              <select
+                className="select-bordered select flex-grow"
                 name="type"
+                defaultValue={t('select-task-type')}
                 onChange={(event) => {
                   formik.handleChange(event);
                 }}
@@ -235,9 +246,8 @@ const CreateTranscript = ({
             type="submit"
             color="primary"
             loading={formik.isSubmitting}
-            active={formik.isValid}
             size="md"
-            disabled={formik.dirty}
+            disabled={!formik.isValid}
           >
             {t('create-team')}
           </Button>

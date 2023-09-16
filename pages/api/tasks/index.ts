@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from '@/lib/session';
-import { createTranscript, getTranscript } from 'models/transcript';
-import { Task } from '../../../types';
+import { createTranscript, getAllTranscripts } from 'models/transcript';
+import { Task } from '@prisma/client';
 
 export default async function handler(
   req: NextApiRequest,
@@ -37,22 +37,21 @@ const handlePOST = async (req: NextApiRequest, res: NextApiResponse) => {
   //FIXME
   const transcript = await createTranscript({
     ...tsc,
-    assignedTranscriberId: tsc.assignedTranscriberId
-      ? tsc.assignedTranscriberId
-      : '',
     status: tsc.status ? tsc.status : '',
     createdAt: new Date(),
     updatedAt: new Date(),
     userId: session?.user.id as string,
-    id: '',
   });
+  console.log('added transcript', transcript);
   res.status(200).json({ data: transcript });
 };
 
 const handleGET = async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await getSession(req, res);
 
-  const transcripts = await getTranscript(session?.user.id as string);
-
+  const transcripts = await getAllTranscripts({
+    userId: session?.user.id as string,
+  });
+  console.log('transcripts', transcripts);
   res.status(200).json({ data: transcripts });
 };
