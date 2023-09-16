@@ -17,6 +17,7 @@ import * as Yup from 'yup';
 import useTranscripts from 'hooks/useTranscripts';
 import { tasksType } from '../../lib/permissions';
 import { createFile } from '../../lib/storage/minio';
+import DragAndDrop from '../dragAndDrop';
 
 const CreateTranscript = ({
   visible,
@@ -26,10 +27,13 @@ const CreateTranscript = ({
   setVisible: (visible: boolean) => void;
 }) => {
   const { t } = useTranslation('common');
-  const { mutateTranscripts } = useTranscripts();
+  const { mutateTasks } = useTranscripts();
   const router = useRouter();
   const [audioUrl, setAudioUrl] = useState(``);
   const audioElmRef = useRef(null);
+  const [dragActive, setDragActive] = useState<boolean>(false);
+  const inputRef = useRef<any>(null);
+  const [files, setFiles] = useState<any>([]);
 
   const formik = useFormik<NewTaskInput>({
     initialValues: {
@@ -65,6 +69,7 @@ const CreateTranscript = ({
           status: 'CREATED',
           assignedTranscriberId: '',
           userId: '',
+          createdAt: new Date(),
         };
         const response = await axios.post<ApiResponse<Task>>(
           '/api/transcripts',
@@ -77,7 +82,7 @@ const CreateTranscript = ({
 
         if (teamCreated) {
           toast.success(t('transcript-created'));
-          mutateTranscripts();
+          mutateTasks();
           formik.resetForm();
           setVisible(false);
           router.push(`/teams/${teamCreated.name}/settings`);
@@ -103,9 +108,68 @@ const CreateTranscript = ({
     }
   };
 
+  function handleChange(e: any) {
+    e.preventDefault();
+    console.log('File has been added');
+    if (e.target.files && e.target.files[0]) {
+      console.log(e.target.files);
+      for (let i = 0; i < e.target.files['length']; i++) {
+        setFiles((prevState: any) => [...prevState, e.target.files[i]]);
+      }
+    }
+  }
+
+  function handleDrop(e: any) {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      for (let i = 0; i < e.dataTransfer.files['length']; i++) {
+        setFiles((prevState: any) => [...prevState, e.dataTransfer.files[i]]);
+      }
+    }
+  }
+
+  function handleDragLeave(e: any) {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+  }
+
+  function handleDragOver(e: any) {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(true);
+  }
+
+  function handleDragEnter(e: any) {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(true);
+  }
+
+  function openFileExplorer() {
+    inputRef.current.value = '';
+    inputRef.current.click();
+  }
+
+  function removeFile(fileName: any, idx: any) {
+    const newArr = [...files];
+    newArr.splice(idx, 1);
+    setFiles([]);
+    setFiles(newArr);
+  }
+
   return (
     <Modal open={visible}>
-      <form onSubmit={formik.handleSubmit} method="POST">
+      <form
+        onSubmit={formik.handleSubmit}
+        method="POST"
+        onDragEnter={handleDragEnter}
+        onDrop={handleDrop}
+        onDragLeave={handleDragLeave}
+        onDragOver={handleDragOver}
+      >
         <Modal.Header className="font-bold">
           {t('create-transcript')}
         </Modal.Header>
@@ -146,26 +210,14 @@ const CreateTranscript = ({
                 ))}
               </select>
             </div>
-            {formik.values.type === 'VOICE TO TEXT' && (
-              <div className="flex justify-between space-x-3">
-                <input
-                  type="file"
-                  name="file"
-                  className="file-input file-input-bordered flex-grow"
-                  onChange={(event) => {
-                    if (event.currentTarget.files) {
-                      const file = event.currentTarget.files?.[0];
-                      if (!file) return;
-                      setAudioUrl(URL.createObjectURL(file));
-                      formik.setFieldValue(
-                        'file',
-                        event.currentTarget.files[0]
-                      );
-                    }
-                  }}
-                />
-              </div>
-            )}
+            <DragAndDrop
+              handleChange={handleChange}
+              openFileExplorer={openFileExplorer}
+              removeFile={removeFile}
+              inputRef={inputRef}
+              files={files}
+              dragActive={dragActive}
+            />
             {audioUrl && (
               <div className="flex justify-between space-x-3">
                 <audio
@@ -183,8 +235,9 @@ const CreateTranscript = ({
             type="submit"
             color="primary"
             loading={formik.isSubmitting}
-            active={formik.dirty}
+            active={formik.isValid}
             size="md"
+            disabled={formik.dirty}
           >
             {t('create-team')}
           </Button>

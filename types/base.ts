@@ -31,6 +31,14 @@ export type TeamWithMemberCount = Prisma.TeamGetPayload<{
   };
 }>;
 
+export type TaskWithFilesCount = Prisma.TaskGetPayload<{
+  include: {
+    _count: {
+      select: { files: true };
+    };
+  };
+}>;
+
 export type WebookFormSchema = {
   name: string;
   url: string;
@@ -119,7 +127,7 @@ export interface Task {
   type: string;
   deadline?: Date;
   assignedTranscriberId: string | null;
-  createdAt?: Date;
+  createdAt: Date;
   updatedAt?: Date;
   userId: string;
 }

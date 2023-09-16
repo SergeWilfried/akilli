@@ -1,22 +1,22 @@
 import { Card, Error, Loading } from '@/components/shared';
 import { getAxiosError } from '@/lib/common';
-import { Team } from '@prisma/client';
 import axios from 'axios';
 import useTeams from 'hooks/useTeams';
 import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
 import { Button } from 'react-daisyui';
 import toast from 'react-hot-toast';
-import { ApiResponse } from 'types';
+import { ApiResponse, Task } from 'types';
 
 import ConfirmationDialog from '../shared/ConfirmationDialog';
+import useTranscripts from '../../hooks/useTranscripts';
 
 const Transcripts = () => {
   const { t } = useTranslation('common');
-  const [team, setTeam] = useState<Team | null>(null);
-  const { isLoading, isError, teams, mutateTeams } = useTeams();
+  const [task, setTeam] = useState<Task | null>(null);
+  const { isLoading, isError, mutateTeams } = useTeams();
   const [askConfirmation, setAskConfirmation] = useState(false);
-
+  const { tasks } = useTranscripts();
   if (isLoading) {
     return <Loading />;
   }
@@ -25,9 +25,9 @@ const Transcripts = () => {
     return <Error message={isError.message} />;
   }
 
-  const leaveTeam = async (team: Team) => {
+  const leaveTeam = async (team: Task) => {
     try {
-      await axios.put<ApiResponse>(`/api/teams/${team.slug}/members`);
+      await axios.put<ApiResponse>(`/api/teams/${team.id}/members`);
       toast.success(t('leave-team-success'));
       mutateTeams();
     } catch (error: any) {
@@ -46,16 +46,20 @@ const Transcripts = () => {
                   {t('id')}
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  {t('text')}
+                  {t('name')}
                 </th>
                 <th scope="col" className="px-6 py-3">
                   {t('language')}
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  {t('audio')}
+                  {t('type')}
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  {t('team')}
+                  {t('files')}
+                </th>
+
+                <th scope="col" className="px-6 py-3">
+                  {t('expires-in')}
                 </th>
                 <th scope="col" className="px-6 py-3">
                   {t('created-at')}
@@ -66,23 +70,25 @@ const Transcripts = () => {
               </tr>
             </thead>
             <tbody>
-              {teams &&
-                teams.map((team) => {
+              {tasks &&
+                tasks.map((task) => {
                   return (
                     <tr
-                      key={team.id}
+                      key={task.id}
                       className="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
                     >
-                      <td className="px-6 py-3">{team.id}</td>
+                      <td className="px-6 py-3">{task.id}</td>
+                      <td className="px-6 py-3">{task.name}</td>
+                      <td className="px-6 py-3">{task.language}</td>
+                      <td className="px-6 py-3">{task.type}</td>
 
-                      <td className="px-6 py-3">{team._count.transcribers}</td>
+                      <td className="px-6 py-3">{task._count.files}</td>
+
                       <td className="px-6 py-3">
-                        {new Date(team.createdAt).toDateString()}
+                        {new Date(task.deadline).toDateString()}
                       </td>
-                      <td className="px-6 py-3">{team._count.transcribers}</td>
-                      <td className="px-6 py-3">{team.name}</td>
                       <td className="px-6 py-3">
-                        {new Date(team.createdAt).toDateString()}
+                        {new Date(task.createdAt).toDateString()}
                       </td>
 
                       <td className="px-6 py-3">
@@ -91,7 +97,7 @@ const Transcripts = () => {
                           size="xs"
                           color="error"
                           onClick={() => {
-                            setTeam(team);
+                            setTeam(task);
                             setAskConfirmation(true);
                           }}
                         >
@@ -107,11 +113,11 @@ const Transcripts = () => {
       </Card>
       <ConfirmationDialog
         visible={askConfirmation}
-        title={`${t('leave-team')} ${team?.name}`}
+        title={`${t('leave-team')} ${task?.name}`}
         onCancel={() => setAskConfirmation(false)}
         onConfirm={() => {
-          if (team) {
-            leaveTeam(team);
+          if (task) {
+            leaveTeam(task);
           }
         }}
         confirmText={t('leave-team')}

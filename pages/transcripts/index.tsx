@@ -33,7 +33,7 @@ const AllTranscripts: NextPageWithLayout = () => {
             setVisible(!visible);
           }}
         >
-          {t('create-team')}
+          {t('create-transcript')}
         </Button>
       </div>
       <CreateTranscript visible={visible} setVisible={setVisible} />
