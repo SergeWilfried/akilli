@@ -1,10 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from '@/lib/session';
-import {
-  deleteTranscript,
-  getOneTranscript,
-  updateTranscript,
-} from 'models/transcript';
+import { deleteTask, getOneTask, updateTask } from 'models/transcript';
 
 export default async function handler(
   req: NextApiRequest,
@@ -40,11 +36,11 @@ const handleGET = async (req: NextApiRequest, res: NextApiResponse) => {
   const { id } = req.query as { id: string };
   const session = await getSession(req, res);
 
-  const transcripts = await getOneTranscript({
+  const tasks = await getOneTask({
     userId: session?.user.id as string,
     id: id,
   });
-  res.status(200).json({ data: transcripts });
+  res.status(200).json({ data: tasks });
 };
 
 const handlePUT = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -52,7 +48,7 @@ const handlePUT = async (req: NextApiRequest, res: NextApiResponse) => {
   const { id } = req.query as { id: string };
   const params = req.body;
 
-  const lang = await updateTranscript(id, params);
+  const lang = await updateTask(id, params);
 
   res.status(200).json({ data: lang });
 };
@@ -60,6 +56,6 @@ const handlePUT = async (req: NextApiRequest, res: NextApiResponse) => {
 const handleDelete = async (req: NextApiRequest, res: NextApiResponse) => {
   const { id } = req.query as { id: string };
 
-  const lang = await deleteTranscript({ id });
+  const lang = await deleteTask({ id });
   res.status(200).json({ data: lang });
 };

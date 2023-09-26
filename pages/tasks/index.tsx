@@ -1,4 +1,4 @@
-import { CreateTranscript, Transcripts } from '@/components/transcripts';
+import { CreateTask, Tasks } from '@/components/tasks';
 import { GetServerSidePropsContext } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { Button } from 'react-daisyui';
 import type { NextPageWithLayout } from 'types';
 
-const AllTranscripts: NextPageWithLayout = () => {
+const AllTasks: NextPageWithLayout = () => {
   const [visible, setVisible] = useState(false);
 
   const router = useRouter();
@@ -24,7 +24,7 @@ const AllTranscripts: NextPageWithLayout = () => {
   return (
     <>
       <div className="flex items-center justify-between">
-        <h4>{t('all-transcripts')}</h4>
+        <h4>{t('all-tasks')}</h4>
         <Button
           color="primary"
           size="md"
@@ -33,11 +33,11 @@ const AllTranscripts: NextPageWithLayout = () => {
             setVisible(!visible);
           }}
         >
-          {t('create-transcript')}
+          {t('create-task')}
         </Button>
       </div>
-      <CreateTranscript visible={visible} setVisible={setVisible} />
-      <Transcripts />
+      <CreateTask visible={visible} setVisible={setVisible} />
+      <Tasks />
     </>
   );
 };
@@ -50,4 +50,4 @@ export async function getStaticProps({ locale }: GetServerSidePropsContext) {
   };
 }
 
-export default AllTranscripts;
+export default AllTasks;

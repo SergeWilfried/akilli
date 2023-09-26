@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import type { ApiResponse } from 'types';
 
-const useTranscript = (lang?: string) => {
+const useTask = (lang?: string) => {
   const { query, isReady } = useRouter();
 
   const langCode = lang || (isReady ? query.lang : null);
@@ -21,4 +21,4 @@ const useTranscript = (lang?: string) => {
   };
 };
 
-export default useTranscript;
+export default useTask;

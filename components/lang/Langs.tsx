@@ -71,7 +71,7 @@ const Languages = () => {
                       <td className="px-6 py-3">{team.name}</td>
                       <td className="px-6 py-3">{team.description}</td>
                       <td className="px-6 py-3">
-                        <Link href={`/lang/${team.name}/transcripts`}>
+                        <Link href={`/lang/${team.name}/tasks`}>
                           <div className="flex items-center justify-start space-x-2">
                             <LetterAvatar
                               name={team.transcribers?.length.toString() ?? '0'}

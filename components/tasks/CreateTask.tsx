@@ -14,13 +14,13 @@ import {
   Task,
 } from 'types';
 import * as Yup from 'yup';
-import useTranscripts from 'hooks/useTranscripts';
+import useTasks from 'hooks/useTasks';
 import { tasksType } from '../../lib/permissions';
 import { createFile } from '../../lib/storage/minio';
 import DragAndDrop from '../dragAndDrop';
 import useLanguages from '../../hooks/useLanguages';
 
-const CreateTranscript = ({
+const CreateTask = ({
   visible,
   setVisible,
 }: {
@@ -28,7 +28,7 @@ const CreateTranscript = ({
   setVisible: (visible: boolean) => void;
 }) => {
   const { t } = useTranslation('common');
-  const { mutateTasks } = useTranscripts();
+  const { mutateTasks } = useTasks();
   const router = useRouter();
   const [audioUrl, setAudioUrl] = useState(``);
   const audioElmRef = useRef(null);
@@ -63,23 +63,61 @@ const CreateTranscript = ({
     onSubmit: async (values) => {
       try {
         /// FIXME: Handle multiple files
-        const url = await handleFileUpload(values.files); // Call the handleFileUpload function
-        console.log(url);
-        const task: Task = {
-          language: values.language,
-          type: values.type,
-          name: values.name,
-          status: 'CREATED',
-          userId: '',
-          createdAt: new Date(),
-        };
-        const response = await axios.post<ApiResponse<Task>>(
-          '/api/tasks',
-          {
-            ...task,
-          }
-        );
+        const irl = await handleFileUpload(files); // Call the handleFileUpload function
+        console.log(`liens de fichier ${irl}`);
+        let response: any;
+        const links = irl?.split(`,`).filter(link => link !== '');
+        console.log('links', links?.length);
 
+        if (links === undefined) {
+          /* empty */
+        }
+        let task: Task;
+        if (links !== undefined) {
+          if (links?.length > 1) {
+            const filesList: any[] = [];
+            for (let index = 0; index < links.length; index++) {
+              const size = files[index]?.size;
+              const type = files[index]?.type;
+              const url = links[index];
+              console.log(url)
+              filesList?.push({
+                url: url,
+                size: size,
+                type: type,
+              });
+            }
+            task = {
+              language: values.language,
+              type: values.type,
+              name: values.name,
+              status: 'CREATED',
+              userId: '',
+              createdAt: new Date(),
+              files: filesList,
+            };
+            response = await axios.post<ApiResponse<Task>>('/api/tasks', {
+              ...task,
+            });
+          } else {
+            task = {
+              language: values.language,
+              type: values.type,
+              name: values.name,
+              status: 'CREATED',
+              userId: '',
+              createdAt: new Date(),
+              files: {
+                url: links,
+                size: files[0].size,
+                type: files[0].type,
+              },
+            };
+            response = await axios.post<ApiResponse<Task>>('/api/tasks', {
+              ...task,
+            });
+          }
+        }
         const { data: teamCreated } = response.data;
 
         if (teamCreated) {
@@ -99,11 +137,20 @@ const CreateTranscript = ({
     setAudioUrl('');
   }, [formik.values.type]);
 
-  const handleFileUpload = async (file) => {
+  const handleFileUpload = async (files: File | File[]) => {
     try {
-      const fileUrl = await createFile(file);
-      return fileUrl;
-      // Do something with the file URL, such as saving it in state or sending it to a server
+      let fileUrl = ``;
+      const filesNumber = files.length;
+      console.log(`Uploading files ${filesNumber}`);
+      if (filesNumber > 1) {
+        for (let index = 0; index < filesNumber; index++) {
+          const url = await createFile(files[index]);
+          fileUrl += `,${url}`;
+        }
+        return fileUrl;
+      } else {
+        return await createFile(files[0]);
+      }
     } catch (error) {
       // Handle the error appropriately
       toast.error('An error occurred while handling the file upload.');
@@ -112,9 +159,7 @@ const CreateTranscript = ({
 
   function handleChange(e: any) {
     e.preventDefault();
-    console.log('File has been added');
     if (e.target.files && e.target.files[0]) {
-      console.log(e.target.files);
       for (let i = 0; i < e.target.files['length']; i++) {
         setFiles((prevState: any) => [...prevState, e.target.files[i]]);
       }
@@ -267,4 +312,4 @@ const CreateTranscript = ({
   );
 };
 
-export default CreateTranscript;
+export default CreateTask;

@@ -1,13 +1,21 @@
 import { prisma } from '@/lib/prisma';
 import { Task } from '@prisma/client';
 
-export async function createTranscript(transcript: Task): Promise<Task> {
+export async function createTask(transcript: Task): Promise<Task> {
   try {
     return await prisma.task.create({
       data: {
         ...transcript,
         status: 'CREATED',
-        deadline: new Date(),
+        deadline: new Date(
+          new Date().setFullYear(new Date().getFullYear() + 1)
+        ),
+        files: {
+          create: [],
+        },
+      },
+      include: {
+        files: true,
       },
     });
   } catch (error) {
@@ -48,7 +56,7 @@ export async function addFilesToTask(
   }
 }
 
-export async function getAllTranscripts(key: { userId: string }): Promise<any> {
+export async function getAllTasks(key: { userId: string }): Promise<any> {
   try {
     return await prisma.task.findMany({ where: key });
   } catch (error) {
@@ -56,7 +64,7 @@ export async function getAllTranscripts(key: { userId: string }): Promise<any> {
   }
 }
 
-export async function getOneTranscript(key: {
+export async function getOneTask(key: {
   userId: string;
   id: string;
 }): Promise<any> {
@@ -67,7 +75,7 @@ export async function getOneTranscript(key: {
   }
 }
 
-export async function updateTranscript(
+export async function updateTask(
   id: string,
   data: Partial<Task>
 ): Promise<Task | null> {
@@ -78,7 +86,7 @@ export async function updateTranscript(
   }
 }
 
-export async function deleteTranscript(key: { id: string }): Promise<void> {
+export async function deleteTask(key: { id: string }): Promise<void> {
   try {
     await prisma.task.delete({ where: key });
   } catch (error) {

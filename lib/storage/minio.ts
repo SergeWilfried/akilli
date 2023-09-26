@@ -2,10 +2,14 @@ import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import env from '@/lib/env';
 
 const s3 = new S3Client({
-  region: env.storage.region,
+  region: env.storage.region ? env.storage.region : 'us-east-1',
   credentials: {
-    accessKeyId: env.storage.accessKey ? env.storage.accessKey : '',
-    secretAccessKey: env.storage.secretKey ? env.storage.secretKey : '',
+    accessKeyId: env.storage.accessKey
+      ? env.storage.accessKey
+      : 'KCX75RVNhVpk7qp50wtK',
+    secretAccessKey: env.storage.secretKey
+      ? env.storage.secretKey
+      : 'CFiINitd069FJDyFpkDxNG7XUdynWF5lIYIWyHhj',
   },
   endpoint: env.storage.publicEndpoint
     ? env.storage.publicEndpoint
@@ -13,15 +17,13 @@ const s3 = new S3Client({
   forcePathStyle: true,
 });
 
-export async function createFile(files: File[]) {
+export async function createFile(file: File) {
+  let fileUrl = ``;
   try {
-    const file = files[0] ? files[0] : undefined;
-    const filesList = files.length > 0 ? files : undefined;
-    let fileUrl: string = '';
-    let urlList: string[];
     if (file) {
       // uploading object with string data on Body
       const objectKey = file?.name;
+      const bucketName = `akilli`;
       const arrayBuffer = await file.arrayBuffer();
       const body = Buffer.from(arrayBuffer);
       await s3.send(
@@ -32,35 +34,13 @@ export async function createFile(files: File[]) {
         })
       );
 
-      if (!env.storage.bucketName) {
-        fileUrl = `akilli/${objectKey}`;
-      }
-      console.log(`Successfully uploaded ${fileUrl}`);
-    }
-    if (filesList) {
-      filesList.forEach(async (file) => {
-        // uploading object with string data on Body
-        const objectKey = file.name;
-        const arrayBuffer = await file.arrayBuffer();
-        const body = Buffer.from(arrayBuffer);
-        await s3.send(
-          new PutObjectCommand({
-            Bucket: env.storage.bucketName ?? 'akilli',
-            Key: objectKey,
-            Body: body,
-          })
-        );
+      fileUrl = `${bucketName}/${objectKey}`;
 
-        if (!env.storage.bucketName) {
-          fileUrl = `akilli/${objectKey}`;
-          urlList.push(fileUrl);
-        }
-        console.log(`Successfully uploaded ${fileUrl}`);
-      });
+      console.log(`Successfully uploaded files ${fileUrl}`);
     }
-
     return fileUrl;
-  } catch (err) {
+  } catch (err: any) {
     console.log('Error', err);
+    throw Error(err?.message);
   }
 }

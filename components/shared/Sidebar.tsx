@@ -38,7 +38,7 @@ export default function Sidebar() {
         icon: LanguageIcon,
       },
       {
-        name: t('transcripts'),
+        name: t('tasks'),
         href: `/tasks`,
         icon: ChatBubbleLeftRightIcon,
       },
@@ -71,7 +71,7 @@ export default function Sidebar() {
         icon: LanguageIcon,
       },
       {
-        name: t('transcripts'),
+        name: t('tasks'),
         href: `#`,
         icon: ChatBubbleLeftRightIcon,
       },

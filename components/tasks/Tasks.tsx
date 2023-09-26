@@ -8,14 +8,14 @@ import toast from 'react-hot-toast';
 import { ApiResponse, Task } from 'types';
 
 import ConfirmationDialog from '../shared/ConfirmationDialog';
-import useTranscripts from '../../hooks/useTasks';
+import useTasks from '../../hooks/useTasks';
 
-const Transcripts = () => {
+const Tasks = () => {
   const { t } = useTranslation('common');
   const [task, setTeam] = useState<Task | null>(null);
   const [askConfirmation, setAskConfirmation] = useState(false);
 
-  const { tasks, isLoading, isError, mutateTasks } = useTranscripts();
+  const { tasks, isLoading, isError, mutateTasks } = useTasks();
   if (isLoading) {
     return <Loading />;
   }
@@ -36,7 +36,7 @@ const Transcripts = () => {
 
   return (
     <>
-      <Card heading={t('all-transcripts')}>
+      <Card heading={t('all-tasks')}>
         <Card.Body>
           <table className="w-full table-fixed text-left text-sm text-gray-500 dark:text-gray-400">
             <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
@@ -54,7 +54,7 @@ const Transcripts = () => {
                 <th scope="col" className="px-6 py-3">
                   {t('status')}
                 </th>
-              
+                
                 <th scope="col" className="px-6 py-3">
                   {t('created-at')}
                 </th>
@@ -72,7 +72,7 @@ const Transcripts = () => {
                       className="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
                     >
                       <td className="px-6 py-3">
-                        <Link href={`/tasks/${task.id}/transcripts`}>
+                        <Link href={`/tasks/${task.id}`}>
                           <div className="flex items-center justify-start space-x-2">
                             <span>{task.name}</span>
                           </div>
@@ -83,7 +83,7 @@ const Transcripts = () => {
 
                       <td className="px-6 py-3">{task.status}</td>
 
-                     
+                 
                       <td className="px-6 py-3">
                         {new Date(task.createdAt).toDateString()}
                       </td>
@@ -125,4 +125,4 @@ const Transcripts = () => {
   );
 };
 
-export default Transcripts;
+export default Tasks;

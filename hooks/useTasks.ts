@@ -2,16 +2,13 @@ import fetcher from '@/lib/fetcher';
 import useSWR, { mutate } from 'swr';
 import type { ApiResponse, TaskWithFilesCount } from 'types';
 
-const useTranscripts = () => {
+const useTasks = () => {
   const url = `/api/tasks`;
 
   const { data, error, isLoading } = useSWR<ApiResponse<TaskWithFilesCount[]>>(
     url,
     fetcher
   );
-
-  console.log(data);
-
   const mutateTasks = async () => {
     mutate(url);
   };
@@ -24,4 +21,4 @@ const useTranscripts = () => {
   };
 };
 
-export default useTranscripts;
+export default useTasks;

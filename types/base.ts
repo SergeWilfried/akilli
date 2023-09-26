@@ -129,7 +129,7 @@ export interface Task {
   createdAt: Date;
   updatedAt?: Date;
   userId: string;
-  files?: [];
+  files?: any;
 }
 
 export enum TranscriptType {
@@ -141,9 +141,14 @@ export interface NewTaskInput {
   language: string;
   name: string;
   type: string;
-  files: File | File[];
+  files: TranscriptFile | TranscriptFile[];
 }
 
+export interface TranscriptFile {
+  url: string;
+  fileFormat: string;
+  contentSize: number;
+}
 export interface ApiKey {
   id: string;
   name: string;
