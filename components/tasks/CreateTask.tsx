@@ -66,7 +66,7 @@ const CreateTask = ({
         const irl = await handleFileUpload(files); // Call the handleFileUpload function
         console.log(`liens de fichier ${irl}`);
         let response: any;
-        const links = irl?.split(`,`).filter(link => link !== '');
+        const links = irl?.split(`,`).filter((link) => link !== '');
         console.log('links', links?.length);
 
         if (links === undefined) {
@@ -80,11 +80,11 @@ const CreateTask = ({
               const size = files[index]?.size;
               const type = files[index]?.type;
               const url = links[index];
-              console.log(url)
+              console.log(url);
               filesList?.push({
                 url: url,
-                size: size,
-                type: type,
+                contentSize: size,
+                fileFormat: type,
               });
             }
             task = {
@@ -109,8 +109,8 @@ const CreateTask = ({
               createdAt: new Date(),
               files: {
                 url: links,
-                size: files[0].size,
-                type: files[0].type,
+                contentSize: files[0].size,
+                fileFormat: files[0].type,
               },
             };
             response = await axios.post<ApiResponse<Task>>('/api/tasks', {

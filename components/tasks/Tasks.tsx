@@ -54,7 +54,7 @@ const Tasks = () => {
                 <th scope="col" className="px-6 py-3">
                   {t('status')}
                 </th>
-                
+
                 <th scope="col" className="px-6 py-3">
                   {t('created-at')}
                 </th>
@@ -83,7 +83,6 @@ const Tasks = () => {
 
                       <td className="px-6 py-3">{task.status}</td>
 
-                 
                       <td className="px-6 py-3">
                         {new Date(task.createdAt).toDateString()}
                       </td>

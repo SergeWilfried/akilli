@@ -1,7 +1,10 @@
 import { prisma } from '@/lib/prisma';
 import { Task } from '@prisma/client';
+import { TaskWithFiles } from '../types';
 
-export async function createTask(transcript: Task): Promise<Task> {
+export async function createTask(
+  transcript: TaskWithFiles
+): Promise<TaskWithFiles> {
   try {
     return await prisma.task.create({
       data: {
@@ -11,7 +14,7 @@ export async function createTask(transcript: Task): Promise<Task> {
           new Date().setFullYear(new Date().getFullYear() + 1)
         ),
         files: {
-          create: [],
+          create: [...transcript.files],
         },
       },
       include: {

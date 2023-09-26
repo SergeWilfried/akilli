@@ -39,6 +39,11 @@ export type TaskWithFilesCount = Prisma.TaskGetPayload<{
   };
 }>;
 
+export type TaskWithFiles = Prisma.TaskGetPayload<{
+  include: {
+    files: true;
+  };
+}>;
 export type WebookFormSchema = {
   name: string;
   url: string;
