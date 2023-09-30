@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import {
-  getTranscript,
   updateTranscript,
   createTranscript,
   deleteTranscript,
+  getAllTranscripts,
 } from '../../../../models/transcripts';
 
 export default async function handler(
@@ -43,7 +43,7 @@ export default async function handler(
 
 const handleGET = async (req: NextApiRequest, res: NextApiResponse) => {
   const { id } = req.query as { id: string };
-  const transcripts = await getTranscript(id);
+  const transcripts = await getAllTranscripts(id);
 
   res.status(200).json({ data: transcripts });
 };

@@ -75,12 +75,14 @@ export async function deleteTranscript(
 }
 
 /**
- * Get all transcripts
- * @returns all transcripts
+ * Get all transcripts for a specific task
+ * @param taskId - the id of the task to get transcripts for
+ * @returns all transcripts for the task
  */
-export async function getAllTranscripts(): Promise<Transcript[]> {
+export async function getAllTranscripts(taskId: string): Promise<Transcript[]> {
   try {
     const transcripts = await prisma.transcript.findMany({
+      where: { taskId },
       include: { task: true },
     });
 
@@ -93,13 +95,17 @@ export async function getAllTranscripts(): Promise<Transcript[]> {
 
 /**
  * Get one transcript
+ * @param taskId - the id of the task that the transcript belongs to
  * @param transcriptId - the id of the transcript to get
  * @returns the transcript
  */
-export async function getTranscript(transcriptId: string): Promise<Transcript> {
+export async function getTranscript(
+  taskId: string,
+  transcriptId: string
+): Promise<Transcript> {
   try {
     const transcript = await prisma.transcript.findUnique({
-      where: { id: transcriptId },
+      where: { id: transcriptId, taskId },
       include: { task: true },
     });
     if (transcript) {
