@@ -15,14 +15,14 @@ const AllTranscribers = ({ task }: { task: TaskWithFiles }) => {
   const { t } = useTranslation('common');
   const { canAccess } = useCanAccess();
 
-  const { isLoading, isError, transcribers, mutateTranscribers } = useTranscribers(
-    task.id
-  );
+  const { isLoading, isError, transcribers, mutateTranscribers } =
+    useTranscribers(task.id);
 
   const canRemoveMember = useMemo(() => {
     return (member: Transcriber) => {
       return (
-        session?.user.id != member.userId && canAccess('team_member', ['delete'])
+        session?.user.id != member.userId &&
+        canAccess('team_member', ['delete'])
       );
     };
   }, [session, canAccess]);
@@ -90,7 +90,7 @@ const AllTranscribers = ({ task }: { task: TaskWithFiles }) => {
                     </div>
                   </td>
                   <td className="px-6 py-3">{member.user.email}</td>
-                 
+
                   {canRemoveMember(member) && (
                     <td className="px-6 py-3">
                       <Button

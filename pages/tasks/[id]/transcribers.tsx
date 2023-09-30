@@ -30,7 +30,7 @@ const Transcribers: NextPageWithLayout = () => {
   return (
     <>
       <TasksTab activeTab="transcribers" task={task} />
-      <AllTranscribers task={task}/>
+      <AllTranscribers task={task} />
       <AccessControl resource="team" actions={['delete']}>
         <RemoveTask task={task} />
       </AccessControl>

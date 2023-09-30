@@ -1,7 +1,4 @@
-import {
-  Cog6ToothIcon,
-  KeyIcon,
-} from '@heroicons/react/24/outline';
+import { Cog6ToothIcon, KeyIcon } from '@heroicons/react/24/outline';
 import classNames from 'classnames';
 import Link from 'next/link';
 import { TaskWithFiles } from '../../types';

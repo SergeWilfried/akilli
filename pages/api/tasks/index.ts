@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from '@/lib/session';
-import { createTask, getAllTasks } from 'models/transcript';
+import { createTask, getAllTasks } from 'models/task';
 import { TaskWithFiles } from '../../../types';
 
 export default async function handler(

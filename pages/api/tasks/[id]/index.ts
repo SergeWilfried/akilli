@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from '@/lib/session';
-import { deleteTask, getOneTask, updateTask } from 'models/transcript';
+import { deleteTask, getOneTask, updateTask } from 'models/task';
 
 export default async function handler(
   req: NextApiRequest,

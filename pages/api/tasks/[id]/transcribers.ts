@@ -6,7 +6,7 @@ import { Role } from '@prisma/client';
 import {
   getAssignedTranscribers,
   removeTranscriberFromTask,
-} from 'models/transcript';
+} from 'models/task';
 import { throwIfNotAllowed } from 'models/user';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { throwIfNoTeamAccess } from '../../../../models/team';
