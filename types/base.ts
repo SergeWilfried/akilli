@@ -135,6 +135,7 @@ export interface Task {
   updatedAt?: Date;
   userId: string;
   files?: any;
+  transcripts?: any;
 }
 
 export enum TranscriptType {
@@ -172,6 +173,15 @@ export interface Address {
   state: string;
   country: string;
   translator: Transcriber[];
+}
+
+export interface Transcript {
+  id: number;
+  text: string;
+  createdAt: Date;
+  updatedAt: Date;
+  task: Task;
+  taskId: number;
 }
 
 interface Payment {
