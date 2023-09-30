@@ -8,14 +8,14 @@ import toast from 'react-hot-toast';
 import { ApiResponse, Task } from 'types';
 
 import ConfirmationDialog from '../shared/ConfirmationDialog';
-import useTranscripts from '../../hooks/useTasks';
+import useTasks from '../../hooks/useTasks';
 
-const Transcripts = () => {
+const AllTranscripts = () => {
   const { t } = useTranslation('common');
   const [task, setTeam] = useState<Task | null>(null);
   const [askConfirmation, setAskConfirmation] = useState(false);
 
-  const { tasks, isLoading, isError, mutateTasks } = useTranscripts();
+  const { tasks, isLoading, isError, mutateTasks } = useTasks();
   if (isLoading) {
     return <Loading />;
   }
@@ -124,4 +124,4 @@ const Transcripts = () => {
   );
 };
 
-export default Transcripts;
+export default AllTranscripts;

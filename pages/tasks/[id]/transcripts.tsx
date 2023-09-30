@@ -7,6 +7,7 @@ import { Error, Loading } from '@/components/shared';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/router';
 import useTask from '../../../hooks/useTask';
+import AllTranscripts from '@/components/transcripts/Transcripts';
 
 const Transcripts: NextPageWithLayout = () => {
   const { t } = useTranslation('common');
@@ -30,9 +31,7 @@ const Transcripts: NextPageWithLayout = () => {
   return (
     <>
       <TasksTab activeTab="transcripts" task={task} />
-      <div className="p-3">
-        <p className="text-sm">This is just a placeholder for the dashboard.</p>
-      </div>
+      <AllTranscripts />
       <AccessControl resource="team" actions={['delete']}>
         <RemoveTask task={task} />
       </AccessControl>

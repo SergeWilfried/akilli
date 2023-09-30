@@ -14,7 +14,6 @@ const Files: NextPageWithLayout = () => {
 
   const { id } = router.query as { id: string };
   const { isLoading, isError, task } = useTask(id);
-  console.log('task id', id);
 
   if (isLoading) {
     return <Loading />;

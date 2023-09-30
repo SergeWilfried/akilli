@@ -43,7 +43,6 @@ const handlePOST = async (req: NextApiRequest, res: NextApiResponse) => {
     userId: session?.user.id as string,
     files: tsc?.files,
   });
-  console.log('added transcript', transcript);
   res.status(200).json({ data: transcript });
 };
 

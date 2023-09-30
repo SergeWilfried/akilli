@@ -7,6 +7,7 @@ import { Error, Loading } from '@/components/shared';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/router';
 import useTask from '../../../hooks/useTask';
+import AllTranscribers from '@/components/tasks/Transcribers';
 
 const Transcribers: NextPageWithLayout = () => {
   const { t } = useTranslation('common');
@@ -14,7 +15,6 @@ const Transcribers: NextPageWithLayout = () => {
 
   const { id } = router.query as { id: string };
   const { isLoading, isError, task } = useTask(id);
-  console.log('task id', id);
 
   if (isLoading) {
     return <Loading />;
@@ -30,9 +30,7 @@ const Transcribers: NextPageWithLayout = () => {
   return (
     <>
       <TasksTab activeTab="transcribers" task={task} />
-      <div className="p-3">
-        <p className="text-sm">This is just a placeholder for the dashboard.</p>
-      </div>
+      <AllTranscribers task={task}/>
       <AccessControl resource="team" actions={['delete']}>
         <RemoveTask task={task} />
       </AccessControl>

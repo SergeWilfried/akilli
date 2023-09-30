@@ -66,16 +66,16 @@ const TasksDetails = ({ task }: { task: Task }) => {
               />
               <InputWithLabel
                 name="slug"
-                label={t('task-status')}
-                descriptionText={t('task-slug-description')}
+                label={t('status')}
+                descriptionText={t('status-description')}
                 value={formik.values.slug}
                 onChange={formik.handleChange}
                 error={formik.errors.slug}
               />
               <InputWithLabel
                 name="domain"
-                label={t('task-domain')}
-                descriptionText={t('task-domain')}
+                label={t('language')}
+                descriptionText={t('language')}
                 value={formik.values.domain ? formik.values.domain : ''}
                 onChange={formik.handleChange}
                 error={formik.errors.domain}

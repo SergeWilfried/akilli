@@ -38,7 +38,7 @@ const CreateTask = ({
   const { languages } = useLanguages();
   const formik = useFormik<NewTaskInput>({
     initialValues: {
-      language: '',
+      language: languages?.[0].name ?? '',
       name: ``,
       type: '',
       files: files,
@@ -238,9 +238,11 @@ const CreateTask = ({
               <select
                 className="select-bordered select flex-grow"
                 name="language"
-                defaultValue={t('select-lang')}
+                value={formik.values.language}
+                defaultValue={formik.initialValues.language} // Update this line
                 onChange={(event) => {
                   formik.handleChange(event);
+                  console.log('language', event.currentTarget);
                 }}
                 required
               >
@@ -255,9 +257,11 @@ const CreateTask = ({
               <select
                 className="select-bordered select flex-grow"
                 name="type"
-                defaultValue={t('select-task-type')}
+                defaultValue={formik.initialValues.type} // Update this line
+                value={formik.values.type}
                 onChange={(event) => {
                   formik.handleChange(event);
+                  console.log('type', event.currentTarget);
                 }}
                 required
               >

@@ -1,7 +1,6 @@
 import {
   Cog6ToothIcon,
   KeyIcon,
-  ShieldExclamationIcon,
 } from '@heroicons/react/24/outline';
 import classNames from 'classnames';
 import Link from 'next/link';
@@ -23,14 +22,6 @@ const TasksTab = (props: TasksTabProps) => {
       icon: Cog6ToothIcon,
     },
   ];
-
-  navigations.push({
-    name: 'Editor',
-    href: `/tasks/${task.id}/editor`,
-    active: activeTab === 'editor',
-    icon: ShieldExclamationIcon,
-  });
-
   navigations.push({
     name: 'Files',
     href: `/tasks/${task.id}/files`,
