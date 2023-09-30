@@ -72,7 +72,7 @@ export async function getOneTask(key: {
   id: string;
 }): Promise<any> {
   try {
-    return await prisma.task.findMany({ where: key });
+    return await prisma.task.findMany({ where: key, include: { files: true } });
   } catch (error) {
     throw new Error('Failed to retrieve transcript');
   }

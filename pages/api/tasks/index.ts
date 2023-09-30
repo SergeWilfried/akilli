@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from '@/lib/session';
 import { createTask, getAllTasks } from 'models/transcript';
-import { Task } from '@prisma/client';
+import { TaskWithFiles } from '../../../types';
 
 export default async function handler(
   req: NextApiRequest,
@@ -31,7 +31,7 @@ export default async function handler(
 }
 
 const handlePOST = async (req: NextApiRequest, res: NextApiResponse) => {
-  const tsc = req.body as Task;
+  const tsc = req.body as TaskWithFiles;
   const session = await getSession(req, res);
 
   //FIXME
@@ -41,6 +41,7 @@ const handlePOST = async (req: NextApiRequest, res: NextApiResponse) => {
     createdAt: new Date(),
     updatedAt: new Date(),
     userId: session?.user.id as string,
+    files: tsc?.files,
   });
   console.log('added transcript', transcript);
   res.status(200).json({ data: transcript });

@@ -1,21 +1,18 @@
 import { Card, Error, Loading } from '@/components/shared';
-import { getAxiosError } from '@/lib/common';
-import axios from 'axios';
 import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
 import { Button, Link } from 'react-daisyui';
-import toast from 'react-hot-toast';
-import { ApiResponse, Task } from 'types';
+import { Task } from 'types';
 
-import ConfirmationDialog from '../shared/ConfirmationDialog';
 import useTasks from '../../hooks/useTasks';
+import { useRouter } from 'next/router';
 
 const Tasks = () => {
   const { t } = useTranslation('common');
-  const [task, setTeam] = useState<Task | null>(null);
-  const [askConfirmation, setAskConfirmation] = useState(false);
+  const [currentTask, setTeam] = useState<Task | null>(null);
+  const router = useRouter();
 
-  const { tasks, isLoading, isError, mutateTasks } = useTasks();
+  const { tasks, isLoading, isError } = useTasks();
   if (isLoading) {
     return <Loading />;
   }
@@ -24,15 +21,15 @@ const Tasks = () => {
     return <Error message={isError.message} />;
   }
 
-  const leaveTeam = async (task: Task) => {
-    try {
-      await axios.delete<ApiResponse>(`/api/tasks/${task.id}`);
-      toast.success(t('leave-team-success'));
-      mutateTasks();
-    } catch (error: any) {
-      toast.error(getAxiosError(error));
-    }
-  };
+  // const leaveTeam = async (task: Task) => {
+  //   try {
+  //     await axios.delete<ApiResponse>(`/api/tasks/${task.id}`);
+  //     toast.success(t('leave-team-success'));
+  //     mutateTasks();
+  //   } catch (error: any) {
+  //     toast.error(getAxiosError(error));
+  //   }
+  // };
 
   return (
     <>
@@ -72,7 +69,7 @@ const Tasks = () => {
                       className="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
                     >
                       <td className="px-6 py-3">
-                        <Link href={`/tasks/${task.id}`}>
+                        <Link href={`/tasks/${task.id}/settings`}>
                           <div className="flex items-center justify-start space-x-2">
                             <span>{task.name}</span>
                           </div>
@@ -94,7 +91,9 @@ const Tasks = () => {
                           color="error"
                           onClick={() => {
                             setTeam(task);
-                            setAskConfirmation(true);
+                            if (currentTask) {
+                              router.push(`tasks/${currentTask.id}`);
+                            }
                           }}
                         >
                           {t('delete-transcript')}
@@ -107,19 +106,6 @@ const Tasks = () => {
           </table>
         </Card.Body>
       </Card>
-      <ConfirmationDialog
-        visible={askConfirmation}
-        title={`${t('leave-team')} ${task?.name}`}
-        onCancel={() => setAskConfirmation(false)}
-        onConfirm={() => {
-          if (task) {
-            leaveTeam(task);
-          }
-        }}
-        confirmText={t('leave-team')}
-      >
-        {t('leave-team-confirmation')}
-      </ConfirmationDialog>
     </>
   );
 };

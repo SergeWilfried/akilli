@@ -1,23 +1,22 @@
 import fetcher from '@/lib/fetcher';
-import type { Task } from '@prisma/client';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
-import type { ApiResponse } from 'types';
+import type { ApiResponse, TaskWithFiles } from 'types';
 
-const useTask = (lang?: string) => {
+const useTask = (id?: string) => {
   const { query, isReady } = useRouter();
 
-  const langCode = lang || (isReady ? query.lang : null);
+  const taskId = id || (isReady ? query.id : null);
 
-  const { data, error, isLoading } = useSWR<ApiResponse<Task>>(
-    langCode ? `/api/lang/${lang}/tasks` : null,
+  const { data, error, isLoading } = useSWR<ApiResponse<TaskWithFiles>>(
+    taskId ? `/api/tasks/${id}` : null,
     fetcher
   );
 
   return {
     isLoading,
     isError: error,
-    team: data?.data,
+    task: data?.data[0],
   };
 };
 

@@ -49,7 +49,7 @@ export default function Sidebar() {
       },
       {
         name: t('settings'),
-        href: `/`,
+        href: `/teams/${slug}/settings`,
         icon: Cog6ToothIcon,
       },
       {

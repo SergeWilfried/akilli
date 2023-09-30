@@ -74,7 +74,7 @@ const CreateTask = ({
         }
         let task: Task;
         if (links !== undefined) {
-          if (links?.length > 1) {
+          if (links?.length >= 1) {
             const filesList: any[] = [];
             for (let index = 0; index < links.length; index++) {
               const size = files[index]?.size;
@@ -107,11 +107,13 @@ const CreateTask = ({
               status: 'CREATED',
               userId: '',
               createdAt: new Date(),
-              files: {
-                url: links,
-                contentSize: files[0].size,
-                fileFormat: files[0].type,
-              },
+              files: [
+                {
+                  url: links,
+                  contentSize: files[0].size,
+                  fileFormat: files[0].type,
+                },
+              ],
             };
             response = await axios.post<ApiResponse<Task>>('/api/tasks', {
               ...task,
