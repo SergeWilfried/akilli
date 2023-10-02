@@ -3,7 +3,6 @@
 // import { useEditor, EditorContent } from '@tiptap/react';
 // import StarterKit from '@tiptap/starter-kit';
 // import { Card } from '@/components/shared';
-import { useTranslation } from 'react-i18next';
 import { TaskWithFiles } from '../../types';
 // import { TaskWithFiles } from '../../types';
 
@@ -11,8 +10,9 @@ interface EditorProps {
   task: TaskWithFiles;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Tiptap = (props: EditorProps) => {
-  const { task } = props;
+  // const { task } = props;
   // const editor = useEditor({
   //   extensions: [StarterKit],
   //   content: `<p>
@@ -22,7 +22,6 @@ const Tiptap = (props: EditorProps) => {
   //   The paragraph extension is not really required, but you need at least one node. Sure, that node can be something different.
   // </p>`,
   // });
-  const { t } = useTranslation('common');
   // const tasks: TaskWithFiles = [];
   return (
     <>
