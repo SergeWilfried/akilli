@@ -77,10 +77,18 @@ export const permissions: RolePermissions = {
       resource: 'team_api_key',
       actions: '*',
     },
+    {
+      resource: 'task',
+      actions: '*',
+    },
   ],
   ADMIN: [
     {
       resource: 'team',
+      actions: '*',
+    },
+    {
+      resource: 'task',
       actions: '*',
     },
     {

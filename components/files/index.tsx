@@ -83,7 +83,8 @@ const AllFiles = ({ currentTask }: FilesProps) => {
                         <td className="px-6 py-3">{apiKey.contentSize}</td>
 
                         <td className="px-6 py-3">
-                          <Badge color="success">{t('fileFormat')}</Badge>
+                          <Badge color={apiKey.fileFormat === 'audio/wav' ? 'success' : 'secondary'}>{apiKey.fileFormat}</Badge>
+
                         </td>
                         <td className="px-6 py-3">
                           {new Date(apiKey.createdAt).toLocaleDateString()}

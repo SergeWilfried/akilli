@@ -1,8 +1,7 @@
 import { GetServerSidePropsContext } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import type { NextPageWithLayout } from 'types';
-import { AccessControl } from '@/components/shared/AccessControl';
-import { TasksTab, RemoveTask } from '@/components/tasks';
+import { TasksTab } from '@/components/tasks';
 import { Error, Loading } from '@/components/shared';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/router';
@@ -45,9 +44,7 @@ const Files: NextPageWithLayout = () => {
         </div>
         <AllFiles currentTask={task} />
       </div>
-      <AccessControl resource="team" actions={['delete']}>
-        <RemoveTask task={task} />
-      </AccessControl>
+
     </>
   );
 };
