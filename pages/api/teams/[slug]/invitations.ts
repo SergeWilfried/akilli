@@ -13,7 +13,6 @@ import {
 import { addTeamMember, throwIfNoTeamAccess } from 'models/team';
 import { throwIfNotAllowed } from 'models/user';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { assignTranscriberToTask } from '../../../../models/task';
 
 export default async function handler(
   req: NextApiRequest,
@@ -134,7 +133,7 @@ const handleDELETE = async (req: NextApiRequest, res: NextApiResponse) => {
 
 // Accept an invitation to an organization
 const handlePUT = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { inviteToken, taskId, transcriberId } = req.body as {
+  const { inviteToken } = req.body as {
     inviteToken: string;
     taskId: string;
     transcriberId: string;
@@ -150,7 +149,6 @@ const handlePUT = async (req: NextApiRequest, res: NextApiResponse) => {
     userId,
     invitation.role
   );
-  await assignTranscriberToTask(taskId, transcriberId);
 
   await sendEvent(invitation.team.id, 'member.created', teamMember);
 

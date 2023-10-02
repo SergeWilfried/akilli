@@ -3,7 +3,9 @@ import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import type { ApiResponse, TaskWithFiles } from 'types';
 
-const useTask = (id?: string) => {
+const useTask = (
+  id?: string
+): { isLoading: boolean; isError: any; task: TaskWithFiles | undefined } => {
   const { query, isReady } = useRouter();
 
   const taskId = id || (isReady ? query.id : null);

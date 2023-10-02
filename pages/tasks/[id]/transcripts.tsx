@@ -40,7 +40,7 @@ const Transcripts: NextPageWithLayout = () => {
             size="md"
             onClick={() => {}}
           >
-            {t('download-all')}
+            {t('add-new-transcript')}
           </Button>
         </div>
         <AllTranscripts task={task} />
