@@ -37,6 +37,10 @@ export const availableRoles = [
     id: Role.OWNER,
     name: 'Owner',
   },
+  {
+    id: Role.Transcriber,
+    name: 'Transcriber',
+  },
 ];
 
 export const permissions: RolePermissions = {
