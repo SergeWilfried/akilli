@@ -1,14 +1,15 @@
 import { GetServerSidePropsContext } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import type { NextPageWithLayout } from 'types';
-import { AccessControl } from '../../../components/shared/AccessControl';
-import { TasksTab, RemoveTask } from '../../../components/tasks';
+import { TasksTab } from '@/components/tasks';
 import { Error, Loading } from '@/components/shared';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/router';
 import useTask from '../../../hooks/useTask';
 import AllTranscribers from '@/components/tasks/Transcribers';
 import { Button } from 'react-daisyui';
+import { InviteTranscribers } from '@/components/invitation';
+import { useState } from 'react';
 
 const Transcribers: NextPageWithLayout = () => {
   const { t } = useTranslation('common');
@@ -16,6 +17,7 @@ const Transcribers: NextPageWithLayout = () => {
 
   const { id } = router.query as { id: string };
   const { isLoading, isError, task } = useTask(id);
+  const [visible, setVisible] = useState(false);
 
   if (isLoading) {
     return <Loading />;
@@ -37,16 +39,20 @@ const Transcribers: NextPageWithLayout = () => {
             variant="outline"
             color="primary"
             size="md"
-            onClick={() => {}}
+            onClick={() => {
+              setVisible(!visible);
+            }}
           >
             {t('add-new-transcriber')}
           </Button>
         </div>
         <AllTranscribers task={task} />
       </div>
-      <AccessControl resource="team" actions={['delete']}>
-        <RemoveTask task={task} />
-      </AccessControl>
+      <InviteTranscribers
+        visible={visible}
+        setVisible={setVisible}
+        task={task}
+      />
     </>
   );
 };
