@@ -5,9 +5,10 @@ import { sendEmail } from './sendEmail';
 
 export const sendTeamInviteEmail = async (
   team: Team,
-  invitation: Invitation
+  invitation: Invitation,
+  taskId: string
 ) => {
-  const invitationLink = `${env.appUrl}/invitations/${invitation.token}`;
+  const invitationLink = `${env.appUrl}/invitations/${invitation.token}/${taskId}`;
 
   await sendEmail({
     to: invitation.email,

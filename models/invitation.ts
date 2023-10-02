@@ -26,8 +26,9 @@ export const createInvitation = async (param: {
   invitedBy: string;
   email: string;
   role: Role;
+  taskId: string;
 }) => {
-  const { teamId, invitedBy, email, role } = param;
+  const { teamId, invitedBy, email, role, taskId } = param;
 
   return await prisma.invitation.create({
     data: {
@@ -37,6 +38,7 @@ export const createInvitation = async (param: {
       invitedBy,
       email,
       role,
+      taskId,
     },
   });
 };

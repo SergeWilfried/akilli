@@ -40,12 +40,12 @@ const Transcripts: NextPageWithLayout = () => {
             size="md"
             onClick={() => {}}
           >
-            {t('new-file-import')}
+            {t('download-all')}
           </Button>
         </div>
         <AllTranscripts task={task} />
       </div>
-      <AccessControl resource="team" actions={['delete']}>
+      <AccessControl resource="transcript" actions={['delete']}>
         <RemoveTask task={task} />
       </AccessControl>
     </>

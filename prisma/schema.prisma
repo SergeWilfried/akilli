@@ -118,8 +118,10 @@ model Invitation {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 
-  user User @relation(fields: [invitedBy], references: [id], onDelete: Cascade)
-  team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [invitedBy], references: [id], onDelete: Cascade)
+  team   Team   @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  task   Task   @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  taskId String
 
   @@unique([teamId, email])
 }
@@ -168,7 +170,8 @@ model Task {
   userId       String
   files        File[]
   transcribers Transcriber[]
-  Transcript   Transcript[]
+  transcripts  Transcript[]
+  invitations  Invitation[]
 }
 
 model File {

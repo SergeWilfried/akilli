@@ -26,7 +26,7 @@ const InviteTranscribers = ({
   const formik = useFormik({
     initialValues: {
       email: '',
-      role: availableRoles[0].id,
+      role: availableRoles[3].id,
     },
     validationSchema: Yup.object().shape({
       email: Yup.string().email().required(),
@@ -40,6 +40,7 @@ const InviteTranscribers = ({
           `/api/teams/${task.id}/invitations`,
           {
             ...values,
+            taskId: task.id
           }
         );
 
