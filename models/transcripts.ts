@@ -81,14 +81,14 @@ export async function deleteTranscript(
  */
 export async function getAllTranscripts(taskId: string): Promise<Transcript[]> {
   try {
+    console.log('transcript ID', taskId);
     const transcripts = await prisma.transcript.findMany({
-      where: { taskId },
+      where: { id: taskId },
       include: { task: true },
     });
 
     return transcripts;
   } catch (error) {
-    console.error(error);
     throw new Error('Failed to get transcripts');
   }
 }

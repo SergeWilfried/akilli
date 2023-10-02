@@ -3,19 +3,24 @@ import { getAxiosError } from '@/lib/common';
 import axios from 'axios';
 import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
-import { Button, Link } from 'react-daisyui';
+import { Button } from 'react-daisyui';
 import toast from 'react-hot-toast';
 import { ApiResponse, Task } from 'types';
 
 import ConfirmationDialog from '../shared/ConfirmationDialog';
-import useTasks from '../../hooks/useTasks';
-
-const AllTranscripts = () => {
+import useTranscripts from '../../hooks/useTranscripts';
+import { useRouter } from 'next/router';
+interface AllTranscriptsProps {
+  task: Task;
+}
+const AllTranscripts = (props: AllTranscriptsProps) => {
   const { t } = useTranslation('common');
-  const [task, setTeam] = useState<Task | null>(null);
+  const { task } = props;
   const [askConfirmation, setAskConfirmation] = useState(false);
-
-  const { tasks, isLoading, isError, mutateTasks } = useTasks();
+  const router = useRouter();
+  const { transcripts, isLoading, isError, mutateTranscripts } = useTranscripts(
+    task?.id ?? ''
+  );
   if (isLoading) {
     return <Loading />;
   }
@@ -28,7 +33,7 @@ const AllTranscripts = () => {
     try {
       await axios.delete<ApiResponse>(`/api/tasks/${task.id}`);
       toast.success(t('leave-team-success'));
-      mutateTasks();
+      mutateTranscripts();
     } catch (error: any) {
       toast.error(getAxiosError(error));
     }
@@ -42,17 +47,7 @@ const AllTranscripts = () => {
             <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
               <tr>
                 <th scope="col" className="px-6 py-3">
-                  {t('name')}
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  {t('language')}
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  {t('type')}
-                </th>
-
-                <th scope="col" className="px-6 py-3">
-                  {t('status')}
+                  {t('text')}
                 </th>
 
                 <th scope="col" className="px-6 py-3">
@@ -64,24 +59,14 @@ const AllTranscripts = () => {
               </tr>
             </thead>
             <tbody>
-              {tasks &&
-                tasks.map((task) => {
+              {transcripts &&
+                transcripts.map((task) => {
                   return (
                     <tr
                       key={task.id}
                       className="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
                     >
-                      <td className="px-6 py-3">
-                        <Link href={`/tasks/${task.id}/transcripts`}>
-                          <div className="flex items-center justify-start space-x-2">
-                            <span>{task.name}</span>
-                          </div>
-                        </Link>
-                      </td>
-                      <td className="px-6 py-3">{task.language}</td>
-                      <td className="px-6 py-3">{task.type}</td>
-
-                      <td className="px-6 py-3">{task.status}</td>
+                      <td className="px-6 py-3">{task.text}</td>
 
                       <td className="px-6 py-3">
                         {new Date(task.createdAt).toDateString()}
@@ -93,7 +78,7 @@ const AllTranscripts = () => {
                           size="xs"
                           color="error"
                           onClick={() => {
-                            setTeam(task);
+                            router.push('/dashboard');
                             setAskConfirmation(true);
                           }}
                         >

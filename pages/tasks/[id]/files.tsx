@@ -7,6 +7,7 @@ import { Error, Loading } from '@/components/shared';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/router';
 import useTask from '../../../hooks/useTask';
+import { Button } from 'react-daisyui';
 
 const Files: NextPageWithLayout = () => {
   const { t } = useTranslation('common');
@@ -29,8 +30,23 @@ const Files: NextPageWithLayout = () => {
   return (
     <>
       <TasksTab activeTab="files" task={task} />
-      <div className="p-3">
-        <p className="text-sm">This is just a placeholder for the dashboard.</p>
+
+      <div className="flex flex-col space-y-4">
+        <div className="flex justify-end mt-4">
+          <Button
+            variant="outline"
+            color="primary"
+            size="md"
+            onClick={() => {}}
+          >
+            {t('new-file-import')}
+          </Button>
+        </div>
+        <div className="p-3">
+          <p className="text-sm">
+            This is just a placeholder for the dashboard.
+          </p>
+        </div>
       </div>
       <AccessControl resource="team" actions={['delete']}>
         <RemoveTask task={task} />

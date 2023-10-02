@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/router';
 import useTask from '../../../hooks/useTask';
 import AllTranscribers from '@/components/tasks/Transcribers';
+import { Button } from 'react-daisyui';
 
 const Transcribers: NextPageWithLayout = () => {
   const { t } = useTranslation('common');
@@ -30,7 +31,19 @@ const Transcribers: NextPageWithLayout = () => {
   return (
     <>
       <TasksTab activeTab="transcribers" task={task} />
-      <AllTranscribers task={task} />
+      <div className="flex flex-col space-y-4">
+        <div className="flex justify-end mt-4">
+          <Button
+            variant="outline"
+            color="primary"
+            size="md"
+            onClick={() => {}}
+          >
+            {t('add-new-transcriber')}
+          </Button>
+        </div>
+        <AllTranscribers task={task} />
+      </div>
       <AccessControl resource="team" actions={['delete']}>
         <RemoveTask task={task} />
       </AccessControl>
