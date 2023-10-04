@@ -1,4 +1,8 @@
-import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import {
+  GetObjectCommand,
+  PutObjectCommand,
+  S3Client,
+} from '@aws-sdk/client-s3';
 import env from '@/lib/env';
 
 const s3 = new S3Client({
@@ -39,6 +43,25 @@ export async function createFile(file: File) {
       console.log(`Successfully uploaded files ${fileUrl}`);
     }
     return fileUrl;
+  } catch (err: any) {
+    console.log('Error', err);
+    throw Error(err?.message);
+  }
+}
+
+export async function downloadFile(fileUrl: string) {
+  try {
+    const response = await s3.send(
+      new GetObjectCommand({
+        Bucket: env.storage.bucketName ?? 'akilli',
+        Key: fileUrl,
+      })
+    );
+    // The Body object also has 'transformToByteArray' and 'transformToWebStream' methods.
+    if (response.Body) {
+      const str = await response?.Body.transformToWebStream();
+      return str;
+    }
   } catch (err: any) {
     console.log('Error', err);
     throw Error(err?.message);

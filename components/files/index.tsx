@@ -10,18 +10,18 @@ import { Button } from 'react-daisyui';
 import useTask from '../../hooks/useTask';
 
 interface FilesProps {
-    currentTask: Task;
+  currentTask: Task;
 }
 
 const AllFiles = ({ currentTask }: FilesProps) => {
   const { t } = useTranslation('common');
-//   const [setSelectedApiKey] = useState<string | null>(null);
+  //   const [setSelectedApiKey] = useState<string | null>(null);
   const [confirmationDialogVisible, setConfirmationDialogVisible] =
     useState(false);
-    const { isLoading, isError, task } = useTask(currentTask.id ?? '');
+  const { isLoading, isError, task } = useTask(currentTask.id ?? '');
 
   // Fetch API Keys
-  console.log('tasks files', task?.files)
+  console.log('tasks files', task?.files);
 
   // Delete API Key
 
@@ -63,7 +63,7 @@ const AllFiles = ({ currentTask }: FilesProps) => {
                     <th scope="col" className="px-6 py-3">
                       {t('format')}
                     </th>
-                   
+
                     <th scope="col" className="px-6 py-3">
                       {t('created')}
                     </th>
@@ -83,11 +83,23 @@ const AllFiles = ({ currentTask }: FilesProps) => {
                         <td className="px-6 py-3">{apiKey.contentSize}</td>
 
                         <td className="px-6 py-3">
-                          <Badge color={apiKey.fileFormat === 'audio/wav' ? 'success' : 'secondary'}>{apiKey.fileFormat}</Badge>
-
+                          <Badge
+                            color={
+                              apiKey.fileFormat === 'audio/wav'
+                                ? 'success'
+                                : 'secondary'
+                            }
+                          >
+                            {apiKey.fileFormat}
+                          </Badge>
                         </td>
                         <td className="px-6 py-3">
-                          {new Date(apiKey.createdAt).toLocaleDateString()}
+                          <audio controls>
+                            <source
+                              src={`http://${apiKey.url}`}
+                              type={apiKey.fileFormat}
+                            />
+                          </audio>
                         </td>
                         <td className="px-6 py-3">
                           <Button
@@ -95,7 +107,6 @@ const AllFiles = ({ currentTask }: FilesProps) => {
                             color="error"
                             variant="outline"
                             onClick={() => {
-                            //   setSelectedApiKey(apiKey.url);
                               setConfirmationDialogVisible(true);
                             }}
                           >
@@ -112,7 +123,7 @@ const AllFiles = ({ currentTask }: FilesProps) => {
           <ConfirmationDialog
             title={t('revoke-api-key')}
             visible={confirmationDialogVisible}
-            onConfirm={() =>{}}
+            onConfirm={() => {}}
             onCancel={() => setConfirmationDialogVisible(false)}
             cancelText={t('cancel')}
             confirmText={t('revoke-api-key')}

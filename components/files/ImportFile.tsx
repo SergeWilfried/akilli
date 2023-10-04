@@ -9,7 +9,6 @@ import toast from 'react-hot-toast';
 import {
   isValidFileType,
   type ApiResponse,
-  type NewTaskInput,
   MAX_FILE_SIZE,
   Task,
 } from 'types';
@@ -20,7 +19,7 @@ import { createFile } from '../../lib/storage/minio';
 import DragAndDrop from '../dragAndDrop';
 import useLanguages from '../../hooks/useLanguages';
 
-const CreateTask = ({
+const ImportFile = ({
   visible,
   setVisible,
 }: {
@@ -36,17 +35,11 @@ const CreateTask = ({
   const inputRef = useRef<any>(null);
   const [files, setFiles] = useState<any>([]);
   const { languages } = useLanguages();
-  const formik = useFormik<NewTaskInput>({
+  const formik = useFormik<any>({
     initialValues: {
-      language: languages?.[0].name ?? '',
-      name: ``,
-      type: '',
       files: files,
     },
     validationSchema: Yup.object().shape({
-      name: Yup.string().required('Name is Required'),
-      language: Yup.string().required('Language is Required'),
-      type: Yup.string().required('Type Required'),
       files: Yup.array().of(
         Yup.mixed()
           .optional()
@@ -317,4 +310,4 @@ const CreateTask = ({
   );
 };
 
-export default CreateTask;
+export default ImportFile;

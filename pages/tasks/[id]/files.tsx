@@ -8,6 +8,8 @@ import { useRouter } from 'next/router';
 import useTask from '../../../hooks/useTask';
 import { Button } from 'react-daisyui';
 import AllFiles from '@/components/files';
+import { useState } from 'react';
+import ImportFile from '@/components/files/ImportFile';
 
 const Files: NextPageWithLayout = () => {
   const { t } = useTranslation('common');
@@ -15,6 +17,7 @@ const Files: NextPageWithLayout = () => {
 
   const { id } = router.query as { id: string };
   const { isLoading, isError, task } = useTask(id);
+  const [visible, setVisible] = useState(false);
 
   if (isLoading) {
     return <Loading />;
@@ -37,14 +40,16 @@ const Files: NextPageWithLayout = () => {
             variant="outline"
             color="primary"
             size="md"
-            onClick={() => {}}
+            onClick={() => {
+              setVisible(!visible);
+            }}
           >
             {t('new-file-import')}
           </Button>
         </div>
         <AllFiles currentTask={task} />
       </div>
-
+      <ImportFile setVisible={setVisible} visible={visible}/>
     </>
   );
 };

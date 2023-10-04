@@ -40,7 +40,7 @@ const InviteTranscribers = ({
           `/api/teams/${task.id}/invitations`,
           {
             ...values,
-            taskId: task.id
+            taskId: task.id,
           }
         );
 
