@@ -11,6 +11,7 @@ import useTask from '../../hooks/useTask';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import { getAxiosError } from '../../lib/common';
+import React from 'react';
 
 interface FilesProps {
   currentTask: Task;
@@ -110,7 +111,7 @@ const AllFiles = ({ currentTask }: FilesProps) => {
                         <td className="px-6 py-3">
                           <audio controls>
                             <source
-                              src={`http://${apiKey.url}`}
+                              src={`http://localhost:9000/${apiKey.url}`}
                               type={apiKey.fileFormat}
                             />
                           </audio>

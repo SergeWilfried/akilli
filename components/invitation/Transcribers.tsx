@@ -37,7 +37,7 @@ const InviteTranscribers = ({
     onSubmit: async (values) => {
       try {
         await axios.post<ApiResponse<Invitation>>(
-          `/api/teams/${task.id}/invitations`,
+          `/api/tasks/${task.id}/assign`,
           {
             ...values,
             taskId: task.id,

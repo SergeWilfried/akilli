@@ -48,6 +48,7 @@ const Transcribers: NextPageWithLayout = () => {
         </div>
         <AllTranscribers task={task} />
       </div>
+      <PendingInvitations team={team} />
       <InviteTranscribers
         visible={visible}
         setVisible={setVisible}
