@@ -3,14 +3,12 @@ const env = {
   appUrl: `${process.env.APP_URL}`,
   product: 'boxyhq',
   redirectAfterSignIn: '/teams/switch',
-
   // SAML Jackson configuration
   saml: {
     issuer: 'https://saml.boxyhq.com',
     path: '/api/oauth/saml',
     callback: `${process.env.APP_URL}`,
   },
-
   // SMTP configuration for NextAuth
   smtp: {
     host: process.env.SMTP_HOST,
@@ -19,7 +17,13 @@ const env = {
     password: process.env.SMTP_PASSWORD,
     from: process.env.SMTP_FROM,
   },
-
+  storage: {
+    accessKey: process.env.ACCESS_KEY,
+    secretKey: process.env.SECRET_KEY,
+    region: process.env.STORAGE_REGION,
+    publicEndpoint: process.env.PUBLIC_STORAGE_ENDPOINT,
+    bucketName: process.env.PUBLIC_STORAGE_BUCKET_NAME,
+  },
   // NextAuth configuration
   nextAuth: {
     secret: process.env.NEXTAUTH_SECRET,

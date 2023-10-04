@@ -111,5 +111,16 @@ export const permissions: RolePermissions = {
       actions: ['read', 'leave'],
     },
   ],
-  TRANSCRIPTOR: [],
+  Transcriber: [],
 };
+
+export const tasksType = [
+  {
+    id: '0',
+    name: 'TEXT TO VOICE',
+  },
+  {
+    id: '1',
+    name: 'VOICE TO TEXT',
+  },
+];

@@ -1,4 +1,3 @@
-import { Select } from 'react-daisyui';
 import { SelectObject } from '../../lib/common';
 
 interface SelectWithLabelProps {
@@ -27,7 +26,7 @@ const SelectWithLabel = (props: SelectWithLabelProps) => {
         <span className="label-text">{label}</span>
       </label>
 
-      <Select
+      <select
         className={classes.join(' ')}
         name={name}
         onChange={onChange}
@@ -39,7 +38,7 @@ const SelectWithLabel = (props: SelectWithLabelProps) => {
             {role.name}
           </option>
         ))}
-      </Select>
+      </select>
       {(error || descriptionText) && (
         <label className="label">
           <span className={`label-text-alt ${error ? 'text-red-500' : ''}`}>

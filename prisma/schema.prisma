@@ -3,15 +3,15 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("POSTGRES_PRISMA_URL")
+  provider          = "postgresql"
+  url               = env("POSTGRES_PRISMA_URL")
   directUrl         = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
   shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING") // used for migrations
 }
 
 enum Role {
   ADMIN
-  TRANSCRIPTOR
+  Transcriber
   MEMBER
   OWNER
 }
@@ -56,54 +56,55 @@ model VerificationToken {
 }
 
 model User {
-  id            String       @id @default(uuid())
+  id            String    @id @default(uuid())
   name          String
-  email         String       @unique
+  email         String    @unique
   emailVerified DateTime?
   password      String?
-  mobileNumber  String       @unique
+  mobileNumber  String    @unique
   country       String
-  gender        String?
-  age           String?
-  role          Role         @default(ADMIN)
+  role          Role      @default(ADMIN)
   image         String?
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @default(now())
-  translators   Translator[]
-  accounts      Account[]
-  sessions      Session[]
-  invitations   Invitation[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @default(now())
+  tasks         Task[]
+
+  accounts     Account[]
+  sessions     Session[]
+  invitations  Invitation[]
+  transcribers Transcriber[]
 }
 
 model Team {
-  id          String       @id @default(uuid())
-  name        String
-  slug        String       @unique
-  domain      String?      @unique
-  defaultRole Role         @default(MEMBER)
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @default(now())
-  translators Translator[]
-  invitations Invitation[]
-  apiKeys     ApiKey[]
+  id           String        @id @default(uuid())
+  name         String
+  slug         String        @unique
+  domain       String?       @unique
+  defaultRole  Role          @default(MEMBER)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @default(now())
+  transcribers Transcriber[]
+  invitations  Invitation[]
+  apiKeys      ApiKey[]
 }
 
-model Translator {
-  id      String   @id @default(uuid())
-  teamId  String
-  userId  String
-  address Address? @relation(fields: [addressId], references: [id])
-  role              Role              @default(MEMBER)
-  createdAt         DateTime          @default(now())
-  updatedAt         DateTime          @default(now())
-  team              Team              @relation(fields: [teamId], references: [id], onDelete: Cascade)
-  user              User              @relation(fields: [userId], references: [id], onDelete: Cascade)
-  audiosTranscripts AudioTranscript[]
-  transcripts       Transcript[]
-  addressId         Int?
+model Transcriber {
+  id        String     @id @default(uuid())
+  name      String?
+  gender    String?
+  role      Role       @default(Transcriber)
+  age       String?
+  email     String?    @unique
+  languages Language[]
+  tasks     Task[]
+  team      Team       @relation(fields: [teamId], references: [id])
+  teamId    String
+  payments  Payment[]
+  rating    Rating[]
+  user      User       @relation(fields: [userId], references: [id])
+  userId    String
 
   @@unique([teamId, userId])
-  @@index([userId])
 }
 
 model Invitation {
@@ -124,48 +125,13 @@ model Invitation {
 }
 
 model Language {
-  id          String            @id @default(uuid())
-  name        String
-  description String
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @default(now())
-  transcripts Transcript[]
-  audios      AudioTranscript[]
-
-  @@unique([name])
-}
-
-model Transcript {
-  id                  String    @id @default(uuid())
-  topic               String?
-  text                String    @db.Text
-  textLang            String
-  transcript          String    @db.Text
-  transcriptionLang   Language? @relation(fields: [transcriptionLangId], references: [id])
-  transcriptionLangId String?
-
-  audios AudioTranscript[]
-
-  translator   Translator? @relation(fields: [translatorId], references: [id])
-  translatorId String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-}
-
-model AudioTranscript {
-  id String @id @default(uuid())
-
-  transcript   Transcript? @relation(fields: [transcriptId], references: [id])
-  transcriptId String?
-  language     Language?   @relation(fields: [languageId], references: [id])
-  languageId   String?
-  url          String
-  fileFormat   String
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @default(now())
-  translator   Translator? @relation(fields: [translatorId], references: [id])
-  translatorId String?
+  id           String        @id @default(uuid())
+  name         String        @unique
+  description  String
+  code         String        @unique
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @default(now())
+  transcribers Transcriber[]
 }
 
 model PasswordReset {
@@ -186,14 +152,62 @@ model ApiKey {
   updatedAt  DateTime  @default(now())
   expiresAt  DateTime?
   lastUsedAt DateTime?
-
-  team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  team       Team      @relation(fields: [teamId], references: [id], onDelete: Cascade)
 }
 
-model Address {
-  id         Int          @id @default(autoincrement())
-  city       String
-  state      String
-  country    String
-  translator Translator[]
+model Task {
+  id           String        @id @default(uuid())
+  language     String
+  type         String
+  name         String
+  status       String
+  deadline     DateTime
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  user         User          @relation(fields: [userId], references: [id])
+  userId       String
+  files        File[]
+  transcribers Transcriber[]
+  Transcript   Transcript[]
+}
+
+model File {
+  id          String   @id @default(uuid())
+  url         String
+  contentSize Int
+  fileFormat  String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  task        Task?    @relation(fields: [taskId], references: [id])
+  taskId      String?
+}
+
+model Payment {
+  id            String      @id @default(uuid())
+  transcriber   Transcriber @relation(fields: [transcriberId], references: [id])
+  transcriberId String
+  amount        Float
+  date          DateTime
+  status        String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model Rating {
+  id            String      @id @default(uuid())
+  transcriber   Transcriber @relation(fields: [transcriberId], references: [id])
+  transcriberId String
+  rating        Float
+  comment       String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model Transcript {
+  id        String   @id @default(uuid())
+  text      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  task      Task     @relation(fields: [taskId], references: [id])
+  taskId    String
 }

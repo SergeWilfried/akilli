@@ -73,7 +73,7 @@ const Teams = () => {
                           </div>
                         </Link>
                       </td>
-                      <td className="px-6 py-3">{team._count.translators}</td>
+                      <td className="px-6 py-3">{team._count.transcribers}</td>
                       <td className="px-6 py-3">
                         {new Date(team.createdAt).toDateString()}
                       </td>

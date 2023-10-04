@@ -42,7 +42,7 @@ export const addTeamMember = async (
   userId: string,
   role: Role
 ) => {
-  return await prisma.translator.upsert({
+  return await prisma.transcriber.upsert({
     create: {
       teamId,
       userId,
@@ -61,7 +61,7 @@ export const addTeamMember = async (
 };
 
 export const removeTeamMember = async (teamId: string, userId: string) => {
-  return await prisma.translator.delete({
+  return await prisma.transcriber.delete({
     where: {
       teamId_userId: {
         teamId,
@@ -74,7 +74,7 @@ export const removeTeamMember = async (teamId: string, userId: string) => {
 export const getTeams = async (userId: string) => {
   return await prisma.team.findMany({
     where: {
-      translators: {
+      transcribers: {
         some: {
           userId,
         },
@@ -82,14 +82,14 @@ export const getTeams = async (userId: string) => {
     },
     include: {
       _count: {
-        select: { translators: true },
+        select: { transcribers: true },
       },
     },
   });
 };
 
 export async function getTeamRoles(userId: string) {
-  const teamRoles = await prisma.translator.findMany({
+  const teamRoles = await prisma.transcriber.findMany({
     where: {
       userId,
     },
@@ -104,7 +104,7 @@ export async function getTeamRoles(userId: string) {
 
 // Check if the user is an admin or owner of the team
 export async function isTeamAdmin(userId: string, teamId: string) {
-  const teamMember = await prisma.translator.findFirstOrThrow({
+  const teamMember = await prisma.transcriber.findFirstOrThrow({
     where: {
       userId,
       teamId,
@@ -115,7 +115,7 @@ export async function isTeamAdmin(userId: string, teamId: string) {
 }
 
 export const getTeamMembers = async (slug: string) => {
-  return await prisma.translator.findMany({
+  return await prisma.transcriber.findMany({
     where: {
       team: {
         slug,
@@ -175,7 +175,7 @@ export const throwIfNoTeamAccess = async (
 
 // Get the current user's team member object
 export const getTeamMember = async (userId: string, slug: string) => {
-  const teamMember = await prisma.translator.findFirstOrThrow({
+  const teamMember = await prisma.transcriber.findFirstOrThrow({
     where: {
       userId,
       team: {

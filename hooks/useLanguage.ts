@@ -5,7 +5,7 @@ import type { ApiResponse, Language } from 'types';
 const useLanguage = () => {
   const url = `/api/lang`;
 
-  const { data, error, isLoading } = useSWR<ApiResponse<Language[]>>(
+  const { data, error, isLoading } = useSWR<ApiResponse<Language>>(
     url,
     fetcher
   );
