@@ -121,14 +121,14 @@ const AllFiles = ({ currentTask }: FilesProps) => {
             </Card.Body>
           </Card>
           <ConfirmationDialog
-            title={t('revoke-api-key')}
+            title={t('delete-file')}
             visible={confirmationDialogVisible}
             onConfirm={() => {}}
             onCancel={() => setConfirmationDialogVisible(false)}
             cancelText={t('cancel')}
-            confirmText={t('revoke-api-key')}
+            confirmText={t('delete-file')}
           >
-            {t('revoke-api-key-confirm')}
+            {t('delete-file-confirm')}
           </ConfirmationDialog>
         </>
       )}

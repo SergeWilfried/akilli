@@ -176,6 +176,8 @@
   "revoke": "Revoke",
   "cancel": "Cancel",
   "revoke-api-key": "Revoke API Key",
+  "delete-file": "Delete audio file",
+  "delete-file-confirm": "Are you sure you want to delete this file? This action can not be undone.",
   "active": "Active",
   "no-api-key-title": "You haven't created any API Keys yet",
   "no-api-key-description": "API Keys allow your app to communicate with app",
