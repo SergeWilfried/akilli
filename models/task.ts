@@ -1,6 +1,11 @@
 import { prisma } from '@/lib/prisma';
 import { Task, Transcriber } from '@prisma/client';
 import { TaskWithFiles } from '../types';
+type File = {
+  url: string;
+  fileFormat: string;
+  contentSize: number;
+};
 
 export async function createTask(
   transcript: TaskWithFiles
@@ -42,11 +47,9 @@ export async function addFilesToTask(
         files: {
           createMany: {
             data: files.map((file) => ({
-              name: file.name,
-              url: '',
-              type: file.type,
-              contentSize: file.size,
-              fileFormat: file.type,
+              url: file?.url,
+              contentSize: file.contentSize,
+              fileFormat: file.fileFormat,
             })),
           },
         },

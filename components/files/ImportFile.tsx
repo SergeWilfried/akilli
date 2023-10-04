@@ -3,38 +3,30 @@ import axios from 'axios';
 import { useFormik } from 'formik';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
-import React, { useRef, useState, useEffect } from 'react';
-import { Button, Input, Modal } from 'react-daisyui';
+import React, { useRef, useState } from 'react';
+import { Button, Modal } from 'react-daisyui';
 import toast from 'react-hot-toast';
-import {
-  isValidFileType,
-  type ApiResponse,
-  MAX_FILE_SIZE,
-  Task,
-} from 'types';
+import { isValidFileType, type ApiResponse, MAX_FILE_SIZE, Task } from 'types';
 import * as Yup from 'yup';
 import useTasks from 'hooks/useTasks';
-import { tasksType } from '../../lib/permissions';
 import { createFile } from '../../lib/storage/minio';
 import DragAndDrop from '../dragAndDrop';
-import useLanguages from '../../hooks/useLanguages';
 
 const ImportFile = ({
   visible,
   setVisible,
+  task,
 }: {
   visible: boolean;
   setVisible: (visible: boolean) => void;
+  task: Task;
 }) => {
   const { t } = useTranslation('common');
   const { mutateTasks } = useTasks();
   const router = useRouter();
-  const [audioUrl, setAudioUrl] = useState(``);
-  const audioElmRef = useRef(null);
   const [dragActive, setDragActive] = useState<boolean>(false);
   const inputRef = useRef<any>(null);
   const [files, setFiles] = useState<any>([]);
-  const { languages } = useLanguages();
   const formik = useFormik<any>({
     initialValues: {
       files: files,
@@ -53,19 +45,15 @@ const ImportFile = ({
           )
       ),
     }),
-    onSubmit: async (values) => {
+    onSubmit: async () => {
       try {
         /// FIXME: Handle multiple files
         const irl = await handleFileUpload(files); // Call the handleFileUpload function
-        console.log(`liens de fichier ${irl}`);
-        let response: any;
-        const links = irl?.split(`,`).filter((link) => link !== '');
-        console.log('links', links?.length);
 
-        if (links === undefined) {
-          /* empty */
-        }
-        let task: Task;
+
+        let response;
+        const links = irl?.split(`,`).filter((link) => link !== '');
+
         if (links !== undefined) {
           if (links?.length >= 1) {
             const filesList: any[] = [];
@@ -73,54 +61,56 @@ const ImportFile = ({
               const size = files[index]?.size;
               const type = files[index]?.type;
               const url = links[index];
-              console.log(url);
               filesList?.push({
                 url: url,
                 contentSize: size,
                 fileFormat: type,
               });
             }
-            task = {
-              language: values.language,
-              type: values.type,
-              name: values.name,
-              status: 'CREATED',
-              userId: '',
-              createdAt: new Date(),
+           
+            response = await axios.post<ApiResponse<any>>(
+              `/api/tasks/${task?.id}/files`,
+              {
+                taskId: task?.id,
               files: filesList,
-            };
-            response = await axios.post<ApiResponse<Task>>('/api/tasks', {
-              ...task,
-            });
+              }
+            );
+            const { data: teamCreated } = response.data;
+
+            if (teamCreated) {
+              toast.success(t('transcript-created'));
+              mutateTasks();
+              formik.resetForm();
+              setVisible(false);
+              router.push(`/tasks/${task.id}/files`);
+            }
           } else {
-            task = {
-              language: values.language,
-              type: values.type,
-              name: values.name,
-              status: 'CREATED',
-              userId: '',
-              createdAt: new Date(),
-              files: [
+           
+            const list = [
                 {
                   url: links,
                   contentSize: files[0].size,
                   fileFormat: files[0].type,
                 },
               ],
-            };
-            response = await axios.post<ApiResponse<Task>>('/api/tasks', {
-              ...task,
-            });
-          }
-        }
-        const { data: teamCreated } = response.data;
+              response = await axios.post<ApiResponse<any>>(
+                `/api/tasks/${task?.id}/files`,
+                {
+                  taskId: task?.id,
+                  ...list,
+                }
+              );
+             
+            const { data: teamCreated } = response.data;
 
-        if (teamCreated) {
-          toast.success(t('transcript-created'));
-          mutateTasks();
-          formik.resetForm();
-          setVisible(false);
-          router.push(`/tasks`);
+            if (teamCreated) {
+              toast.success(t('transcript-created'));
+              mutateTasks();
+              formik.resetForm();
+              setVisible(false);
+              router.push(`/tasks/${task.id}/files`);
+            }
+          }
         }
       } catch (error: any) {
         toast.error(getAxiosError(error));
@@ -128,15 +118,10 @@ const ImportFile = ({
     },
   });
 
-  useEffect(() => {
-    setAudioUrl('');
-  }, [formik.values.type]);
-
   const handleFileUpload = async (files: File | File[]) => {
     try {
       let fileUrl = ``;
       const filesNumber = files.length;
-      console.log(`Uploading files ${filesNumber}`);
       if (filesNumber > 1) {
         for (let index = 0; index < filesNumber; index++) {
           const url = await createFile(files[index]);
@@ -218,52 +203,7 @@ const ImportFile = ({
         <Modal.Body>
           <div className="mt-2 flex flex-col space-y-4">
             <p>{t('members-of-a-team')}</p>
-            <div className="flex justify-between space-x-3">
-              <Input
-                name="name"
-                className="flex-grow"
-                onChange={formik.handleChange}
-                value={formik.values.name}
-                placeholder={t('task-name')}
-              />
-            </div>
-            <div className="flex justify-between space-x-3">
-              <select
-                className="select-bordered select flex-grow"
-                name="language"
-                value={formik.values.language}
-                onChange={(event) => {
-                  formik.handleChange(event);
-                  console.log('language', event.currentTarget);
-                }}
-                required
-              >
-                {languages?.map((task) => (
-                  <option value={task.name} key={task.id}>
-                    {task.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="flex justify-between space-x-3">
-              <select
-                className="select-bordered select flex-grow"
-                name="type"
-                defaultValue={formik.initialValues.type} // Update this line
-                value={formik.values.type}
-                onChange={(event) => {
-                  formik.handleChange(event);
-                  console.log('type', event.currentTarget);
-                }}
-                required
-              >
-                {tasksType.map((task) => (
-                  <option value={task.name} key={task.id}>
-                    {task.name}
-                  </option>
-                ))}
-              </select>
-            </div>
+
             <DragAndDrop
               handleChange={handleChange}
               openFileExplorer={openFileExplorer}
@@ -272,16 +212,6 @@ const ImportFile = ({
               files={files}
               dragActive={dragActive}
             />
-            {audioUrl && (
-              <div className="flex justify-between space-x-3">
-                <audio
-                  className="flex-grow"
-                  src={audioUrl}
-                  controls
-                  ref={audioElmRef}
-                />
-              </div>
-            )}
           </div>
         </Modal.Body>
         <Modal.Actions>

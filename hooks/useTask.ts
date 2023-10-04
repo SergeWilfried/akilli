@@ -1,24 +1,28 @@
 import fetcher from '@/lib/fetcher';
 import { useRouter } from 'next/router';
-import useSWR from 'swr';
+import useSWR, { mutate } from 'swr';
 import type { ApiResponse, TaskWithFiles } from 'types';
 
-const useTask = (
-  id?: string
-): { isLoading: boolean; isError: any; task: TaskWithFiles | undefined } => {
+const useTask = (id?: string) => {
   const { query, isReady } = useRouter();
 
   const taskId = id || (isReady ? query.id : null);
+  const url = taskId ? `/api/tasks/${id}` : null;
 
   const { data, error, isLoading } = useSWR<ApiResponse<TaskWithFiles>>(
-    taskId ? `/api/tasks/${id}` : null,
+    url,
     fetcher
   );
+
+  const mutateTasks = async () => {
+    mutate(url);
+  };
 
   return {
     isLoading,
     isError: error,
     task: data?.data[0],
+    mutateTasks,
   };
 };
 

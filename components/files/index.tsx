@@ -8,6 +8,9 @@ import { useState } from 'react';
 import { Button } from 'react-daisyui';
 
 import useTask from '../../hooks/useTask';
+import toast from 'react-hot-toast';
+import axios from 'axios';
+import { getAxiosError } from '../../lib/common';
 
 interface FilesProps {
   currentTask: Task;
@@ -15,15 +18,26 @@ interface FilesProps {
 
 const AllFiles = ({ currentTask }: FilesProps) => {
   const { t } = useTranslation('common');
-  //   const [setSelectedApiKey] = useState<string | null>(null);
   const [confirmationDialogVisible, setConfirmationDialogVisible] =
     useState(false);
-  const { isLoading, isError, task } = useTask(currentTask.id ?? '');
+  const { isLoading, isError, task, mutateTasks } = useTask(
+    currentTask.id ?? ''
+  );
+  const [selectedFile, setSelectedFile] = useState<string | null>(null);
 
   // Fetch API Keys
   console.log('tasks files', task?.files);
 
-  // Delete API Key
+  // Delete File
+  const deleteFile = async () => {
+    try {
+      await axios.delete(`/api/tasks/${task?.id}/files/${selectedFile}`);
+      toast.success(t('member-deleted'));
+      mutateTasks();
+    } catch (error: any) {
+      toast.error(getAxiosError(error));
+    }
+  };
 
   if (isLoading) {
     return <Loading />;
@@ -108,9 +122,10 @@ const AllFiles = ({ currentTask }: FilesProps) => {
                             variant="outline"
                             onClick={() => {
                               setConfirmationDialogVisible(true);
+                              setSelectedFile(apiKey.id);
                             }}
                           >
-                            {t('revoke')}
+                            {t('delete')}
                           </Button>
                         </td>
                       </tr>
@@ -123,7 +138,11 @@ const AllFiles = ({ currentTask }: FilesProps) => {
           <ConfirmationDialog
             title={t('delete-file')}
             visible={confirmationDialogVisible}
-            onConfirm={() => {}}
+            onConfirm={() => {
+              if (selectedFile) {
+                deleteFile();
+              }
+            }}
             onCancel={() => setConfirmationDialogVisible(false)}
             cancelText={t('cancel')}
             confirmText={t('delete-file')}

@@ -49,7 +49,7 @@ const Files: NextPageWithLayout = () => {
         </div>
         <AllFiles currentTask={task} />
       </div>
-      <ImportFile setVisible={setVisible} visible={visible}/>
+      <ImportFile setVisible={setVisible} visible={visible} task={task} />
     </>
   );
 };
