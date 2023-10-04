@@ -10,6 +10,9 @@ export type Resource =
   | 'team_dsync'
   | 'team_audit_log'
   | 'team_webhook'
+  | 'task'
+  | 'transcript'
+  | 'language'
   | 'team_api_key';
 
 export type RolePermissions = {
@@ -33,6 +36,10 @@ export const availableRoles = [
   {
     id: Role.OWNER,
     name: 'Owner',
+  },
+  {
+    id: Role.Transcriber,
+    name: 'Transcriber',
   },
 ];
 
@@ -70,10 +77,18 @@ export const permissions: RolePermissions = {
       resource: 'team_api_key',
       actions: '*',
     },
+    {
+      resource: 'task',
+      actions: '*',
+    },
   ],
   ADMIN: [
     {
       resource: 'team',
+      actions: '*',
+    },
+    {
+      resource: 'task',
       actions: '*',
     },
     {
@@ -111,7 +126,16 @@ export const permissions: RolePermissions = {
       actions: ['read', 'leave'],
     },
   ],
-  Transcriber: [],
+  Transcriber: [
+    {
+      resource: 'team',
+      actions: ['read', 'leave'],
+    },
+    {
+      resource: 'task',
+      actions: ['read', 'leave'],
+    },
+  ],
 };
 
 export const tasksType = [

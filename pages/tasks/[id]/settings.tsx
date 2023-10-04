@@ -31,7 +31,7 @@ const Settings = () => {
     <>
       <TasksTab activeTab="settings" task={task} />
       <TasksDetails task={task} />
-      <AccessControl resource="team" actions={['delete']}>
+      <AccessControl resource="task" actions={['delete']}>
         <RemoveTask task={task} />
       </AccessControl>
     </>

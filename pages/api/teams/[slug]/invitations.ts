@@ -53,7 +53,7 @@ const handlePOST = async (req: NextApiRequest, res: NextApiResponse) => {
   const teamMember = await throwIfNoTeamAccess(req, res);
   throwIfNotAllowed(teamMember, 'team_invitation', 'create');
 
-  const { email, role } = req.body;
+  const { email, role, taskId } = req.body;
 
   const invitationExists = await prisma.invitation.findFirst({
     where: {
@@ -71,11 +71,12 @@ const handlePOST = async (req: NextApiRequest, res: NextApiResponse) => {
     invitedBy: teamMember.userId,
     email,
     role,
+    taskId,
   });
 
   await sendEvent(teamMember.teamId, 'invitation.created', invitation);
 
-  await sendTeamInviteEmail(teamMember.team, invitation);
+  await sendTeamInviteEmail(teamMember.team, invitation, taskId);
 
   sendAudit({
     action: 'member.invitation.create',
@@ -132,7 +133,11 @@ const handleDELETE = async (req: NextApiRequest, res: NextApiResponse) => {
 
 // Accept an invitation to an organization
 const handlePUT = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { inviteToken } = req.body as { inviteToken: string };
+  const { inviteToken } = req.body as {
+    inviteToken: string;
+    taskId: string;
+    transcriberId: string;
+  };
 
   const session = await getSession(req, res);
   const userId = session?.user?.id as string;

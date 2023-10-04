@@ -13,7 +13,6 @@ export const AccessControl = ({
   actions,
 }: AccessControlProps) => {
   const { canAccess } = useCanAccess();
-
   if (!canAccess(resource, actions)) {
     return null;
   }
