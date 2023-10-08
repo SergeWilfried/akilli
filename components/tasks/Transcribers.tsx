@@ -67,6 +67,9 @@ const AllTranscribers = ({ task }: { task: TaskWithFiles }) => {
                 {t('country')}
               </th>
               <th scope="col" className="px-6 py-3">
+                {t('gender')}
+              </th>
+              <th scope="col" className="px-6 py-3">
                 {t('rating')}
               </th>
               {canAccess('team_member', ['delete']) && (
