@@ -96,7 +96,7 @@ const Tasks = () => {
                             }
                           }}
                         >
-                          {t('delete-transcript')}
+                          {t('delete')}
                         </Button>
                       </td>
                     </tr>
