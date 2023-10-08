@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 import useTask from '../../../hooks/useTask';
 import AllTranscribers from '@/components/tasks/Transcribers';
 import { Button } from 'react-daisyui';
-import { InviteTranscribers } from '@/components/invitation';
+import { InviteTranscribers, PendingAssignments } from '@/components/invitation';
 import { useState } from 'react';
 
 const Transcribers: NextPageWithLayout = () => {
@@ -48,7 +48,7 @@ const Transcribers: NextPageWithLayout = () => {
         </div>
         <AllTranscribers task={task} />
       </div>
-      <PendingInvitations team={team} />
+      <PendingAssignments task={task} />
       <InviteTranscribers
         visible={visible}
         setVisible={setVisible}
