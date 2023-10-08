@@ -1,4 +1,3 @@
-
 import { AuthLayout } from '@/components/layouts';
 import { Alert, InputWithLabel } from '@/components/shared';
 import { getParsedCookie } from '@/lib/cookie';
