@@ -157,6 +157,8 @@
   "team-connections": "Team SSO Connections",
   "member-role-updated": "Member role updated successfully.",
   "member-deleted": "Member deleted successfully.",
+  "file-deleted": "File deleted successfully.",
+  "transcriber-deleted": "Transcriber removed successfully.",
   "team-settings": "Team Settings",
   "team-slug": "Team Slug",
   "team-slug-description": "A unique ID used to identify this team in URLs.",

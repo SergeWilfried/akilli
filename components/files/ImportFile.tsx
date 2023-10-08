@@ -50,7 +50,6 @@ const ImportFile = ({
         /// FIXME: Handle multiple files
         const irl = await handleFileUpload(files); // Call the handleFileUpload function
 
-
         let response;
         const links = irl?.split(`,`).filter((link) => link !== '');
 
@@ -67,12 +66,12 @@ const ImportFile = ({
                 fileFormat: type,
               });
             }
-           
+
             response = await axios.post<ApiResponse<any>>(
               `/api/tasks/${task?.id}/files`,
               {
                 taskId: task?.id,
-              files: filesList,
+                files: filesList,
               }
             );
             const { data: teamCreated } = response.data;
@@ -85,7 +84,6 @@ const ImportFile = ({
               router.push(`/tasks/${task.id}/files`);
             }
           } else {
-           
             const list = [
                 {
                   url: links,
@@ -100,7 +98,7 @@ const ImportFile = ({
                   ...list,
                 }
               );
-             
+
             const { data: teamCreated } = response.data;
 
             if (teamCreated) {

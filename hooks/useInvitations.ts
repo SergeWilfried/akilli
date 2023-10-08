@@ -4,7 +4,7 @@ import useSWR, { mutate } from 'swr';
 import { ApiResponse } from 'types';
 
 const useInvitations = (slug: string) => {
-  const url = `/api/teams/${slug}/invitations`;
+  const url = `/api/tasks/${slug}/invitations`;
 
   const { data, error, isLoading } = useSWR<ApiResponse<Invitation[]>>(
     url,
