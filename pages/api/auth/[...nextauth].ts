@@ -8,11 +8,8 @@ import { getAccount } from 'models/account';
 import { addTeamMember, getTeam, getTeamRoles } from 'models/team';
 import { createUser, getUser } from 'models/user';
 import NextAuth, { Account, NextAuthOptions, User } from 'next-auth';
-import BoxyHQSAMLProvider from 'next-auth/providers/boxyhq-saml';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import EmailProvider from 'next-auth/providers/email';
-import GitHubProvider from 'next-auth/providers/github';
-import GoogleProvider from 'next-auth/providers/google';
 
 const adapter = PrismaAdapter(prisma);
 
@@ -63,17 +60,6 @@ export const authOptions: NextAuthOptions = {
       },
     }),
 
-    BoxyHQSAMLProvider({
-      authorization: { params: { scope: '' } },
-      issuer: env.appUrl,
-      clientId: 'dummy',
-      clientSecret: 'dummy',
-      allowDangerousEmailAccountLinking: true,
-      httpOptions: {
-        timeout: 30000,
-      },
-    }),
-
     EmailProvider({
       server: {
         host: env.smtp.host,
@@ -84,18 +70,6 @@ export const authOptions: NextAuthOptions = {
         },
       },
       from: env.smtp.from,
-    }),
-
-    GitHubProvider({
-      clientId: env.github.clientId,
-      clientSecret: env.github.clientSecret,
-      allowDangerousEmailAccountLinking: true,
-    }),
-
-    GoogleProvider({
-      clientId: env.google.clientId,
-      clientSecret: env.google.clientSecret,
-      allowDangerousEmailAccountLinking: true,
     }),
   ],
   pages: {
