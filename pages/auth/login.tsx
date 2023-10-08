@@ -1,5 +1,4 @@
-import GithubButton from '@/components/auth/GithubButton';
-import GoogleButton from '@/components/auth/GoogleButton';
+
 import { AuthLayout } from '@/components/layouts';
 import { Alert, InputWithLabel } from '@/components/shared';
 import { getParsedCookie } from '@/lib/cookie';
@@ -135,12 +134,6 @@ const Login: NextPageWithLayout<
           <Link href="/auth/magic-link" className="btn-outline btn w-full">
             &nbsp;{t('sign-in-with-email')}
           </Link>
-          <Link href="/auth/sso" className="btn-outline btn w-full">
-            &nbsp;{t('continue-with-saml-sso')}
-          </Link>
-          <div className="divider">or</div>
-          <GithubButton />
-          <GoogleButton />
         </div>
       </div>
       <p className="text-center text-sm text-gray-600">

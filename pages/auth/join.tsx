@@ -1,5 +1,4 @@
-import GithubButton from '@/components/auth/GithubButton';
-import GoogleButton from '@/components/auth/GoogleButton';
+
 import Join from '@/components/auth/Join';
 import JoinWithInvitation from '@/components/auth/JoinWithInvitation';
 import { AuthLayout } from '@/components/layouts';
@@ -44,10 +43,7 @@ const Signup: NextPageWithLayout<inferSSRProps<typeof getServerSideProps>> = ({
           <Join />
         )}
         <div className="divider">or</div>
-        <div className="space-y-3">
-          <GithubButton />
-          <GoogleButton />
-        </div>
+
       </div>
 
       <p className="text-center text-sm text-gray-600">
