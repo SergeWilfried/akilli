@@ -147,4 +147,8 @@ export const tasksType = [
     id: '1',
     name: 'VOICE TO TEXT',
   },
+  {
+    id: '2',
+    name: 'TEXT TO TEXT',
+  },
 ];
