@@ -33,7 +33,7 @@ const AllFiles = ({ currentTask }: FilesProps) => {
   const deleteFile = async () => {
     try {
       await axios.delete(`/api/tasks/${task?.id}/files/${selectedFile}`);
-      toast.success(t('member-deleted'));
+      toast.success(t('file-deleted'));
       mutateTasks();
     } catch (error: any) {
       toast.error(getAxiosError(error));

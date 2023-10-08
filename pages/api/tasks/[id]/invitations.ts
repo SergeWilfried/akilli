@@ -104,7 +104,7 @@ const handleDELETE = async (req: NextApiRequest, res: NextApiResponse) => {
   throwIfNotAllowed(teamMember, 'team_invitation', 'delete');
 
   const { id } = req.query as { id: string };
-
+  console.warn('query', req.query);
   const invitation = await getInvitation({ id });
 
   if (

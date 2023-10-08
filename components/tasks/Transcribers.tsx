@@ -35,7 +35,7 @@ const AllTranscribers = ({ task }: { task: TaskWithFiles }) => {
 
       mutateTranscribers();
 
-      toast.success(t('member-deleted'));
+      toast.success(t('transcriber-deleted'));
     };
   }, [task.id, mutateTranscribers, t]);
 
