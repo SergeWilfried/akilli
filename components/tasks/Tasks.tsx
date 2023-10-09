@@ -2,17 +2,20 @@ import { Card, Error, Loading } from '@/components/shared';
 import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
 import { Button, Link } from 'react-daisyui';
-import { Task } from 'types';
+import { ApiResponse, Task } from 'types';
+import ConfirmationDialog from '../shared/ConfirmationDialog';
 
 import useTasks from '../../hooks/useTasks';
-import { useRouter } from 'next/router';
+import axios from 'axios';
+import toast from 'react-hot-toast';
+import { getAxiosError } from '../../lib/common';
 
 const Tasks = () => {
   const { t } = useTranslation('common');
   const [currentTask, setTeam] = useState<Task | null>(null);
-  const router = useRouter();
+  const [askConfirmation, setAskConfirmation] = useState(false);
 
-  const { tasks, isLoading, isError } = useTasks();
+  const { tasks, isLoading, isError, mutateTasks } = useTasks();
   if (isLoading) {
     return <Loading />;
   }
@@ -21,15 +24,15 @@ const Tasks = () => {
     return <Error message={isError.message} />;
   }
 
-  // const leaveTeam = async (task: Task) => {
-  //   try {
-  //     await axios.delete<ApiResponse>(`/api/tasks/${task.id}`);
-  //     toast.success(t('leave-team-success'));
-  //     mutateTasks();
-  //   } catch (error: any) {
-  //     toast.error(getAxiosError(error));
-  //   }
-  // };
+  const deleteTask = async (task: Task) => {
+    try {
+      await axios.delete<ApiResponse>(`/api/tasks/${task.id}`);
+      toast.success(t('leave-team-success'));
+      mutateTasks();
+    } catch (error: any) {
+      toast.error(getAxiosError(error));
+    }
+  };
 
   return (
     <>
@@ -92,11 +95,11 @@ const Tasks = () => {
                           onClick={() => {
                             setTeam(task);
                             if (currentTask) {
-                              router.push(`tasks/${currentTask.id}`);
+                              setAskConfirmation(true)
                             }
                           }}
                         >
-                          {t('delete-transcript')}
+                          {t('delete')}
                         </Button>
                       </td>
                     </tr>
@@ -106,6 +109,19 @@ const Tasks = () => {
           </table>
         </Card.Body>
       </Card>
+      <ConfirmationDialog
+        visible={askConfirmation}
+        title={`${t('delete')} ${currentTask?.name}`}
+        onCancel={() => setAskConfirmation(false)}
+        onConfirm={() => {
+          if (currentTask) {
+            deleteTask(currentTask);
+          }
+        }}
+        confirmText={t('delete-task')}
+      >
+        {t('delete-task-confirmation')}
+      </ConfirmationDialog>
     </>
   );
 };

@@ -152,3 +152,26 @@ export const tasksType = [
     name: 'TEXT TO TEXT',
   },
 ];
+
+export const TaskStatus = [
+  {
+    id: '0',
+    name: 'STARTED',
+    value: 'STARTED',
+  },
+  {
+    id: '1',
+    name: 'PENDING',
+    value: 'PENDING',
+  },
+  {
+    id: '2',
+    name: 'INPROGRESS',
+    value: 'INPROGRESS',
+  },
+  {
+    id: '3',
+    name: 'COMPLETE',
+    value: 'COMPLETE',
+  },
+];

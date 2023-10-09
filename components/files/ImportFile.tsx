@@ -196,11 +196,11 @@ const ImportFile = ({
         onDragOver={handleDragOver}
       >
         <Modal.Header className="font-bold">
-          {t('create-transcript')}
+          {t('new-file-import')}
         </Modal.Header>
         <Modal.Body>
           <div className="mt-2 flex flex-col space-y-4">
-            <p>{t('members-of-a-team')}</p>
+            <p>{t('import-files-desc')}</p>
 
             <DragAndDrop
               handleChange={handleChange}
