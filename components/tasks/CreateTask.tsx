@@ -224,7 +224,7 @@ const CreateTask = ({
         </Modal.Header>
         <Modal.Body>
           <div className="mt-2 flex flex-col space-y-4">
-            <p>{t('members-of-a-team')}</p>
+            <p>{t('create-task-desc')}</p>
             <div className="flex justify-between space-x-3">
               <Input
                 name="name"

@@ -56,6 +56,8 @@
   "choose-team": "Choose your team",
   "allow-team": "Allow team members to login using an Identity Provider.",
   "members-of-a-team": "Members of a team have access to specific areas, such as a new languages or a new projects.",
+  "import-files-desc": "Import audio or text files to the project.",
+  "create-task-desc": "Create a new transcription project for a specific language. Transcriptions projects....",
   "lang-form-desc": "Create a new Language",
   "delete-lang": "Delete",
   "accept-invite": "You can accept the invitation to join the team by clicking the button below.",
