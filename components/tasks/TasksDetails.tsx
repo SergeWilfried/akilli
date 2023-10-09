@@ -8,25 +8,28 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { Button } from 'react-daisyui';
 import toast from 'react-hot-toast';
-import type { ApiResponse } from 'types';
+import { type ApiResponse } from 'types';
 import * as Yup from 'yup';
 
 import { AccessControl } from '../shared/AccessControl';
+import useLanguages from '../../hooks/useLanguages';
+import { TaskStatus } from '../../lib/permissions';
 
 const TasksDetails = ({ task }: { task: Task }) => {
   const router = useRouter();
   const { t } = useTranslation('common');
+  const { languages } = useLanguages();
 
   const formik = useFormik({
     initialValues: {
       name: task.name,
-      slug: task.status,
-      domain: task.language,
+      status: task.status,
+      language: task.language,
     },
     validationSchema: Yup.object().shape({
       name: Yup.string().required('Name is required'),
-      slug: Yup.string().required('Slug is required'),
-      domain: Yup.string().nullable(),
+      status: Yup.string().required('Slug is required'),
+      language: Yup.string().nullable(),
     }),
     enableReinitialize: true,
     onSubmit: async (values) => {
@@ -56,6 +59,8 @@ const TasksDetails = ({ task }: { task: Task }) => {
         <Card heading={t('task-settings')}>
           <Card.Body className="px-3 py-3">
             <div className="flex flex-col">
+            <div className="flex justify-between space-x-3">
+
               <InputWithLabel
                 name="name"
                 label={t('task-name')}
@@ -64,22 +69,42 @@ const TasksDetails = ({ task }: { task: Task }) => {
                 onChange={formik.handleChange}
                 error={formik.errors.name}
               />
-              <InputWithLabel
+              </div>
+
+              <select
                 name="slug"
-                label={t('status')}
-                descriptionText={t('status-description')}
-                value={formik.values.slug}
+                className="border border-gray-300 bg-white shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                value={formik.values.status ? formik.values.status : 'STARTED'}
                 onChange={formik.handleChange}
-                error={formik.errors.slug}
-              />
-              <InputWithLabel
+              >
+                <option value="" disabled>
+                  {t('select-status')}
+                </option>
+                {TaskStatus.map((status) => (
+                  <option key={status.id} value={status.id}>
+                    {status.name}
+                  </option>
+                ))}
+              </select>
+              
+       
+              <select
+                id="domain"
                 name="domain"
-                label={t('language')}
-                descriptionText={t('language')}
-                value={formik.values.domain ? formik.values.domain : ''}
+                className="border border-gray-300 bg-white shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+
+                value={formik.values.language ? formik.values.language : ''}
                 onChange={formik.handleChange}
-                error={formik.errors.domain}
-              />
+              >
+                <option value="" disabled>
+                  {t('select-language')}
+                </option>
+                {languages?.map((language) => (
+                  <option key={language.id} value={language.id}>
+                    {language.name}
+                  </option>
+                ))}
+              </select>
             </div>
           </Card.Body>
           <AccessControl resource="team" actions={['update']}>

@@ -97,7 +97,7 @@ const Tasks = () => {
                           onClick={() => {
                             setTeam(task);
                             if (currentTask) {
-                              router.push(`tasks/${currentTask.id}`);
+                              setAskConfirmation(true)
                             }
                           }}
                         >
@@ -120,9 +120,9 @@ const Tasks = () => {
             deleteTask(currentTask);
           }
         }}
-        confirmText={t('leave-team')}
+        confirmText={t('delete-task')}
       >
-        {t('leave-team-confirmation')}
+        {t('delete-task-confirmation')}
       </ConfirmationDialog>
     </>
   );

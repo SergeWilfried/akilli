@@ -220,7 +220,7 @@ const CreateTask = ({
         onDragOver={handleDragOver}
       >
         <Modal.Header className="font-bold">
-          {t('create-transcript')}
+          {t('create-task')}
         </Modal.Header>
         <Modal.Body>
           <div className="mt-2 flex flex-col space-y-4">
@@ -256,7 +256,7 @@ const CreateTask = ({
               <select
                 className="select-bordered select flex-grow"
                 name="type"
-                defaultValue={formik.initialValues.type} // Update this line
+                // defaultValue={formik.initialValues.type} // Update this line
                 value={formik.values.type}
                 onChange={(event) => {
                   formik.handleChange(event);
