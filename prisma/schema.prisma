@@ -177,13 +177,15 @@ model Task {
 model File {
   id          String   @id @default(uuid())
   url         String
-  contentSize Int
   fileFormat  String
+  contentSize Int?
+  pathname String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   task        Task?    @relation(fields: [taskId], references: [id])
   taskId      String?
 }
+
 
 model Payment {
   id            String      @id @default(uuid())

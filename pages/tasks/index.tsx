@@ -19,7 +19,7 @@ const AllTasks: NextPageWithLayout = () => {
     if (newTeam) {
       setVisible(true);
     }
-  }, [router.query]);
+  }, [newTeam, router.query]);
 
   return (
     <>

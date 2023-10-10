@@ -27,7 +27,7 @@ const Signup: NextPageWithLayout<inferSSRProps<typeof getServerSideProps>> = ({
     if (error) {
       toast.error(t(error));
     }
-  }, [router.query]);
+  }, [router.query, error, t]);
 
   if (status === 'authenticated') {
     router.push('/dashboard');

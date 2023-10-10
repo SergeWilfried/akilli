@@ -59,16 +59,15 @@ const TasksDetails = ({ task }: { task: Task }) => {
         <Card heading={t('task-settings')}>
           <Card.Body className="px-3 py-3">
             <div className="flex flex-col">
-            <div className="flex justify-between space-x-3">
-
-              <InputWithLabel
-                name="name"
-                label={t('task-name')}
-                descriptionText={t('task-name')}
-                value={formik.values.name}
-                onChange={formik.handleChange}
-                error={formik.errors.name}
-              />
+              <div className="flex justify-between space-x-3">
+                <InputWithLabel
+                  name="name"
+                  label={t('task-name')}
+                  descriptionText={t('task-name')}
+                  value={formik.values.name}
+                  onChange={formik.handleChange}
+                  error={formik.errors.name}
+                />
               </div>
 
               <select
@@ -86,13 +85,11 @@ const TasksDetails = ({ task }: { task: Task }) => {
                   </option>
                 ))}
               </select>
-              
-       
+
               <select
                 id="domain"
                 name="domain"
                 className="border border-gray-300 bg-white shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500"
-
                 value={formik.values.language ? formik.values.language : ''}
                 onChange={formik.handleChange}
               >
