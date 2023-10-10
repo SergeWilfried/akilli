@@ -219,9 +219,7 @@ const CreateTask = ({
         onDragLeave={handleDragLeave}
         onDragOver={handleDragOver}
       >
-        <Modal.Header className="font-bold">
-          {t('create-task')}
-        </Modal.Header>
+        <Modal.Header className="font-bold">{t('create-task')}</Modal.Header>
         <Modal.Body>
           <div className="mt-2 flex flex-col space-y-4">
             <p>{t('create-task-desc')}</p>

@@ -95,7 +95,7 @@ const Tasks = () => {
                           onClick={() => {
                             setTeam(task);
                             if (currentTask) {
-                              setAskConfirmation(true)
+                              setAskConfirmation(true);
                             }
                           }}
                         >

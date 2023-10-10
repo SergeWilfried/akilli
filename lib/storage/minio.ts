@@ -3,10 +3,13 @@ import {
   PutObjectCommand,
   S3Client,
 } from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+
 import env from '@/lib/env';
 
 const s3 = new S3Client({
   region: env.storage.region ? env.storage.region : 'us-east-1',
+  requestHandler: new FetchHttpHandler({ keepAlive: false }),
   credentials: {
     accessKeyId: env.storage.accessKey
       ? env.storage.accessKey
@@ -44,24 +47,24 @@ export async function createFile(file: File) {
     }
     return fileUrl;
   } catch (err: any) {
-    console.log('Error', err);
+    console.error('Error', err);
     throw Error(err?.message);
   }
 }
 
-export async function downloadFile(fileUrl: string) {
+// Specifies a path within your bucket and the file to download.
+interface bucketParams {
+  Bucket: string;
+  Key: string;
+}
+
+export async function getMediaURL(params: bucketParams) {
   try {
-    const response = await s3.send(
-      new GetObjectCommand({
-        Bucket: env.storage.bucketName ?? 'akilli',
-        Key: fileUrl,
-      })
-    );
-    // The Body object also has 'transformToByteArray' and 'transformToWebStream' methods.
-    if (response.Body) {
-      const str = await response?.Body.transformToWebStream();
-      return str;
-    }
+    const url = await getSignedUrl(s3, new GetObjectCommand(params), {
+      expiresIn: 15 * 60,
+    }); // Adjustable expiration.
+    console.log('URL:', url);
+    return url;
   } catch (err: any) {
     console.log('Error', err);
     throw Error(err?.message);
