@@ -2,13 +2,6 @@ import { prisma } from '@/lib/prisma';
 import { Task, Transcriber } from '@prisma/client';
 import { TaskWithFiles } from '../types';
 
-type PutBlobResult = {
-  url: string;
-  pathname: string;
-  contentType: string;
-  contentDisposition: string;
-};
-
 export async function createTask(
   transcript: TaskWithFiles
 ): Promise<TaskWithFiles> {
@@ -33,10 +26,7 @@ export async function createTask(
     throw new Error('Failed to create transcript');
   }
 }
-export async function addFilesToTask(
-  taskId: string,
-  files: PutBlobResult[]
-): Promise<Task> {
+export async function addFilesToTask(taskId: string, files: []): Promise<Task> {
   try {
     const task = await prisma.task.findUnique({ where: { id: taskId } });
     if (!task) {
@@ -48,11 +38,11 @@ export async function addFilesToTask(
       data: {
         files: {
           createMany: {
-            data: files.map((file) => ({
+            data: files.map((file: any) => ({
               url: file?.url,
-              fileFormat: file.contentType,
-              pathname: file.pathname,
-              contentDisposition: file.contentDisposition,
+              fileFormat: file.type,
+              pathname: file?.url,
+              contentSize: file.size,
             })),
           },
         },

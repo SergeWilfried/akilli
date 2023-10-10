@@ -178,7 +178,7 @@ model File {
   id          String   @id @default(uuid())
   url         String
   fileFormat  String
-  contentDisposition String
+  contentSize Int?
   pathname String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
