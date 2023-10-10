@@ -134,8 +134,8 @@ export interface Task {
   createdAt: Date;
   updatedAt?: Date;
   userId: string;
-  files?: any;
-  transcripts?: any;
+  files?: unknown;
+  transcripts?: unknown;
 }
 
 export enum TranscriptType {

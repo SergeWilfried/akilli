@@ -19,7 +19,7 @@ const AllTeams: NextPageWithLayout = () => {
     if (newTeam) {
       setVisible(true);
     }
-  }, [router.query]);
+  }, [newTeam]);
 
   return (
     <>
