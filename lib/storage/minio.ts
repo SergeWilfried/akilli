@@ -64,10 +64,10 @@ export async function getMediaURL(params: bucketParams) {
     const url = await getSignedUrl(s3, new GetObjectCommand(params), {
       expiresIn: 15 * 60,
     }); // Adjustable expiration.
-    console.log('URL:', url);
+    console.log('url:', url);
     return url;
   } catch (err: any) {
-    console.log('Error', err);
+    console.log('error', err);
     throw Error(err?.message);
   }
 }
