@@ -21,6 +21,57 @@ export const getInvitation = async (
   });
 };
 
+export const getTaskInvitations = async (key: { id: string }) => {
+  const invitations = await prisma.task.findUniqueOrThrow({
+    where: key,
+    include: {
+      invitations: true,
+    },
+  });
+  return invitations.invitations;
+};
+
+export const getTaskInvitation = async (key: {
+  taskId: string;
+  invitationId: string;
+}) => {
+  const { taskId, invitationId } = key;
+  const invitations = await prisma.task.findUniqueOrThrow({
+    where: {
+      id: taskId,
+    },
+    include: {
+      invitations: true,
+    },
+  });
+  return invitations.invitations.filter((f) => f.id === invitationId);
+};
+
+export const deleteTaskInvitation = async (key: {
+  taskId: string;
+  invitationId: string;
+}) => {
+  const { taskId, invitationId } = key;
+  const tasks = await prisma.task.findUniqueOrThrow({
+    where: {
+      id: taskId,
+    },
+    include: {
+      invitations: true,
+    },
+  });
+  const sin = tasks.invitations.filter((f) => f.id === invitationId);
+  console.log('invitations', tasks.invitations);
+  console.log('invitation found', sin);
+
+  await prisma.invitation.delete({
+    where: {
+      id: sin[0].id,
+    },
+  });
+  return [];
+};
+
 export const createInvitation = async (param: {
   teamId: string;
   invitedBy: string;
