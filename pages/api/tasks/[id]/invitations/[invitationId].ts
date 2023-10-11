@@ -7,6 +7,7 @@ import { sendEvent } from '@/lib/svix';
 import {
   createInvitation,
   deleteInvitation,
+  deleteTaskInvitation,
   getInvitation,
   getInvitations,
 } from 'models/invitation';
@@ -103,30 +104,22 @@ const handleDELETE = async (req: NextApiRequest, res: NextApiResponse) => {
   const teamMember = await throwIfNoTeamAccess(req, res);
   throwIfNotAllowed(teamMember, 'team_invitation', 'delete');
 
-  const { id } = req.query as { id: string };
-  console.warn('query', req.query);
-  const invitation = await getInvitation({ id });
+  const { id, invitationId } = req.query as {
+    id: string;
+    invitationId: string;
+  };
+  console.warn('invitation query', req.query);
+  await deleteTaskInvitation({ taskId: id, invitationId });
+  console.log('invitation deleted');
 
-  if (
-    invitation.invitedBy != teamMember.user.id ||
-    invitation.teamId != teamMember.teamId
-  ) {
-    throw new ApiError(
-      400,
-      `You don't have permission to delete this invitation.`
-    );
-  }
+  // sendAudit({
+  //   action: 'member.invitation.delete',
+  //   crud: 'd',
+  //   user: teamMember.user,
+  //   team: teamMember.team,
+  // });
 
-  await deleteInvitation({ id });
-
-  sendAudit({
-    action: 'member.invitation.delete',
-    crud: 'd',
-    user: teamMember.user,
-    team: teamMember.team,
-  });
-
-  await sendEvent(teamMember.teamId, 'invitation.removed', invitation);
+  // await sendEvent(teamMember.teamId, 'invitation.removed', invitation);
 
   res.status(200).json({ data: {} });
 };

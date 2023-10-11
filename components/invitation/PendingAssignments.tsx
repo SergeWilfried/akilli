@@ -25,8 +25,9 @@ const PendingAssignments = ({ task }: { task: Task }) => {
 
   const deleteInvitation = async (invitation: Invitation) => {
     const sp = new URLSearchParams({ id: invitation.id });
+    console.log(sp.toString())
     const { data: response } = await axios.delete<ApiResponse<unknown>>(
-      `/api/tasks/${task.id}/invitations?${sp.toString()}`,
+      `/api/tasks/${task.id}/invitations/${invitation.id}`,
       {
         validateStatus: () => true,
       }
