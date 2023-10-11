@@ -179,7 +179,7 @@ model File {
   url         String
   fileFormat  String
   contentSize Int?
-  pathname String
+  pathname    String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   task        Task?    @relation(fields: [taskId], references: [id])
