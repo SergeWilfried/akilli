@@ -24,9 +24,9 @@ const PendingInvitations = ({ team }: { team: Team }) => {
   }
 
   const deleteInvitation = async (invitation: Invitation) => {
-    const sp = new URLSearchParams({ id: invitation.id });
+    // const sp = new URLSearchParams({ id: invitation.id });
     const { data: response } = await axios.delete<ApiResponse<unknown>>(
-      `/api/teams/${team.slug}/invitations?${sp.toString()}`,
+      `/api/teams/${team.slug}/invitations/${invitation.id}`,
       {
         validateStatus: () => true,
       }
