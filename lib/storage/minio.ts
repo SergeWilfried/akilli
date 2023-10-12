@@ -4,13 +4,11 @@ import {
   S3Client,
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { FetchHttpHandler } from '@smithy/fetch-http-handler';
 
 import env from '@/lib/env';
 
 const s3 = new S3Client({
   region: env.storage.region ? env.storage.region : 'us-east-1',
-  requestHandler: new FetchHttpHandler({ keepAlive: false }),
   credentials: {
     accessKeyId: env.storage.accessKey
       ? env.storage.accessKey
