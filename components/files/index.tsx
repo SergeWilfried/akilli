@@ -56,12 +56,12 @@ const AllFiles = ({ currentTask }: FilesProps) => {
     <WithLoadingAndError isLoading={isLoading} error={!task}>
       {task.files.length === 0 ? (
         <EmptyState
-          title={t('no-api-key-title')}
-          description={t('no-api-key-description')}
+          title={t('no-file-title')}
+          description={t('no-file-description')}
         />
       ) : (
         <>
-          <Card heading={t('api-keys')}>
+          <Card heading={t('files')}>
             <Card.Body>
               <table className="w-full text-left text-sm text-gray-500">
                 <thead className="bg-gray-100 text-xs uppercase text-gray-700">
