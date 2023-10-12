@@ -11,7 +11,7 @@ datasource db {
 
 enum Role {
   ADMIN
-  Transcriber
+  TRANSCRIBER
   MEMBER
   OWNER
 }
@@ -92,7 +92,7 @@ model Transcriber {
   id        String     @id @default(uuid())
   name      String?
   gender    String?
-  role      Role       @default(Transcriber)
+  role      Role       @default(TRANSCRIBER)
   age       String?
   email     String?    @unique
   languages Language[]

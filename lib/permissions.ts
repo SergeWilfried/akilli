@@ -38,7 +38,7 @@ export const availableRoles = [
     name: 'Owner',
   },
   {
-    id: Role.Transcriber,
+    id: Role.TRANSCRIBER,
     name: 'Transcriber',
   },
 ];
@@ -55,6 +55,14 @@ export const permissions: RolePermissions = {
     },
     {
       resource: 'team_invitation',
+      actions: '*',
+    },
+    {
+      resource: 'language',
+      actions: '*',
+    },
+    {
+      resource: 'transcript',
       actions: '*',
     },
     {
@@ -88,7 +96,15 @@ export const permissions: RolePermissions = {
       actions: '*',
     },
     {
+      resource: 'transcript',
+      actions: '*',
+    },
+    {
       resource: 'task',
+      actions: '*',
+    },
+    {
+      resource: 'language',
       actions: '*',
     },
     {
@@ -126,14 +142,22 @@ export const permissions: RolePermissions = {
       actions: ['read', 'leave'],
     },
   ],
-  Transcriber: [
+  TRANSCRIBER: [
     {
       resource: 'team',
       actions: ['read', 'leave'],
     },
     {
+      resource: 'language',
+      actions: ['read'],
+    },
+    {
       resource: 'task',
       actions: ['read', 'leave'],
+    },
+    {
+      resource: 'transcript',
+      actions: '*',
     },
   ],
 };

@@ -14,7 +14,7 @@ const useAssignments = (taskId: string) => {
   const mutateInvitation = async () => {
     mutate(url);
   };
-
+  console.log(error);
   return {
     isLoading,
     isError: error,

@@ -45,9 +45,10 @@ export default async function handler(
 // Get members of a team
 const handleGET = async (req: NextApiRequest, res: NextApiResponse) => {
   const { id } = req.query as { id: string };
+  console.warn('Get all invitations for a team', req.query);
 
   const members = await getAssignedTranscribers(id);
-
+  console.warn('members', members);
   res.status(200).json({ data: members });
 };
 

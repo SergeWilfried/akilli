@@ -161,10 +161,12 @@ export async function getAssignedTranscribers(
       include: { transcribers: true },
     });
 
+    console.warn('transcribers', task?.transcribers);
+
     if (task) {
-      return task.transcribers;
+      return task?.transcribers;
     } else {
-      throw new Error('Task not found');
+      return [];
     }
   } catch (error) {
     console.error(error);

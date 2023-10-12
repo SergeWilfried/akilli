@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "Role" AS ENUM ('ADMIN', 'Transcriber', 'MEMBER', 'OWNER');
+CREATE TYPE "Role" AS ENUM ('ADMIN', 'TRANSCRIBER', 'MEMBER', 'OWNER');
 
 -- CreateEnum
 CREATE TYPE "EntityType" AS ENUM ('PERSON', 'BUSINESS');
@@ -74,7 +74,7 @@ CREATE TABLE "Transcriber" (
     "id" TEXT NOT NULL,
     "name" TEXT,
     "gender" TEXT,
-    "role" "Role" NOT NULL DEFAULT 'Transcriber',
+    "role" "Role" NOT NULL DEFAULT 'TRANSCRIBER',
     "age" TEXT,
     "email" TEXT,
     "teamId" TEXT NOT NULL,
@@ -94,6 +94,7 @@ CREATE TABLE "Invitation" (
     "invitedBy" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "taskId" TEXT NOT NULL,
 
     CONSTRAINT "Invitation_pkey" PRIMARY KEY ("id")
 );
@@ -144,7 +145,6 @@ CREATE TABLE "Task" (
     "name" TEXT NOT NULL,
     "status" TEXT NOT NULL,
     "deadline" TIMESTAMP(3) NOT NULL,
-    "assignedTranscriberId" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "userId" TEXT NOT NULL,
@@ -156,8 +156,9 @@ CREATE TABLE "Task" (
 CREATE TABLE "File" (
     "id" TEXT NOT NULL,
     "url" TEXT NOT NULL,
-    "contentSize" INTEGER NOT NULL,
     "fileFormat" TEXT NOT NULL,
+    "contentSize" INTEGER,
+    "pathname" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "taskId" TEXT,
@@ -191,7 +192,24 @@ CREATE TABLE "Rating" (
 );
 
 -- CreateTable
+CREATE TABLE "Transcript" (
+    "id" TEXT NOT NULL,
+    "text" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "taskId" TEXT NOT NULL,
+
+    CONSTRAINT "Transcript_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "_LanguageToTranscriber" (
+    "A" TEXT NOT NULL,
+    "B" TEXT NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "_TaskToTranscriber" (
     "A" TEXT NOT NULL,
     "B" TEXT NOT NULL
 );
@@ -250,6 +268,12 @@ CREATE UNIQUE INDEX "_LanguageToTranscriber_AB_unique" ON "_LanguageToTranscribe
 -- CreateIndex
 CREATE INDEX "_LanguageToTranscriber_B_index" ON "_LanguageToTranscriber"("B");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "_TaskToTranscriber_AB_unique" ON "_TaskToTranscriber"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_TaskToTranscriber_B_index" ON "_TaskToTranscriber"("B");
+
 -- AddForeignKey
 ALTER TABLE "Account" ADD CONSTRAINT "Account_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
@@ -269,10 +293,10 @@ ALTER TABLE "Invitation" ADD CONSTRAINT "Invitation_invitedBy_fkey" FOREIGN KEY 
 ALTER TABLE "Invitation" ADD CONSTRAINT "Invitation_teamId_fkey" FOREIGN KEY ("teamId") REFERENCES "Team"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ApiKey" ADD CONSTRAINT "ApiKey_teamId_fkey" FOREIGN KEY ("teamId") REFERENCES "Team"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Invitation" ADD CONSTRAINT "Invitation_taskId_fkey" FOREIGN KEY ("taskId") REFERENCES "Task"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Task" ADD CONSTRAINT "Task_assignedTranscriberId_fkey" FOREIGN KEY ("assignedTranscriberId") REFERENCES "Transcriber"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "ApiKey" ADD CONSTRAINT "ApiKey_teamId_fkey" FOREIGN KEY ("teamId") REFERENCES "Team"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Task" ADD CONSTRAINT "Task_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -287,8 +311,16 @@ ALTER TABLE "Payment" ADD CONSTRAINT "Payment_transcriberId_fkey" FOREIGN KEY ("
 ALTER TABLE "Rating" ADD CONSTRAINT "Rating_transcriberId_fkey" FOREIGN KEY ("transcriberId") REFERENCES "Transcriber"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "Transcript" ADD CONSTRAINT "Transcript_taskId_fkey" FOREIGN KEY ("taskId") REFERENCES "Task"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "_LanguageToTranscriber" ADD CONSTRAINT "_LanguageToTranscriber_A_fkey" FOREIGN KEY ("A") REFERENCES "Language"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_LanguageToTranscriber" ADD CONSTRAINT "_LanguageToTranscriber_B_fkey" FOREIGN KEY ("B") REFERENCES "Transcriber"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
+-- AddForeignKey
+ALTER TABLE "_TaskToTranscriber" ADD CONSTRAINT "_TaskToTranscriber_A_fkey" FOREIGN KEY ("A") REFERENCES "Task"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_TaskToTranscriber" ADD CONSTRAINT "_TaskToTranscriber_B_fkey" FOREIGN KEY ("B") REFERENCES "Transcriber"("id") ON DELETE CASCADE ON UPDATE CASCADE;

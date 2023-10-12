@@ -182,7 +182,7 @@ export const getTeamMember = async (userId: string, slug: string) => {
         slug,
       },
       role: {
-        in: ['ADMIN', 'MEMBER', 'OWNER'],
+        in: ['ADMIN', 'MEMBER', 'OWNER', 'TRANSCRIBER'],
       },
     },
     include: {
