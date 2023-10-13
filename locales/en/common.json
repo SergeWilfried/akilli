@@ -187,6 +187,8 @@
   "active": "Active",
   "no-api-key-title": "You haven't created any API Keys yet",
   "no-api-key-description": "API Keys allow your app to communicate with app",
+  "no-file-title": "You haven't added any files yet",
+  "no-file-description": "Add audio or txt files to your transcription project",
   "revoke-api-key-confirm": "Are you sure you want to revoke this API Key? This action can not be undone.",
   "delete": "Delete",
   "copy-to-clipboard": "Copy",
