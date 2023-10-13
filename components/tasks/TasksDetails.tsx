@@ -45,7 +45,7 @@ const TasksDetails = ({ task }: { task: Task }) => {
 
         if (taskUpdated) {
           toast.success(t('successfully-updated'));
-          return router.push(`/tasks/${taskUpdated.id}/settings`);
+          return router.push(`teams/akilli/tasks/${taskUpdated.id}/settings`);
         }
       } catch (error: any) {
         toast.error(getAxiosError(error));
@@ -56,9 +56,15 @@ const TasksDetails = ({ task }: { task: Task }) => {
   return (
     <>
       <form onSubmit={formik.handleSubmit}>
-        <Card heading={t('task-settings')}>
-          <Card.Body className="px-3 py-3">
-            <div className="flex flex-col">
+        <Card>
+          <Card.Body>
+            <Card.Header>
+              <Card.Title>{t('task-settings')}</Card.Title>
+              <Card.Description>
+                Project settings and configuration.
+              </Card.Description>
+            </Card.Header>
+            <div className="flex flex-col gap-4">
               <div className="flex justify-between space-x-3">
                 <InputWithLabel
                   name="name"
@@ -72,7 +78,7 @@ const TasksDetails = ({ task }: { task: Task }) => {
 
               <select
                 name="slug"
-                className="border border-gray-300 bg-white shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                className="select-bordered select flex-grow"
                 value={formik.values.status ? formik.values.status : 'STARTED'}
                 onChange={formik.handleChange}
               >
@@ -89,7 +95,7 @@ const TasksDetails = ({ task }: { task: Task }) => {
               <select
                 id="domain"
                 name="domain"
-                className="border border-gray-300 bg-white shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                className="select-bordered select flex-grow"
                 value={formik.values.language ? formik.values.language : ''}
                 onChange={formik.handleChange}
               >
@@ -104,9 +110,10 @@ const TasksDetails = ({ task }: { task: Task }) => {
               </select>
             </div>
           </Card.Body>
-          <AccessControl resource="team" actions={['update']}>
+          <AccessControl resource="task" actions={['update']}>
             <Card.Footer>
-              <div className="flex justify-end">
+            <div className="flex justify-end">
+
                 <Button
                   type="submit"
                   color="primary"
@@ -116,7 +123,7 @@ const TasksDetails = ({ task }: { task: Task }) => {
                 >
                   {t('save-changes')}
                 </Button>
-              </div>
+                </div>
             </Card.Footer>
           </AccessControl>
         </Card>

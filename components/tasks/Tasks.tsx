@@ -36,8 +36,11 @@ const Tasks = () => {
 
   return (
     <>
-      <Card heading={t('all-tasks')}>
+      <Card>
         <Card.Body>
+          <Card.Header>
+            <Card.Title>{t('all-tasks')}</Card.Title>
+          </Card.Header>
           <table className="w-full table-fixed text-left text-sm text-gray-500 dark:text-gray-400">
             <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
               <tr>
@@ -72,7 +75,7 @@ const Tasks = () => {
                       className="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
                     >
                       <td className="px-6 py-3">
-                        <Link href={`/tasks/${task.id}/settings`}>
+                        <Link href={`tasks/${task.id}/settings`}>
                           <div className="flex items-center justify-start space-x-2">
                             <span>{task.name}</span>
                           </div>

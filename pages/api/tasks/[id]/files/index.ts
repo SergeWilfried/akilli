@@ -33,8 +33,6 @@ export default async function handler(
 // Create an API key
 const handlePOST = async (req: NextApiRequest, res: NextApiResponse) => {
   const { taskId, files } = req.body;
-  console.log('taskId', taskId);
-  console.log('files', files);
 
   const updatedFilesList = await addFilesToTask(taskId, files);
   res.status(200).json({ data: updatedFilesList });

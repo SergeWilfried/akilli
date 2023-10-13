@@ -3,7 +3,6 @@ import {
   DocumentMagnifyingGlassIcon,
   KeyIcon,
   PaperAirplaneIcon,
-  ShieldExclamationIcon,
   UserPlusIcon,
 } from '@heroicons/react/24/outline';
 import type { Team } from '@prisma/client';
@@ -40,14 +39,7 @@ const TeamTab = (props: TeamTabProps) => {
     });
   }
 
-  if (canAccess('team_sso', ['create', 'update', 'read', 'delete'])) {
-    navigations.push({
-      name: 'Single Sign-On',
-      href: `/teams/${team.slug}/saml`,
-      active: activeTab === 'saml',
-      icon: ShieldExclamationIcon,
-    });
-  }
+  
 
   if (canAccess('team_dsync', ['create', 'update', 'read', 'delete'])) {
     navigations.push({
@@ -102,8 +94,8 @@ const TeamTab = (props: TeamTabProps) => {
               className={classNames(
                 'inline-flex items-center border-b-2 py-4 text-sm font-medium',
                 menu.active
-                ? 'border-gray-900 text-gray-700 dark:text-gray-100'
-                : 'border-transparent text-gray-500 hover:border-gray-300  hover:text-gray-700 hover:dark:text-gray-100'
+                  ? 'border-gray-900 text-gray-700 dark:text-gray-100'
+                  : 'border-transparent text-gray-500 hover:border-gray-300  hover:text-gray-700 hover:dark:text-gray-100'
               )}
             >
               {menu.name}

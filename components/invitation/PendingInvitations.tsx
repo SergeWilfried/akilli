@@ -13,7 +13,8 @@ const PendingInvitations = ({ team }: { team: Team }) => {
   const { isLoading, isError, invitations, mutateInvitation } = useInvitations(
     team.slug
   );
-  const [selectedInvitation, setSelectedInvitation] = useState<Invitation | null>(null);
+  const [selectedInvitation, setSelectedInvitation] =
+    useState<Invitation | null>(null);
 
   const { t } = useTranslation('common');
   const [confirmationDialogVisible, setConfirmationDialogVisible] =
@@ -102,7 +103,7 @@ const PendingInvitations = ({ team }: { team: Team }) => {
       <ConfirmationDialog
         visible={confirmationDialogVisible}
         onCancel={() => setConfirmationDialogVisible(false)}
-        onConfirm={() => deleteInvitation(selectedInvitation)}
+        onConfirm={() => deleteInvitation(selectedInvitation!)}
         title={t('confirm-delete-member-invitation')}
       >
         {t('delete-member-invitation-warning')}

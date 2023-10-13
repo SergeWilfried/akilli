@@ -21,13 +21,13 @@ const Dashboard: NextPageWithLayout = () => {
 
     if (teams.length > 0) {
       router.push(`/teams/${teams[0].slug}/settings`);
-    } else if (teams[0].defaultRole === Role.OWNER) {
+    } else if (teams[0]?.defaultRole === Role.OWNER) {
       router.push('teams?newTeam=true');
     }
   }, [isLoading, router, teams]);
 
   return (
-    <Card heading="Dashboard">
+    <Card>
       <Card.Body>
         <div className="p-3">
           <p className="text-sm">

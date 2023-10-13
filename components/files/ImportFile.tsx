@@ -106,7 +106,7 @@ const ImportFile = ({
               mutateTasks();
               formik.resetForm();
               setVisible(false);
-              router.push(`/tasks/${task.id}/files`);
+              router.push(`teams/akilli/tasks/${task.id}/files`);
             }
           }
         }

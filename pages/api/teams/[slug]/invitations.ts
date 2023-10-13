@@ -76,7 +76,7 @@ const handlePOST = async (req: NextApiRequest, res: NextApiResponse) => {
 
   await sendEvent(teamMember.teamId, 'invitation.created', invitation);
 
-  await sendTeamInviteEmail(teamMember.team, invitation, taskId);
+  await sendTeamInviteEmail(teamMember.team, invitation);
 
   sendAudit({
     action: 'member.invitation.create',
@@ -135,8 +135,6 @@ const handleDELETE = async (req: NextApiRequest, res: NextApiResponse) => {
 const handlePUT = async (req: NextApiRequest, res: NextApiResponse) => {
   const { inviteToken } = req.body as {
     inviteToken: string;
-    taskId: string;
-    transcriberId: string;
   };
 
   const session = await getSession(req, res);

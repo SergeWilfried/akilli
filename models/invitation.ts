@@ -57,7 +57,6 @@ export const deleteTaskInvitation = async (key: {
       id: invitationId,
     },
   });
-  console.log('invitations', invitation);
 
   await prisma.invitation.delete({
     where: {

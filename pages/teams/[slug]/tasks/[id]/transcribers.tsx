@@ -5,7 +5,7 @@ import { TasksTab } from '@/components/tasks';
 import { Error, Loading } from '@/components/shared';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/router';
-import useTask from '../../../hooks/useTask';
+import useTask from 'hooks/useTask';
 import AllTranscribers from '@/components/tasks/Transcribers';
 import { Button } from 'react-daisyui';
 import {
@@ -50,8 +50,8 @@ const Transcribers: NextPageWithLayout = () => {
           </Button>
         </div>
         <AllTranscribers task={task} />
+        <PendingAssignments task={task} />
       </div>
-      <PendingAssignments task={task} />
       <InviteTranscribers
         visible={visible}
         setVisible={setVisible}
