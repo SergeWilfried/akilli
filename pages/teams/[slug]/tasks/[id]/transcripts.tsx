@@ -1,14 +1,15 @@
 import { GetServerSidePropsContext } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import type { NextPageWithLayout } from 'types';
-import { AccessControl } from '../../../components/shared/AccessControl';
-import { TasksTab, RemoveTask } from '../../../components/tasks';
+
 import { Error, Loading } from '@/components/shared';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/router';
 import useTask from 'hooks/useTask';
 import AllTranscripts from '@/components/transcripts/Transcripts';
 import { Button } from 'react-daisyui';
+import { AccessControl } from '@/components/shared/AccessControl';
+import { TasksTab, RemoveTask } from '@/components/tasks';
 
 const Transcripts: NextPageWithLayout = () => {
   const { t } = useTranslation('common');
