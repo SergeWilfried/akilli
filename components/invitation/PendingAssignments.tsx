@@ -14,7 +14,7 @@ const PendingAssignments = ({ task }: { task: Task }) => {
     task.id
   );
   const [selectedInvitation, setSelectedInvitation] =
-    useState<Invitation | null>(null);
+    useState<Invitation>();
 
   const [confirmationDialogVisible, setConfirmationDialogVisible] =
     useState(false);
@@ -105,7 +105,7 @@ new URLSearchParams({ id: invitation.id });
       <ConfirmationDialog
         visible={confirmationDialogVisible}
         onCancel={() => setConfirmationDialogVisible(false)}
-        onConfirm={() => deleteInvitation(selectedInvitation)}
+        onConfirm={() => deleteInvitation(selectedInvitation!)}
         title={t('confirm-delete-member-invitation')}
       >
         {t('delete-member-invitation-warning')}
