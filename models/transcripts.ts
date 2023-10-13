@@ -15,11 +15,7 @@ export async function createTranscript(
     const newTranscript = await prisma.transcript.create({
       data: {
         text: text,
-        task: {
-          connect: { id: taskId },
-        },
       },
-      include: { task: true },
     });
 
     return newTranscript;
@@ -43,7 +39,7 @@ export async function updateTranscript(
     const updatedTranscript = await prisma.transcript.update({
       where: { id: transcriptId },
       data: { text },
-      include: { task: true },
+      // include: { task: true },
     });
 
     return updatedTranscript;
@@ -64,7 +60,7 @@ export async function deleteTranscript(
   try {
     const deletedTranscript = await prisma.transcript.delete({
       where: { id: transcriptId },
-      include: { task: true },
+      // include: { task: true },
     });
 
     return deletedTranscript;
@@ -84,7 +80,7 @@ export async function getAllTranscripts(taskId: string): Promise<Transcript[]> {
     console.log('transcript ID', taskId);
     const transcripts = await prisma.transcript.findMany({
       where: { id: taskId },
-      include: { task: true },
+      // include: { task: true },
     });
 
     return transcripts;
@@ -105,8 +101,8 @@ export async function getTranscript(
 ): Promise<Transcript> {
   try {
     const transcript = await prisma.transcript.findUnique({
-      where: { id: transcriptId, taskId },
-      include: { task: true },
+      where: { id: transcriptId },
+      // include: { task: true },
     });
     if (transcript) {
       return transcript;

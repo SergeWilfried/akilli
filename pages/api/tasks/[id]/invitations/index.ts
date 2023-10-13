@@ -76,7 +76,7 @@ const handlePOST = async (req: NextApiRequest, res: NextApiResponse) => {
 
   await sendEvent(teamMember.teamId, 'invitation.created', invitation);
 
-  await sendTeamInviteEmail(teamMember.team, invitation, taskId);
+  await sendTeamInviteEmail(teamMember.team, invitation);
 
   sendAudit({
     action: 'member.invitation.create',
