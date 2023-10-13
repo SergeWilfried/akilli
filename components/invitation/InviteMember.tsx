@@ -1,7 +1,6 @@
-import { getAxiosError } from '@/lib/common';
+import { defaultHeaders } from '@/lib/common';
 import { availableRoles } from '@/lib/permissions';
 import type { Invitation, Team } from '@prisma/client';
-import axios from 'axios';
 import { useFormik } from 'formik';
 import useInvitations from 'hooks/useInvitations';
 import { useTranslation } from 'next-i18next';
@@ -29,33 +28,47 @@ const InviteMember = ({
       role: availableRoles[0].id,
     },
     validationSchema: Yup.object().shape({
-      email: Yup.string().email().required(),
+      email: Yup.string().email().required('Email is a required field'), // Added error message
       role: Yup.string()
-        .required()
+        .required('Role is required')
         .oneOf(availableRoles.map((r) => r.id)),
     }),
     onSubmit: async (values) => {
-      try {
-        await axios.post<ApiResponse<Invitation>>(
-          `/api/teams/${team.slug}/invitations`,
-          {
-            ...values,
-          }
-        );
+      const response = await fetch(`/api/teams/${team.slug}/invitations`, {
+        method: 'POST',
+        headers: defaultHeaders,
+        body: JSON.stringify(values),
+      });
 
-        toast.success(t('invitation-sent'));
+      const json = (await response.json()) as ApiResponse<Invitation>;
 
-        mutateInvitation();
-        setVisible(false);
-        formik.resetForm();
-      } catch (error: any) {
-        toast.error(getAxiosError(error));
+      if (!response.ok) {
+        toast.error(json.error.message);
+        return;
       }
+
+      toast.success(t('invitation-sent'));
+      mutateInvitation();
+      setVisible(false);
+      formik.resetForm();
     },
   });
+  const toggleVisible = () => {
+    setVisible(!visible);
+  };
 
   return (
     <Modal open={visible}>
+      <Button
+        type="button"
+        size="sm"
+        shape="circle"
+        className="absolute right-2 top-2 rounded-full"
+        onClick={toggleVisible}
+        aria-label={t('close')}
+      >
+        ✕
+      </Button>
       <form onSubmit={formik.handleSubmit} method="POST">
         <Modal.Header className="font-bold">
           {t('invite-new-member')}
@@ -67,6 +80,11 @@ const InviteMember = ({
               <Input
                 name="email"
                 className="flex-grow"
+                color={
+                  formik.touched.email && formik.errors.email
+                    ? 'error'
+                    : 'primary'
+                }
                 onChange={formik.handleChange}
                 value={formik.values.email}
                 placeholder="jackson@boxyhq.com"
@@ -85,6 +103,19 @@ const InviteMember = ({
                 ))}
               </select>
             </div>
+            {formik.touched.email && formik.errors.email && (
+              <span
+                className="text-red-600"
+                style={{
+                  position: 'absolute',
+                  left: 30,
+                  bottom: 55,
+                  fontSize: '0.75em',
+                }}
+              >
+                {formik.errors.email}
+              </span>
+            )}
           </div>
         </Modal.Body>
         <Modal.Actions>
@@ -96,16 +127,6 @@ const InviteMember = ({
             size="md"
           >
             {t('send-invite')}
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => {
-              setVisible(!visible);
-            }}
-            size="md"
-          >
-            {t('close')}
           </Button>
         </Modal.Actions>
       </form>
