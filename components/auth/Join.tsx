@@ -69,7 +69,6 @@ const Join = () => {
   return (
     <form onSubmit={formik.handleSubmit}>
       <div className="space-y-1">
-      
         <InputWithLabel
           type="text"
           label={t('name')}

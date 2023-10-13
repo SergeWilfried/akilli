@@ -39,8 +39,6 @@ const TeamTab = (props: TeamTabProps) => {
     });
   }
 
-  
-
   if (canAccess('team_dsync', ['create', 'update', 'read', 'delete'])) {
     navigations.push({
       name: 'Directory Sync',
