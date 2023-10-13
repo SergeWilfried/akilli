@@ -9,7 +9,6 @@ import HeroSection from '@/components/defaultLanding/HeroSection';
 import FeatureSection from '@/components/defaultLanding/FeatureSection';
 import PricingSection from '@/components/defaultLanding/PricingSection';
 import useTheme from 'hooks/useTheme';
-import env from '@/lib/env';
 import Head from 'next/head';
 
 const Home: NextPageWithLayout = () => {
@@ -75,14 +74,14 @@ export const getServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
   // Redirect to login page if landing page is disabled
-  if (env.hideLandingPage) {
-    return {
-      redirect: {
-        destination: '/auth/login',
-        permanent: true,
-      },
-    };
-  }
+  // if (env.hideLandingPage) {
+  //   return {
+  //     redirect: {
+  //       destination: '/auth/login',
+  //       permanent: true,
+  //     },
+  //   };
+  // }
 
   const { locale } = context;
 
