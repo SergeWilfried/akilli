@@ -59,8 +59,11 @@ const UpdateAccount = ({ user }: { user: User }) => {
 
   return (
     <form onSubmit={formik.handleSubmit}>
-      <Card heading={t('update-account')}>
-        <Card.Body className="p-4">
+      <Card>
+        <Card.Body>
+        <Card.Header>
+            <Card.Title>{t('update-account')}</Card.Title>
+          </Card.Header>
           <div className="flex flex-col space-y-2">
             <ProfileImageUpload formik={formik} />
             <InputWithLabel

@@ -36,8 +36,10 @@ const AllTasks: NextPageWithLayout = () => {
           {t('create-task')}
         </Button>
       </div>
-      <CreateTask visible={visible} setVisible={setVisible} />
-      <Tasks />
+      <div className="space-y-6">
+        <CreateTask visible={visible} setVisible={setVisible} />
+        <Tasks />
+      </div>
     </>
   );
 };

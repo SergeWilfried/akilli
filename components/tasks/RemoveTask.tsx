@@ -37,8 +37,11 @@ const RemoveTask = ({ task }: { task: Task }) => {
 
   return (
     <>
-      <Card heading={t('remove-task')}>
-        <Card.Body className="px-3 py-3">
+      <Card>
+        <Card.Body>
+          <Card.Header>
+            <Card.Title>${t('remove-task')}</Card.Title>
+          </Card.Header>
           <p className="text-sm mb-4">{t('remove-task-warning')}</p>
           <Button
             color="error"

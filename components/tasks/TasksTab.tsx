@@ -11,29 +11,31 @@ interface TasksTabProps {
 
 const TasksTab = (props: TasksTabProps) => {
   const { activeTab, task, heading } = props;
+  const teamSlug = 'akilli';
   const navigations = [
     {
       name: 'Details',
-      href: `/tasks/${task.id}/settings`,
+      href: `teams/${teamSlug}/tasks/${task.id}/settings`,
+
       active: activeTab === 'settings',
       icon: Cog6ToothIcon,
     },
   ];
   navigations.push({
     name: 'Files',
-    href: `/tasks/${task.id}/files`,
+    href: `teams/${teamSlug}/tasks/${task.id}/files`,
     active: activeTab === 'files',
     icon: KeyIcon,
   });
   navigations.push({
     name: 'Transcribers',
-    href: `/tasks/${task.id}/transcribers`,
+    href: `teams/${teamSlug}/tasks/${task.id}/transcribers`,
     active: activeTab === 'transcribers',
     icon: KeyIcon,
   });
   navigations.push({
     name: 'Transcripts',
-    href: `/tasks/${task.id}/transcripts`,
+    href: `teams/${teamSlug}/${task.id}/transcripts`,
     active: activeTab === 'transcripts',
     icon: KeyIcon,
   });

@@ -27,7 +27,7 @@ const Dashboard: NextPageWithLayout = () => {
   }, [isLoading, router, teams]);
 
   return (
-    <Card heading="Dashboard">
+    <Card>
       <Card.Body>
         <div className="p-3">
           <p className="text-sm">

@@ -61,8 +61,11 @@ const AllFiles = ({ currentTask }: FilesProps) => {
         />
       ) : (
         <>
-          <Card heading={t('files')}>
+          <Card>
             <Card.Body>
+            <Card.Header>
+            <Card.Title>{t('files')}</Card.Title>
+          </Card.Header>
               <table className="w-full text-left text-sm text-gray-500">
                 <thead className="bg-gray-100 text-xs uppercase text-gray-700">
                   <tr>

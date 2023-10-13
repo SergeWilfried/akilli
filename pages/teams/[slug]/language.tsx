@@ -25,8 +25,10 @@ const Language: NextPageWithLayout = () => {
           {t('create-lang')}
         </Button>
       </div>
-      <CreateLang visible={visible} setVisible={setVisible} />
-      <Languages />
+      <div className="space-y-6">
+        <CreateLang visible={visible} setVisible={setVisible} />
+        <Languages />
+      </div>
     </>
   );
 };

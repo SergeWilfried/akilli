@@ -49,12 +49,14 @@ const JoinWithInvitation = ({
       mobileNumber: Yup.string().required(),
       password: Yup.string()
         .required()
-        .min(passwordPolicies.minLength, 'Password must be at least 8 characters long'),
+        .min(
+          passwordPolicies.minLength,
+          'Password must be at least 8 characters long'
+        ),
     }),
     enableReinitialize: true,
     onSubmit: async (values) => {
       try {
-      
         const response = await fetch('/api/auth/join', {
           method: 'POST',
           headers: defaultHeaders,
@@ -66,10 +68,10 @@ const JoinWithInvitation = ({
           toast.error(json.error.message);
           return;
         }
-  
+
         formik.resetForm();
         toast.success(t('successfully-joined'));
-  
+
         router.push(`/auth/login?token=${inviteToken}`);
 
         return next ? router.push(next) : router.push('/auth/login');
@@ -126,7 +128,7 @@ const JoinWithInvitation = ({
         error={formik.touched.email ? formik.errors.email : undefined}
         onChange={formik.handleChange}
       />
-       <div className="relative flex">
+      <div className="relative flex">
         <InputWithLabel
           type={isPasswordVisible ? 'text' : 'password'}
           label={t('password')}

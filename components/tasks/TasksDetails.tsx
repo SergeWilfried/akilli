@@ -45,7 +45,7 @@ const TasksDetails = ({ task }: { task: Task }) => {
 
         if (taskUpdated) {
           toast.success(t('successfully-updated'));
-          return router.push(`/tasks/${taskUpdated.id}/settings`);
+          return router.push(`teams/akilli/tasks/${taskUpdated.id}/settings`);
         }
       } catch (error: any) {
         toast.error(getAxiosError(error));
@@ -56,8 +56,11 @@ const TasksDetails = ({ task }: { task: Task }) => {
   return (
     <>
       <form onSubmit={formik.handleSubmit}>
-        <Card heading={t('task-settings')}>
-          <Card.Body className="px-3 py-3">
+        <Card>
+          <Card.Body>
+            <Card.Header>
+              <Card.Title>{t('task-settings')}</Card.Title>
+            </Card.Header>
             <div className="flex flex-col">
               <div className="flex justify-between space-x-3">
                 <InputWithLabel

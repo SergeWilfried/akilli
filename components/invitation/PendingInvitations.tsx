@@ -13,7 +13,8 @@ const PendingInvitations = ({ team }: { team: Team }) => {
   const { isLoading, isError, invitations, mutateInvitation } = useInvitations(
     team.slug
   );
-  const [selectedInvitation, setSelectedInvitation] = useState<Invitation | null>(null);
+  const [selectedInvitation, setSelectedInvitation] =
+    useState<Invitation | null>(null);
 
   const { t } = useTranslation('common');
   const [confirmationDialogVisible, setConfirmationDialogVisible] =

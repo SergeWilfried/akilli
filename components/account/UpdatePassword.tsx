@@ -36,8 +36,11 @@ const UpdatePassword = () => {
   return (
     <>
       <form onSubmit={formik.handleSubmit}>
-        <Card heading={t('update-password')}>
-          <Card.Body className="p-4">
+        <Card>
+          <Card.Body>
+          <Card.Header>
+            <Card.Title>{t('update-password')}</Card.Title>
+          </Card.Header>
             <div className="flex flex-col space-y-3">
               <InputWithLabel
                 type="password"
