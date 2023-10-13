@@ -77,7 +77,6 @@ export async function deleteTranscript(
  */
 export async function getAllTranscripts(taskId: string): Promise<Transcript[]> {
   try {
-    console.log('transcript ID', taskId);
     const transcripts = await prisma.transcript.findMany({
       where: { id: taskId },
       // include: { task: true },

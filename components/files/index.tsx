@@ -7,7 +7,7 @@ import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
 import { Button } from 'react-daisyui';
 
-import useTask from '../../hooks/useTask';
+import useTask from 'hooks/useTask';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import { getAxiosError } from '../../lib/common';
@@ -27,7 +27,6 @@ const AllFiles = ({ currentTask }: FilesProps) => {
   const [selectedFile, setSelectedFile] = useState<string | null>(null);
 
   // Fetch API Keys
-  console.log('tasks files', task?.files);
 
   // Delete File
   const deleteFile = async () => {

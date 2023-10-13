@@ -9,7 +9,7 @@ import { Button } from 'react-daisyui';
 import AllFiles from '@/components/files';
 import { useState } from 'react';
 import ImportFile from '@/components/files/ImportFile';
-import useTask from '../../../hooks/useTask';
+import useTask from 'hooks/useTask';
 
 const Files: NextPageWithLayout = () => {
   const { t } = useTranslation('common');

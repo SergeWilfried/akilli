@@ -6,7 +6,7 @@ import { TasksTab, RemoveTask } from '../../../components/tasks';
 import { Error, Loading } from '@/components/shared';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/router';
-import useTask from '../../../hooks/useTask';
+import useTask from 'hooks/useTask';
 import AllTranscripts from '@/components/transcripts/Transcripts';
 import { Button } from 'react-daisyui';
 

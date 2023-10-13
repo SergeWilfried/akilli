@@ -40,14 +40,7 @@ const TeamTab = (props: TeamTabProps) => {
     });
   }
 
-  if (canAccess('team_sso', ['create', 'update', 'read', 'delete'])) {
-    navigations.push({
-      name: 'Single Sign-On',
-      href: `/teams/${team.slug}/saml`,
-      active: activeTab === 'saml',
-      icon: ShieldExclamationIcon,
-    });
-  }
+  
 
   if (canAccess('team_dsync', ['create', 'update', 'read', 'delete'])) {
     navigations.push({

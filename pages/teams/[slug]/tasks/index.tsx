@@ -23,7 +23,7 @@ const AllTasks: NextPageWithLayout = () => {
 
   return (
     <>
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-end">
         <Button
           color="primary"
           size="md"
