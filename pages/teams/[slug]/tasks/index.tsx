@@ -23,8 +23,7 @@ const AllTasks: NextPageWithLayout = () => {
 
   return (
     <>
-      <div className="flex items-center justify-between">
-        <h4>{t('all-tasks')}</h4>
+      <div className="flex items-center justify-end">
         <Button
           color="primary"
           size="md"
@@ -36,8 +35,10 @@ const AllTasks: NextPageWithLayout = () => {
           {t('create-task')}
         </Button>
       </div>
-      <CreateTask visible={visible} setVisible={setVisible} />
-      <Tasks />
+      <div className="space-y-6">
+        <CreateTask visible={visible} setVisible={setVisible} />
+        <Tasks />
+      </div>
     </>
   );
 };

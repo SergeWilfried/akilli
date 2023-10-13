@@ -10,7 +10,7 @@ const Dashboard: NextPageWithLayout = () => {
   const { data: session } = useSession();
 
   return (
-    <Card heading="Dashboard">
+    <Card>
       <Card.Body>
         <div className="p-3">
           <p className="text-sm">

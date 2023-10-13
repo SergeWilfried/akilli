@@ -24,7 +24,10 @@ const ResetPassword = () => {
     validationSchema: Yup.object().shape({
       password: Yup.string()
         .required()
-        .min(passwordPolicies.minLength, `Password must be at least ${passwordPolicies.minLength} characters long`),
+        .min(
+          passwordPolicies.minLength,
+          `Password must be at least ${passwordPolicies.minLength} characters long`
+        ),
       confirmPassword: Yup.string().test(
         'passwords-match',
         'Passwords must match',

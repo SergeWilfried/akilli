@@ -12,8 +12,7 @@ const Language: NextPageWithLayout = () => {
 
   return (
     <>
-      <div className="flex items-center justify-between">
-        <h4>{t('all-lang')}</h4>
+      <div className="flex items-center justify-end">
         <Button
           color="primary"
           size="md"

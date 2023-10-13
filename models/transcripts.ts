@@ -10,15 +10,11 @@ import { Transcript } from '@prisma/client';
 export async function createTranscript(
   taskId: string,
   text: string
-): Promise<Transcript> {
+): Promise<any> {
   try {
-    const newTranscript = await prisma.transcript.create({
-      data: {
-        text: text,
-      },
-    });
-
-    return newTranscript;
+    // const newTranscript = await prisma.transcript.create({});
+    console.log(taskId, text);
+    return 'newTranscript';
   } catch (error) {
     console.error(error);
     throw new Error('Failed to create transcript');
@@ -77,7 +73,6 @@ export async function deleteTranscript(
  */
 export async function getAllTranscripts(taskId: string): Promise<Transcript[]> {
   try {
-    console.log('transcript ID', taskId);
     const transcripts = await prisma.transcript.findMany({
       where: { id: taskId },
       // include: { task: true },

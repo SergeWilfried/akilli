@@ -6,7 +6,7 @@ import type { GetServerSidePropsContext } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useRouter } from 'next/router';
-import useTask from '../../../hooks/useTask';
+import useTask from 'hooks/useTask';
 
 const Settings = () => {
   const { t } = useTranslation('common');
@@ -30,10 +30,12 @@ const Settings = () => {
   return (
     <>
       <TasksTab activeTab="settings" task={task} />
-      <TasksDetails task={task} />
-      <AccessControl resource="task" actions={['delete']}>
-        <RemoveTask task={task} />
-      </AccessControl>
+      <div className="flex flex-col space-y-6">
+        <TasksDetails task={task} />
+        <AccessControl resource="task" actions={['delete']}>
+          <RemoveTask task={task} />
+        </AccessControl>
+      </div>
     </>
   );
 };

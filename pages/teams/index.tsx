@@ -24,7 +24,6 @@ const AllTeams: NextPageWithLayout = () => {
   return (
     <>
       <div className="flex items-center justify-between">
-        <h4>{t('all-teams')}</h4>
         <Button
           color="primary"
           size="md"
