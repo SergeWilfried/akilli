@@ -1,5 +1,6 @@
 import { enc, lib } from 'crypto-js';
 import type { NextApiRequest } from 'next';
+import { validatePasswordPolicy } from './auth';
 export interface SelectObject {
   id: string | number;
   name: string;
@@ -24,6 +25,9 @@ export function generateToken(length = 64) {
 
   return enc.Base64.stringify(tokenBytes);
 }
+export const domainRegex =
+  /(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]/;
+
 
 export const slugify = (text: string) => {
   return text
@@ -76,9 +80,7 @@ export const validateEmail = (email: string): boolean => {
 
 export const validatePassword = (password: string): boolean => {
   // Password should be at least 8 characters long
-  if (password.length < 8) {
-    return false;
-  }
+  validatePasswordPolicy(password);
 
   // Password should have at least one lowercase letter
   if (!/[a-z]/.test(password)) {
@@ -105,4 +107,12 @@ export const validatePassword = (password: string): boolean => {
 
 export const copyToClipboard = (text: string) => {
   navigator.clipboard.writeText(text);
+};
+
+export const defaultHeaders = {
+  'Content-Type': 'application/json',
+};
+
+export const passwordPolicies = {
+  minLength: 8,
 };

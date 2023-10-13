@@ -1,3 +1,4 @@
+import { FetchHttpHandler } from '@smithy/fetch-http-handler';
 import {
   GetObjectCommand,
   PutObjectCommand,
@@ -9,6 +10,7 @@ import env from '@/lib/env';
 
 const s3 = new S3Client({
   region: env.storage.region ? env.storage.region : 'us-east-1',
+  requestHandler: new FetchHttpHandler({ keepAlive: false }),
   credentials: {
     accessKeyId: env.storage.accessKey
       ? env.storage.accessKey

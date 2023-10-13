@@ -3,13 +3,10 @@ import { prisma } from '@/lib/prisma';
 import { sendAudit } from '@/lib/retraced';
 import { sendEvent } from '@/lib/svix';
 import { Role } from '@prisma/client';
-import {
-  getAssignedTranscribers,
-  removeTranscriberFromTask,
-} from 'models/task';
+import { removeTranscriberFromTask } from 'models/task';
 import { throwIfNotAllowed } from 'models/user';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { throwIfNoTeamAccess } from '../../../../models/team';
+import { getTeamMembers, throwIfNoTeamAccess } from '../../../../models/team';
 
 export default async function handler(
   req: NextApiRequest,
@@ -45,10 +42,9 @@ export default async function handler(
 // Get members of a team
 const handleGET = async (req: NextApiRequest, res: NextApiResponse) => {
   const { id } = req.query as { id: string };
-  console.warn('Get all invitations for a team', req.query);
 
-  const members = await getAssignedTranscribers(id);
-  console.warn('members', members);
+  const members = await getTeamMembers('akilli');
+  console.warn('members', id);
   res.status(200).json({ data: members });
 };
 

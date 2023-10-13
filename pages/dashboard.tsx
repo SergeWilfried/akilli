@@ -3,11 +3,28 @@ import { GetServerSidePropsContext } from 'next';
 import { useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import router from 'next/router';
+import { useEffect } from 'react';
 import type { NextPageWithLayout } from 'types';
+import useTeams from '../hooks/useTeams';
+import { Role } from '@prisma/client';
 
 const Dashboard: NextPageWithLayout = () => {
   const { t } = useTranslation('common');
   const { data: session } = useSession();
+  const { teams, isLoading } = useTeams();
+
+  useEffect(() => {
+    if (isLoading || !teams) {
+      return;
+    }
+
+    if (teams.length > 0) {
+      router.push(`/teams/${teams[0].slug}/settings`);
+    } else if (teams[0].defaultRole === Role.OWNER) {
+      router.push('teams?newTeam=true');
+    }
+  }, [isLoading, router, teams]);
 
   return (
     <Card heading="Dashboard">

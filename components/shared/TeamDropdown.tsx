@@ -28,7 +28,7 @@ const TeamDropdown = () => {
       name: t('teams'),
       items: (teams || []).map((team) => ({
         id: team.id,
-        name: team.name,
+        name: 'Admin',
         href: `/teams/${team.slug}/dashboard`,
         icon: FolderIcon,
       })),
@@ -73,7 +73,7 @@ const TeamDropdown = () => {
             tabIndex={0}
             className="border border-gray-300 flex h-10 items-center px-4 justify-between cursor-pointer rounded text-sm font-bold"
           >
-            {currentTeam?.name || data?.user?.name}{' '}
+            {currentTeam?.name ? 'Admin' : data?.user?.name}{' '}
             <ChevronUpDownIcon className="w-5 h-5" />
           </div>
           <ul

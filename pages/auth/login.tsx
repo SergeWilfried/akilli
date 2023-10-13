@@ -43,7 +43,7 @@ const Login: NextPageWithLayout<
     if (success) {
       setMessage({ text: success, status: 'success' });
     }
-  }, [router,error, t, success, router.query]);
+  }, [router, error, t, success, router.query]);
 
   if (status === 'authenticated') {
     router.push('/dashboard');

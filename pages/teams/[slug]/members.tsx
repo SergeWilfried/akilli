@@ -29,7 +29,7 @@ const TeamMembers: NextPageWithLayout = () => {
   return (
     <>
       <TeamTab activeTab="members" team={team} />
-      <div className="flex flex-col">
+      <div className="flex flex-col space-y-6">
         <div className="flex mt-4 justify-end">
           <Button
             color="primary"
@@ -43,8 +43,8 @@ const TeamMembers: NextPageWithLayout = () => {
           </Button>
         </div>
         <Members team={team} />
+        <PendingInvitations team={team} />
       </div>
-      <PendingInvitations team={team} />
       <InviteMember visible={visible} setVisible={setVisible} team={team} />
     </>
   );

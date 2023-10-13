@@ -77,7 +77,7 @@ const handlePOST = async (req: NextApiRequest, res: NextApiResponse) => {
 
   await sendEvent(teamMember.teamId, 'invitation.created', invitation);
 
-  await sendTeamInviteEmail(teamMember.team, invitation, taskId);
+  await sendTeamInviteEmail(teamMember.team, invitation);
 
   sendAudit({
     action: 'member.invitation.create',
@@ -110,7 +110,6 @@ const handleDELETE = async (req: NextApiRequest, res: NextApiResponse) => {
   };
   console.warn('invitation query', req.query);
   await deleteTaskInvitation({ taskId: id, invitationId });
-  console.log('invitation deleted');
 
   // sendAudit({
   //   action: 'member.invitation.delete',

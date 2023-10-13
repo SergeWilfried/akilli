@@ -51,22 +51,17 @@ export const deleteTaskInvitation = async (key: {
   taskId: string;
   invitationId: string;
 }) => {
-  const { taskId, invitationId } = key;
-  const tasks = await prisma.task.findUniqueOrThrow({
+  const { invitationId } = key;
+  const invitation = await prisma.invitation.findUniqueOrThrow({
     where: {
-      id: taskId,
-    },
-    include: {
-      invitations: true,
+      id: invitationId,
     },
   });
-  const sin = tasks.invitations.filter((f) => f.id === invitationId);
-  console.log('invitations', tasks.invitations);
-  console.log('invitation found', sin);
+  console.log('invitations', invitation);
 
   await prisma.invitation.delete({
     where: {
-      id: sin[0].id,
+      id: invitation.id,
     },
   });
   return [];

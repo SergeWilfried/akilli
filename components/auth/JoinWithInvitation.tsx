@@ -6,7 +6,6 @@ import {
 } from '@/components/shared';
 import { countryOptions, getAxiosError } from '@/lib/common';
 import type { User } from '@prisma/client';
-import axios from 'axios';
 import { useFormik } from 'formik';
 import useInvitation from 'hooks/useInvitation';
 import { useTranslation } from 'next-i18next';
@@ -15,6 +14,9 @@ import { Button } from 'react-daisyui';
 import toast from 'react-hot-toast';
 import type { ApiResponse } from 'types';
 import * as Yup from 'yup';
+import TogglePasswordVisibility from '../shared/TogglePasswordVisibility';
+import { defaultHeaders, passwordPolicies } from '@/lib/common';
+import { useState } from 'react';
 
 const JoinWithInvitation = ({
   inviteToken,
@@ -25,8 +27,12 @@ const JoinWithInvitation = ({
 }) => {
   const router = useRouter();
   const { t } = useTranslation('common');
+  const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
 
   const { isLoading, isError, invitation } = useInvitation(inviteToken);
+  const handlePasswordVisibility = () => {
+    setIsPasswordVisible((prev) => !prev);
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -43,17 +49,28 @@ const JoinWithInvitation = ({
       mobileNumber: Yup.string().required(),
       password: Yup.string()
         .required()
-        .min(8, 'Password must be at least 8 characters long'),
+        .min(passwordPolicies.minLength, 'Password must be at least 8 characters long'),
     }),
     enableReinitialize: true,
     onSubmit: async (values) => {
       try {
-        await axios.post<ApiResponse<User>>('/api/auth/join', {
-          ...values,
+      
+        const response = await fetch('/api/auth/join', {
+          method: 'POST',
+          headers: defaultHeaders,
+          body: JSON.stringify(values),
         });
+        const json = (await response.json()) as ApiResponse<User>;
 
+        if (!response.ok) {
+          toast.error(json.error.message);
+          return;
+        }
+  
         formik.resetForm();
         toast.success(t('successfully-joined'));
+  
+        router.push(`/auth/login?token=${inviteToken}`);
 
         return next ? router.push(next) : router.push('/auth/login');
       } catch (error: any) {
@@ -109,15 +126,21 @@ const JoinWithInvitation = ({
         error={formik.touched.email ? formik.errors.email : undefined}
         onChange={formik.handleChange}
       />
-      <InputWithLabel
-        type="password"
-        label={t('password')}
-        name="password"
-        placeholder={t('password')}
-        value={formik.values.password}
-        error={formik.touched.password ? formik.errors.password : undefined}
-        onChange={formik.handleChange}
-      />
+       <div className="relative flex">
+        <InputWithLabel
+          type={isPasswordVisible ? 'text' : 'password'}
+          label={t('password')}
+          name="password"
+          placeholder={t('password')}
+          value={formik.values.password}
+          error={formik.touched.password ? formik.errors.password : undefined}
+          onChange={formik.handleChange}
+        />
+        <TogglePasswordVisibility
+          isPasswordVisible={isPasswordVisible}
+          handlePasswordVisibility={handlePasswordVisibility}
+        />
+      </div>
       <Button
         type="submit"
         color="primary"

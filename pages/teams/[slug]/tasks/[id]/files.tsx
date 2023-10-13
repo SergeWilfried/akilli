@@ -1,21 +1,23 @@
 import { GetServerSidePropsContext } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import type { NextPageWithLayout } from 'types';
-import { AccessControl } from '../../../components/shared/AccessControl';
-import { TasksTab, RemoveTask } from '../../../components/tasks';
+import { TasksTab } from '@/components/tasks';
 import { Error, Loading } from '@/components/shared';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/router';
 import useTask from '../../../hooks/useTask';
-import AllTranscripts from '@/components/transcripts/Transcripts';
 import { Button } from 'react-daisyui';
+import AllFiles from '@/components/files';
+import { useState } from 'react';
+import ImportFile from '@/components/files/ImportFile';
 
-const Transcripts: NextPageWithLayout = () => {
+const Files: NextPageWithLayout = () => {
   const { t } = useTranslation('common');
   const router = useRouter();
 
   const { id } = router.query as { id: string };
   const { isLoading, isError, task } = useTask(id);
+  const [visible, setVisible] = useState(false);
 
   if (isLoading) {
     return <Loading />;
@@ -30,23 +32,24 @@ const Transcripts: NextPageWithLayout = () => {
   }
   return (
     <>
-      <TasksTab activeTab="transcripts" task={task} />
+      <TasksTab activeTab="files" task={task} />
+
       <div className="flex flex-col space-y-4">
         <div className="flex justify-end mt-4">
           <Button
             variant="outline"
             color="primary"
             size="md"
-            onClick={() => {}}
+            onClick={() => {
+              setVisible(!visible);
+            }}
           >
-            {t('add-new-transcript')}
+            {t('new-file-import')}
           </Button>
         </div>
-        <AllTranscripts task={task} />
+        <AllFiles currentTask={task} />
       </div>
-      <AccessControl resource="transcript" actions={['delete']}>
-        <RemoveTask task={task} />
-      </AccessControl>
+      <ImportFile setVisible={setVisible} visible={visible} task={task} />
     </>
   );
 };
@@ -61,4 +64,4 @@ export async function getServerSideProps({
   };
 }
 
-export default Transcripts;
+export default Files;

@@ -56,7 +56,7 @@ const handlePOST = async (req: NextApiRequest, res: NextApiResponse) => {
     taskId,
   });
 
-  await sendTeamInviteEmail(teamMember.team, invitation, taskId);
+  await sendTeamInviteEmail(teamMember.team, invitation);
 
   res.status(200).json({ data: invitation });
 };
