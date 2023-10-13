@@ -78,7 +78,7 @@ const TasksDetails = ({ task }: { task: Task }) => {
 
               <select
                 name="slug"
-                className="border border-gray-300 bg-white shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                className="select-bordered select flex-grow"
                 value={formik.values.status ? formik.values.status : 'STARTED'}
                 onChange={formik.handleChange}
               >
@@ -95,7 +95,7 @@ const TasksDetails = ({ task }: { task: Task }) => {
               <select
                 id="domain"
                 name="domain"
-                className="border border-gray-300 bg-white shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                className="select-bordered select flex-grow"
                 value={formik.values.language ? formik.values.language : ''}
                 onChange={formik.handleChange}
               >
@@ -112,7 +112,8 @@ const TasksDetails = ({ task }: { task: Task }) => {
           </Card.Body>
           <AccessControl resource="task" actions={['update']}>
             <Card.Footer>
-              <div className="flex justify-end">
+            <div className="flex justify-end">
+
                 <Button
                   type="submit"
                   color="primary"
@@ -122,7 +123,7 @@ const TasksDetails = ({ task }: { task: Task }) => {
                 >
                   {t('save-changes')}
                 </Button>
-              </div>
+                </div>
             </Card.Footer>
           </AccessControl>
         </Card>

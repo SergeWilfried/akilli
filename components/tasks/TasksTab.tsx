@@ -15,7 +15,7 @@ const TasksTab = (props: TasksTabProps) => {
   const navigations = [
     {
       name: 'Details',
-      href: `teams/${teamSlug}/tasks/${task.id}/settings`,
+      href: `/teams/${teamSlug}/tasks/${task.id}/settings`,
 
       active: activeTab === 'settings',
       icon: Cog6ToothIcon,
@@ -23,19 +23,19 @@ const TasksTab = (props: TasksTabProps) => {
   ];
   navigations.push({
     name: 'Files',
-    href: `teams/${teamSlug}/tasks/${task.id}/files`,
+    href: `/teams/${teamSlug}/tasks/${task.id}/files`,
     active: activeTab === 'files',
     icon: KeyIcon,
   });
   navigations.push({
     name: 'Transcribers',
-    href: `teams/${teamSlug}/tasks/${task.id}/transcribers`,
+    href: `/teams/${teamSlug}/tasks/${task.id}/transcribers`,
     active: activeTab === 'transcribers',
     icon: KeyIcon,
   });
   navigations.push({
     name: 'Transcripts',
-    href: `teams/${teamSlug}/${task.id}/transcripts`,
+    href: `/teams/${teamSlug}/${task.id}/transcripts`,
     active: activeTab === 'transcripts',
     icon: KeyIcon,
   });
