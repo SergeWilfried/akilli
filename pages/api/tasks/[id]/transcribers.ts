@@ -43,7 +43,7 @@ export default async function handler(
 const handleGET = async (req: NextApiRequest, res: NextApiResponse) => {
   const { id } = req.query as { id: string };
 
-  const members = await getTeamMembers('Akilli');
+  const members = await getTeamMembers('akilli');
   console.warn('members', id);
   res.status(200).json({ data: members });
 };
