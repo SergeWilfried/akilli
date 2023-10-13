@@ -36,7 +36,7 @@ const Transcribers: NextPageWithLayout = () => {
   return (
     <>
       <TasksTab activeTab="transcribers" task={task} />
-      <div className="flex flex-col space-y-4">
+      <div className="flex flex-col space-y-6">
         <div className="flex justify-end mt-4">
           <Button
             variant="outline"
@@ -50,8 +50,8 @@ const Transcribers: NextPageWithLayout = () => {
           </Button>
         </div>
         <AllTranscribers task={task} />
+        <PendingAssignments task={task} />
       </div>
-      <PendingAssignments task={task} />
       <InviteTranscribers
         visible={visible}
         setVisible={setVisible}

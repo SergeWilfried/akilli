@@ -50,8 +50,8 @@ const Transcribers: NextPageWithLayout = () => {
           </Button>
         </div>
         <AllTranscribers task={task} />
+        <PendingAssignments task={task} />
       </div>
-      <PendingAssignments task={task} />
       <InviteTranscribers
         visible={visible}
         setVisible={setVisible}
