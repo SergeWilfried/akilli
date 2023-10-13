@@ -40,7 +40,7 @@ const RemoveTask = ({ task }: { task: Task }) => {
       <Card>
         <Card.Body>
           <Card.Header>
-            <Card.Title>${t('remove-task')}</Card.Title>
+            <Card.Title>{t('remove-task')}</Card.Title>
           </Card.Header>
           <p className="text-sm mb-4">{t('remove-task-warning')}</p>
           <Button

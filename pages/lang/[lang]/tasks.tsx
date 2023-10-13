@@ -1,6 +1,5 @@
 import { CreateTask, Tasks } from '@/components/tasks';
 import { GetServerSidePropsContext } from 'next';
-import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -10,7 +9,6 @@ const AllTasks: NextPageWithLayout = () => {
   const [visible, setVisible] = useState(false);
 
   const router = useRouter();
-  const { t } = useTranslation('common');
 
   const { newTeam } = router.query as { newTeam: string };
 

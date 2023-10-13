@@ -51,6 +51,10 @@
   "create-task": "Create Project",
   "remove-team": "Remove Team",
   "remove-team-warning": "Deleting the team will delete all resources and data associated with the team forever. This action cannot be undone.",
+  "remove-task": "Remove Project",
+  "remove-task-warning": "Deleting the projects will delete all resources and data associated with this project forever. This action cannot be undone.",
+  "remove-task-confirmation": "You are about to delete a language, all the tasks linked to it will be lost.",
+
   "team-created": "Team created successfully.",
   "lang-created": "Language created successfully.",
   "leave-team": "Leave Team",

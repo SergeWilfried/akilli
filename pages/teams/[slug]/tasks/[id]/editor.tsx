@@ -5,7 +5,7 @@ import { Button } from 'react-daisyui';
 import { TasksTab } from '@/components/tasks';
 import { useRouter } from 'next/router';
 import { Error, Loading } from '@/components/shared';
-import useTask from '../../../hooks/useTask';
+import useTask from '../../../../../hooks/useTask';
 
 export default function TextEditor() {
   const { t } = useTranslation('common');
