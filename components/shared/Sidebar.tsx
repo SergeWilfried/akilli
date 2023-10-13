@@ -1,6 +1,5 @@
 import {
   Cog6ToothIcon,
-  
   UserCircleIcon,
   ChatBubbleLeftRightIcon,
   LanguageIcon,
@@ -75,11 +74,10 @@ export default forwardRef<HTMLElement, { isCollapsed: boolean }>(
         },
         {
           name: t('tasks'),
-          href: `#`,
+          href: `/teams/${slug}/tasks`,
           icon: ChatBubbleLeftRightIcon,
           active: activePathname === `/teams/${slug}/tasks`,
         },
-
         {
           name: t('insights'),
           href: `/`,
