@@ -76,8 +76,10 @@ export default forwardRef<HTMLElement, { isCollapsed: boolean }>(
           name: t('tasks'),
           href: `/teams/${slug}/tasks`,
           icon: ChatBubbleLeftRightIcon,
-          
-          active: activePathname === `/teams/${slug}/tasks` ?? activePathname?.startsWith('/teams'),
+
+          active:
+            activePathname === `/teams/${slug}/tasks` ??
+            activePathname?.startsWith('/teams'),
         },
         {
           name: t('insights'),
@@ -89,7 +91,7 @@ export default forwardRef<HTMLElement, { isCollapsed: boolean }>(
           name: t('settings'),
           href: `/teams/${slug}/settings`,
           active: activePathname === `/teams/${slug}/settings`,
-          
+
           icon: Cog6ToothIcon,
         },
       ],

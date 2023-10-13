@@ -1,4 +1,4 @@
-import {  Error, LetterAvatar, Loading } from '@/components/shared';
+import { Error, LetterAvatar, Loading } from '@/components/shared';
 import { Invitation, Task } from '@prisma/client';
 import axios from 'axios';
 import { useTranslation } from 'next-i18next';
@@ -13,8 +13,7 @@ const PendingAssignments = ({ task }: { task: Task }) => {
   const { isLoading, isError, invitations, mutateInvitation } = useAssignments(
     task.id
   );
-  const [selectedInvitation, setSelectedInvitation] =
-    useState<Invitation>();
+  const [selectedInvitation, setSelectedInvitation] = useState<Invitation>();
 
   const [confirmationDialogVisible, setConfirmationDialogVisible] =
     useState(false);
@@ -30,7 +29,7 @@ const PendingAssignments = ({ task }: { task: Task }) => {
   }
 
   const deleteInvitation = async (invitation: Invitation) => {
-new URLSearchParams({ id: invitation.id });
+    new URLSearchParams({ id: invitation.id });
     const { data: response } = await axios.delete<ApiResponse<unknown>>(
       `/api/tasks/${task.id}/invitations/${invitation.id}`,
       {
