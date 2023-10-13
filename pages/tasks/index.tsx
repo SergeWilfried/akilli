@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Button } from 'react-daisyui';
 import type { NextPageWithLayout } from 'types';
+import { AccessControl } from '../../components/shared/AccessControl';
 
 const AllTasks: NextPageWithLayout = () => {
   const [visible, setVisible] = useState(false);
@@ -23,8 +24,9 @@ const AllTasks: NextPageWithLayout = () => {
 
   return (
     <>
-      <div className="flex items-center justify-between">
-        <Button
+      <div className="flex items-center justify-end">
+      <AccessControl resource="task" actions={['update']}>
+      <Button
           color="primary"
           size="md"
           variant="outline"
@@ -34,6 +36,8 @@ const AllTasks: NextPageWithLayout = () => {
         >
           {t('create-task')}
         </Button>
+        </AccessControl>
+       
       </div>
       <div className="flex flex-col space-y-6">
         <CreateTask visible={visible} setVisible={setVisible} />
