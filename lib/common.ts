@@ -24,6 +24,9 @@ export function generateToken(length = 64) {
 
   return enc.Base64.stringify(tokenBytes);
 }
+export const defaultHeaders = {
+  'Content-Type': 'application/json',
+};
 
 export const slugify = (text: string) => {
   return text
