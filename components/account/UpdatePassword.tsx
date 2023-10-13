@@ -38,9 +38,9 @@ const UpdatePassword = () => {
       <form onSubmit={formik.handleSubmit}>
         <Card>
           <Card.Body>
-          <Card.Header>
-            <Card.Title>{t('update-password')}</Card.Title>
-          </Card.Header>
+            <Card.Header>
+              <Card.Title>{t('update-password')}</Card.Title>
+            </Card.Header>
             <div className="flex flex-col space-y-3">
               <InputWithLabel
                 type="password"

@@ -63,9 +63,9 @@ const APIKeys = ({ team }: APIKeysProps) => {
         <>
           <Card>
             <Card.Body>
-            <Card.Header>
-            <Card.Title>{t('api-keys')}</Card.Title>
-          </Card.Header>
+              <Card.Header>
+                <Card.Title>{t('api-keys')}</Card.Title>
+              </Card.Header>
               <table className="w-full text-left text-sm text-gray-500">
                 <thead className="bg-gray-100 text-xs uppercase text-gray-700">
                   <tr>

@@ -23,7 +23,6 @@ const AllTasks: NextPageWithLayout = () => {
   return (
     <>
       <div className="flex items-center justify-between">
-        <h4>{t('all-tasks')}</h4>
       </div>
       <CreateTask visible={visible} setVisible={setVisible} />
       <Tasks />

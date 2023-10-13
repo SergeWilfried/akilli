@@ -30,10 +30,12 @@ const Settings = () => {
   return (
     <>
       <TasksTab activeTab="settings" task={task} />
-      <TasksDetails task={task} />
-      <AccessControl resource="task" actions={['delete']}>
-        <RemoveTask task={task} />
-      </AccessControl>
+      <div className="flex flex-col space-y-6">
+        <TasksDetails task={task} />
+        <AccessControl resource="task" actions={['delete']}>
+          <RemoveTask task={task} />
+        </AccessControl>
+      </div>
     </>
   );
 };

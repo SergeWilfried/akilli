@@ -52,9 +52,9 @@ const Events: NextPageWithLayout<inferSSRProps<typeof getServerSideProps>> = ({
   return (
     <>
       <TeamTab activeTab="audit-logs" team={team} />
-      <Card >
+      <Card>
         <Card.Body>
-        <Card.Header>
+          <Card.Header>
             <Card.Title>{t('audit-logs')}</Card.Title>
           </Card.Header>
           {canAccess('team_audit_log', ['read']) && auditLogToken && (

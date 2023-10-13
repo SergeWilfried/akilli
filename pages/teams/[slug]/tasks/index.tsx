@@ -24,7 +24,6 @@ const AllTasks: NextPageWithLayout = () => {
   return (
     <>
       <div className="flex items-center justify-between">
-        <h4>{t('all-tasks')}</h4>
         <Button
           color="primary"
           size="md"

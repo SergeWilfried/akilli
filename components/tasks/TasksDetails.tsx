@@ -60,8 +60,11 @@ const TasksDetails = ({ task }: { task: Task }) => {
           <Card.Body>
             <Card.Header>
               <Card.Title>{t('task-settings')}</Card.Title>
+              <Card.Description>
+                Project settings and configuration.
+              </Card.Description>
             </Card.Header>
-            <div className="flex flex-col">
+            <div className="flex flex-col gap-4">
               <div className="flex justify-between space-x-3">
                 <InputWithLabel
                   name="name"
@@ -107,7 +110,7 @@ const TasksDetails = ({ task }: { task: Task }) => {
               </select>
             </div>
           </Card.Body>
-          <AccessControl resource="team" actions={['update']}>
+          <AccessControl resource="task" actions={['update']}>
             <Card.Footer>
               <div className="flex justify-end">
                 <Button

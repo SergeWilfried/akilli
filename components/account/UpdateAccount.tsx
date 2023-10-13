@@ -61,7 +61,7 @@ const UpdateAccount = ({ user }: { user: User }) => {
     <form onSubmit={formik.handleSubmit}>
       <Card>
         <Card.Body>
-        <Card.Header>
+          <Card.Header>
             <Card.Title>{t('update-account')}</Card.Title>
           </Card.Header>
           <div className="flex flex-col space-y-2">

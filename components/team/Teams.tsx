@@ -38,9 +38,9 @@ const Teams = () => {
 
   return (
     <>
-      <Card >
+      <Card>
         <Card.Body>
-        <Card.Header>
+          <Card.Header>
             <Card.Title>{t('all-teams')}</Card.Title>
           </Card.Header>
           <table className="w-full table-fixed text-left text-sm text-gray-500 dark:text-gray-400">

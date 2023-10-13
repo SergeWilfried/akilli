@@ -34,7 +34,7 @@ const Files: NextPageWithLayout = () => {
     <>
       <TasksTab activeTab="files" task={task} />
 
-      <div className="flex flex-col space-y-4">
+      <div className="flex flex-col space-y-6">
         <div className="flex justify-end mt-4">
           <Button
             variant="outline"

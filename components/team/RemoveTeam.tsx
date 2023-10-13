@@ -37,9 +37,9 @@ const RemoveTeam = ({ team }: { team: Team }) => {
 
   return (
     <>
-      <Card >
-        <Card.Body  >
-        <Card.Header>
+      <Card>
+        <Card.Body>
+          <Card.Header>
             <Card.Title>{t('remove-team')}</Card.Title>
           </Card.Header>
           <p className="text-sm mb-4">{t('remove-team-warning')}</p>
