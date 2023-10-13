@@ -1,5 +1,5 @@
 import { InputWithLabel } from '@/components/shared';
-import { getAxiosError } from '@/lib/common';
+import { getAxiosError, passwordPolicies } from '@/lib/common';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import { useTranslation } from 'next-i18next';
@@ -24,7 +24,7 @@ const ResetPassword = () => {
     validationSchema: Yup.object().shape({
       password: Yup.string()
         .required()
-        .min(8, 'Password must be at least 8 characters long'),
+        .min(passwordPolicies.minLength, `Password must be at least ${passwordPolicies.minLength} characters long`),
       confirmPassword: Yup.string().test(
         'passwords-match',
         'Passwords must match',
