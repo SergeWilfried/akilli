@@ -25,6 +25,8 @@ export function generateToken(length = 64) {
 
   return enc.Base64.stringify(tokenBytes);
 }
+export const domainRegex =
+  /(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]/;
 
 export const slugify = (text: string) => {
   return text
