@@ -28,6 +28,7 @@ const env = {
   nextAuth: {
     secret: process.env.NEXTAUTH_SECRET,
   },
+  hideLandingPage: process.env.HIDE_LANDING_PAGE,
 
   // Svix
   svix: {
