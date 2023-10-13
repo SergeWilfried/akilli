@@ -1,11 +1,10 @@
 import { hashPassword } from '@/lib/auth';
-import { generateToken, slugify } from '@/lib/common';
+import { generateToken } from '@/lib/common';
 import { sendVerificationEmail } from '@/lib/email/sendVerificationEmail';
 import { prisma } from '@/lib/prisma';
 import { isBusinessEmail } from '@/lib/email/utils';
 import env from '@/lib/env';
 import { ApiError } from '@/lib/errors';
-import { createTeam, isTeamExists } from 'models/team';
 import { createUser, getUser, updateUser } from 'models/user';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
@@ -53,17 +52,7 @@ const handlePOST = async (req: NextApiRequest, res: NextApiResponse) => {
       `We currently only accept work email addresses for sign-up. Please use your work email to create an account. If you don't have a work email, feel free to contact our support team for assistance.`
     );
   }
-
-  // Create a new team
-  if (team) {
-    const slug = slugify(team);
-
-    const nameCollisions = await isTeamExists([{ name: team }, { slug }]);
-
-    if (nameCollisions > 0) {
-      throw new ApiError(400, 'A team with this name already exists.');
-    }
-  }
+  console.log(team);
 
   const user = await createUser({
     name,
@@ -72,16 +61,6 @@ const handlePOST = async (req: NextApiRequest, res: NextApiResponse) => {
     mobile: mobileNumber ? mobileNumber : '',
     country: country ? country : '',
   });
-
-  if (team) {
-    const slug = slugify(team);
-
-    await createTeam({
-      userId: user.id,
-      name: team,
-      slug,
-    });
-  }
 
   // Send account verification email
   if (env.confirmEmail) {

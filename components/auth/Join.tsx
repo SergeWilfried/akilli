@@ -25,7 +25,7 @@ const Join = () => {
       name: '',
       email: '',
       password: '',
-      team: '',
+      team: 'akilli',
       country: '',
       mobileNumber: '',
     },
@@ -69,15 +69,7 @@ const Join = () => {
   return (
     <form onSubmit={formik.handleSubmit}>
       <div className="space-y-1">
-        <InputWithLabel
-          type="text"
-          label={t('team')}
-          name="team"
-          placeholder={t('team-name')}
-          value={formik.values.team}
-          error={formik.touched.team ? formik.errors.team : undefined}
-          onChange={formik.handleChange}
-        />
+      
         <InputWithLabel
           type="text"
           label={t('name')}
