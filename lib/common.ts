@@ -106,3 +106,11 @@ export const validatePassword = (password: string): boolean => {
 export const copyToClipboard = (text: string) => {
   navigator.clipboard.writeText(text);
 };
+
+export const defaultHeaders = {
+  'Content-Type': 'application/json',
+};
+
+export const passwordPolicies = {
+  minLength: 8,
+};
