@@ -110,7 +110,6 @@ const handleDELETE = async (req: NextApiRequest, res: NextApiResponse) => {
   };
   console.warn('invitation query', req.query);
   await deleteTaskInvitation({ taskId: id, invitationId });
-  console.log('invitation deleted');
 
   // sendAudit({
   //   action: 'member.invitation.delete',

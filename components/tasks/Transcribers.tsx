@@ -66,11 +66,9 @@ const AllTranscribers = ({ task }: { task: TaskWithFiles }) => {
               <th scope="col" className="px-6 py-3">
                 {t('country')}
               </th>
+
               <th scope="col" className="px-6 py-3">
-                {t('gender')}
-              </th>
-              <th scope="col" className="px-6 py-3">
-                {t('rating')}
+                {t('mobile')}
               </th>
               {canAccess('team_member', ['delete']) && (
                 <th scope="col" className="px-6 py-3">
@@ -93,7 +91,8 @@ const AllTranscribers = ({ task }: { task: TaskWithFiles }) => {
                     </div>
                   </td>
                   <td className="px-6 py-3">{member.user.email}</td>
-
+                  <td className="px-6 py-3">{member.user.country}</td>
+                  <td className="px-6 py-3">{member.user.mobileNumber}</td>
                   {canRemoveMember(member) && (
                     <td className="px-6 py-3">
                       <Button
