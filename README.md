@@ -1,28 +1,6 @@
-# Enterprise SaaS Starter Kit
+## Description
 
-#### Here's what you get out of the box, see images below 👇👇👇
-
-![saas-starter-kit-poster](/public/saas-starter-kit-poster.png)
-
-:warning: **This repository is still in an early stage of development.**
-
-<p>
-    <a href="https://github.com/boxyhq/saas-starter-kit/stargazers"><img src="https://img.shields.io/github/stars/boxyhq/saas-starter-kit" alt="Github stargazers"></a>
-    <a href="https://github.com/boxyhq/saas-starter-kit/issues"><img src="https://img.shields.io/github/issues/boxyhq/saas-starter-kit" alt="Github issues"></a>
-    <a href="https://github.com/boxyhq/saas-starter-kit/blob/main/LICENSE"><img src="https://img.shields.io/github/license/boxyhq/saas-starter-kit" alt="license"></a>
-    <a href="https://twitter.com/BoxyHQ"><img src="https://img.shields.io/twitter/follow/BoxyHQ?style=social" alt="Twitter"></a>
-    <a href="https://www.linkedin.com/company/boxyhq"><img src="https://img.shields.io/badge/LinkedIn-blue" alt="LinkedIn"></a>
-    <a href="https://discord.gg/uyb7pYt4Pa"><img src="https://img.shields.io/discord/877585485235630130" alt="Discord"></a>
-</p>
-
-The Open Source Next.js SaaS boilerplate for Enterprise SaaS app development.
-
-## Additional Resources
-
-Video - [BoxyHQ's SaaS Starter Kit: Your Ultimate Enterprise-Compliant Boilerplate](https://www.youtube.com/watch?v=oF8QIwQIhyo) <br>
-Blog - [Enterprise-ready Saas Starter Kit](https://boxyhq.com/blog/enterprise-ready-saas-starter-kit)
-
-Next.js based SaaS starter kit that saves you months of development by starting you off with all the features that are the same in every product, so you can focus on what makes your app unique.
+Akilli is a platform that provides transcription services for African languages. It aims to bridge the gap in language services for African languages by providing accurate and affordable transcription services.
 
 ## Built With
 
@@ -146,9 +124,6 @@ _Note: HTML test report is generated inside the `report` folder. Currently supor
 - Create account
 - Sign in with Email and Password
 - Sign in with Magic Link
-- Sign in with SAML SSO
-- Sign in with Google [[Setting up Google OAuth](https://support.google.com/cloud/answer/6158849?hl=en)]
-- Sign in with Github [[Creating a Github OAuth App](https://docs.github.com/en/developers/apps/building-oauth-apps/creating-an-oauth-app)]
 - Directory Sync (SCIM)
 - Update account
 - Create team
