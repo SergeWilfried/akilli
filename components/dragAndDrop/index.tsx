@@ -30,7 +30,7 @@ export default function DragAndDrop(props: DragAndDropProps) {
               body: fields,
               url: "/api/teams/akilli/upload",
               headers: {
-                'Access-Control-Allow-Origin': 'https://akilli-git-s3-sergewilfried0.vercel.app',
+                'Access-Control-Allow-Origin': 'https://akilli-eta.vercel.app',
                 'Access-Control-Allow-Methods': 'PUT, GET, POST, DELETE, PATCH',
                 'Content-Type': '*',
               }
