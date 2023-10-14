@@ -5,14 +5,16 @@ import * as dateFn from 'date-fns';
 import formidable from 'formidable';
 import { stat } from 'fs/promises';
 import { createFolderIfNotExist } from './storage/minio';
+import env from './env';
 
 export const parseForm = async (
   req: NextApiRequest
 ): Promise<{ fields: formidable.Fields; files: formidable.Files }> => {
   // eslint-disable-next-line no-async-promise-executor
   return await new Promise(async (resolve, reject) => {
+    const ROOT_DIR = env.storage.bucketName!;
     const uploadDir = join(
-      process.env.ROOT_DIR || process.cwd(),
+      ROOT_DIR || process.cwd(),
       `/uploads/${dateFn.format(Date.now(), 'dd-MM-Y')}`
     );
 
@@ -20,7 +22,7 @@ export const parseForm = async (
       await stat(uploadDir);
     } catch (e: any) {
       if (e.code === 'ENOENT') {
-        await createFolderIfNotExist('akilli', uploadDir);
+        await createFolderIfNotExist(env.storage.bucketName, uploadDir);
       } else {
         console.error(e);
         reject(e);

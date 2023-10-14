@@ -8,6 +8,7 @@ import toast from 'react-hot-toast';
 interface DragAndDropProps {
   inputRef: any;
   fields: any;
+  // task: Task
 }
 export default function DragAndDrop(props: DragAndDropProps) {
   const { inputRef, fields } = props;

@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useFormik } from 'formik';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef } from 'react';
 import { Button, Input, Modal } from 'react-daisyui';
 import toast from 'react-hot-toast';
 import {
@@ -16,7 +16,6 @@ import {
 import * as Yup from 'yup';
 import useTasks from 'hooks/useTasks';
 import { tasksType } from '../../lib/permissions';
-import { createFile } from '../../lib/storage/minio';
 import DragAndDrop from '../dragAndDrop';
 import useLanguages from '../../hooks/useLanguages';
 
@@ -30,8 +29,7 @@ const CreateTask = ({
   const { t } = useTranslation('common');
   const { mutateTasks } = useTasks();
   const router = useRouter();
-  const [audioUrl, setAudioUrl] = useState(``);
-  const audioElmRef = useRef(null);
+ 
   const inputRef = useRef<any>(null);
   const { languages } = useLanguages();
   const formik = useFormik<NewTaskInput>({
@@ -61,7 +59,7 @@ const CreateTask = ({
     onSubmit: async (values) => {
       try {
         /// FIXME: Handle multiple files
-        const irl = await handleFileUpload(files); // Call the handleFileUpload function
+        const irl = 'http://'; // Call the handleFileUpload function
         console.log(`liens de fichier ${irl}`);
         let response: any;
         const links = irl?.split(`,`).filter((link) => link !== '');
@@ -72,19 +70,7 @@ const CreateTask = ({
         }
         let task: Task;
         if (links !== undefined) {
-          if (links?.length >= 1) {
-            const filesList: any[] = [];
-            for (let index = 0; index < links.length; index++) {
-              const size = files[index]?.size;
-              const type = files[index]?.type;
-              const url = links[index];
-              console.log(url);
-              filesList?.push({
-                url: url,
-                contentSize: size,
-                fileFormat: type,
-              });
-            }
+         
             task = {
               language: values.language,
               type: values.type,
@@ -92,31 +78,12 @@ const CreateTask = ({
               status: 'CREATED',
               userId: '',
               createdAt: new Date(),
-              files: filesList,
+              
             };
             response = await axios.post<ApiResponse<Task>>('/api/tasks', {
               ...task,
             });
-          } else {
-            task = {
-              language: values.language,
-              type: values.type,
-              name: values.name,
-              status: 'CREATED',
-              userId: '',
-              createdAt: new Date(),
-              files: [
-                {
-                  url: links,
-                  contentSize: files[0].size,
-                  fileFormat: files[0].type,
-                },
-              ],
-            };
-            response = await axios.post<ApiResponse<Task>>('/api/tasks', {
-              ...task,
-            });
-          }
+          
         }
         const { data: teamCreated } = response.data;
 
@@ -132,32 +99,6 @@ const CreateTask = ({
       }
     },
   });
-
-  useEffect(() => {
-    setAudioUrl('');
-  }, [formik.values.type]);
-
-  const handleFileUpload = async (files: File | File[]) => {
-    try {
-      let fileUrl = ``;
-      const filesNumber = files.length;
-      console.log(`Uploading files ${filesNumber}`);
-      if (filesNumber > 1) {
-        for (let index = 0; index < filesNumber; index++) {
-          const url = await createFile(files[index]);
-          fileUrl += `,${url}`;
-        }
-        return fileUrl;
-      } else {
-        return await createFile(files[0]);
-      }
-    } catch (error) {
-      // Handle the error appropriately
-      toast.error('An error occurred while handling the file upload.');
-    }
-  };
-
-
 
  
 
@@ -218,17 +159,8 @@ const CreateTask = ({
                 ))}
               </select>
             </div>
-            <DragAndDrop  inputRef={inputRef} fields={formik.values} />
-            {audioUrl && (
-              <div className="flex justify-between space-x-3">
-                <audio
-                  className="flex-grow"
-                  src={audioUrl}
-                  controls
-                  ref={audioElmRef}
-                />
-              </div>
-            )}
+            <DragAndDrop inputRef={inputRef} fields={formik.values} />
+         
           </div>
         </Modal.Body>
         <Modal.Actions>
