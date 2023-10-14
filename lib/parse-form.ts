@@ -22,7 +22,7 @@ export const parseForm = async (
       await stat(uploadDir);
     } catch (e: any) {
       if (e.code === 'ENOENT') {
-        await createFolderIfNotExist(env.storage.bucketName, uploadDir);
+        await createFolderIfNotExist(env.storage.bucketName!, uploadDir);
       } else {
         console.error(e);
         reject(e);

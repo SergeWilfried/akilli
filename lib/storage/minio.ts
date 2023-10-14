@@ -76,7 +76,12 @@ export async function getMediaURL(params: bucketParams) {
 
 async function createFolder(Bucket, Key) {
   const command = new PutObjectCommand({ Bucket, Key });
-  return s3.send(command);
+  try {
+    await s3.send(command);
+  } catch (err: any) {
+    console.error('Error', err);
+    throw Error(err?.message);
+  }
 }
 
 async function existsFolder(Bucket, Key) {
@@ -107,5 +112,10 @@ export async function createFolderIfNotExist(Bucket: string, Key: string) {
 
 export async function deleteFolder(Bucket, Key) {
   const command = new DeleteObjectCommand({ Bucket, Key });
-  return s3.send(command);
+  try {
+    await s3.send(command);
+  } catch (err: any) {
+    console.error('Error', err);
+    throw Error(err?.message);
+  }
 }
