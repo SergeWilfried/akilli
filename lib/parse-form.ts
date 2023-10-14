@@ -32,9 +32,7 @@ export const parseForm = async (
         return;
       }
     }
-    /** @type {Promise<any>[]} */
-    let s3Uploads;
-
+    const s3Uploads: Promise<any>[] = [];
     /** @param {import('formidable').File} file */
     function fileWriteStreamHandler(file) {
       const body = new PassThrough();
@@ -53,7 +51,7 @@ export const parseForm = async (
         .then((response: CompleteMultipartUploadCommandOutput) => {
           file.location = response.Location;
         });
-      s3Uploads.push(uploadRequest);
+      s3Uploads?.push(uploadRequest);
       return body;
     }
 
