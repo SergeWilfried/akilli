@@ -22,13 +22,12 @@ export default function DragAndDrop(props: DragAndDropProps) {
     if (e.target.files && e.target.files[0]) {
       for (let i = 0; i < e.target.files['length']; i++) {
         setFiles((prevState: any) => [...prevState, e.target.files[i]]);
-        onUploadFile(e.target.files[i])
+        onUploadFile(e.target.files[i]);
       }
     }
   }
 
   const onUploadFile = async (file) => {
-
     if (!file) {
       return;
     }
@@ -36,11 +35,11 @@ export default function DragAndDrop(props: DragAndDropProps) {
     try {
       const startAt = Date.now();
       const formData = new FormData();
-      formData.append("media", file);
-      formData.append("fields", fields);
+      formData.append('media', file);
+      formData.append('fields', fields);
 
       const options: AxiosRequestConfig = {
-        headers: { "Content-Type": "multipart/form-data" },
+        headers: { 'Content-Type': 'multipart/form-data' },
         onUploadProgress: (progressEvent: any) => {
           const { loaded, total } = progressEvent;
 
@@ -62,15 +61,15 @@ export default function DragAndDrop(props: DragAndDropProps) {
         data: {
           url: string | string[];
         };
-      }>("/api/teams/akilli/upload", formData, options);
+      }>('/api/teams/akilli/upload', formData, options);
 
-      console.log("File was uploaded successfylly:", data);
+      console.log('File was uploaded successfylly:', data);
     } catch (e: any) {
       console.error(e?.response);
       const error =
         e.response && e.response.data
           ? e.response.data.error
-          : "Sorry! something went wrong.";
+          : 'Sorry! something went wrong.';
       toast.error(error);
     }
   };
@@ -121,7 +120,7 @@ export default function DragAndDrop(props: DragAndDropProps) {
           <div key={idx} className="flex flex-row space-x-5">
             <span>{file.name}</span>
             <span>
-            <SimpleProgressBar progress={progress} remaining={remaining} />
+              <SimpleProgressBar progress={progress} remaining={remaining} />
             </span>
             <span
               className="text-red-500 cursor-pointer"
@@ -129,7 +128,6 @@ export default function DragAndDrop(props: DragAndDropProps) {
             >
               remove
             </span>
-           
           </div>
         ))}
       </div>

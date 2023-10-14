@@ -28,6 +28,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       error: null,
     });
   } catch (e: any) {
+    console.error(e);
     res.status(e?.httpCode || 400).json({ data: null, error: e?.message });
   }
 };
