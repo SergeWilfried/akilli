@@ -94,9 +94,14 @@ async function existsFolder(Bucket, Key) {
   }
 }
 
-export async function createFolderIfNotExist(Bucket, Key) {
-  if (!(await existsFolder(Bucket, Key))) {
-    return createFolder(Bucket, Key);
+export async function createFolderIfNotExist(Bucket: string, Key: string) {
+  try {
+    if (!(await existsFolder(Bucket, Key))) {
+      await createFolder(Bucket, Key);
+    }
+  } catch (err: any) {
+    console.error('Error', err);
+    throw Error(err?.message);
   }
 }
 
