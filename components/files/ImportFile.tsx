@@ -46,44 +46,31 @@ const ImportFile = ({
       try {
         /// FIXME: Handle multiple files
 
-   
+        const response = await axios.post<ApiResponse<any>>(
+          `/api/tasks/${task?.id}/files`,
+          {
+            taskId: task?.id,
+          }
+        );
 
-          
+        const { data: teamCreated } = response.data;
 
-              const response = await axios.post<ApiResponse<any>>(
-                `/api/tasks/${task?.id}/files`,
-                {
-                  taskId: task?.id,
-                }
-              );
-
-            const { data: teamCreated } = response.data;
-
-            if (teamCreated) {
-              toast.success(t('transcript-created'));
-              mutateTasks();
-              formik.resetForm();
-              setVisible(false);
-              router.push(`teams/akilli/tasks/${task.id}/files`);
-            }
-          
-        
+        if (teamCreated) {
+          toast.success(t('transcript-created'));
+          mutateTasks();
+          formik.resetForm();
+          setVisible(false);
+          router.push(`teams/akilli/tasks/${task.id}/files`);
+        }
       } catch (error: any) {
         toast.error(getAxiosError(error));
       }
     },
   });
 
-
-
-  
-
   return (
     <Modal open={visible}>
-      <form
-        onSubmit={formik.handleSubmit}
-        method="POST"
-      >
+      <form onSubmit={formik.handleSubmit} method="POST">
         <Modal.Header className="font-bold">
           {t('new-file-import')}
         </Modal.Header>
@@ -91,10 +78,7 @@ const ImportFile = ({
           <div className="mt-2 flex flex-col space-y-4">
             <p>{t('import-files-desc')}</p>
 
-            <DragAndDrop
-              inputRef={inputRef}
-              fields={formik.values}
-            />
+            <DragAndDrop inputRef={inputRef} fields={formik.values} />
           </div>
         </Modal.Body>
         <Modal.Actions>

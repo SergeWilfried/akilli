@@ -29,7 +29,7 @@ const CreateTask = ({
   const { t } = useTranslation('common');
   const { mutateTasks } = useTasks();
   const router = useRouter();
- 
+
   const inputRef = useRef<any>(null);
   const { languages } = useLanguages();
   const formik = useFormik<NewTaskInput>({
@@ -70,20 +70,17 @@ const CreateTask = ({
         }
         let task: Task;
         if (links !== undefined) {
-         
-            task = {
-              language: values.language,
-              type: values.type,
-              name: values.name,
-              status: 'CREATED',
-              userId: '',
-              createdAt: new Date(),
-              
-            };
-            response = await axios.post<ApiResponse<Task>>('/api/tasks', {
-              ...task,
-            });
-          
+          task = {
+            language: values.language,
+            type: values.type,
+            name: values.name,
+            status: 'CREATED',
+            userId: '',
+            createdAt: new Date(),
+          };
+          response = await axios.post<ApiResponse<Task>>('/api/tasks', {
+            ...task,
+          });
         }
         const { data: teamCreated } = response.data;
 
@@ -100,15 +97,9 @@ const CreateTask = ({
     },
   });
 
- 
-
   return (
     <Modal open={visible}>
-      <form
-        onSubmit={formik.handleSubmit}
-        method="POST"
-   
-      >
+      <form onSubmit={formik.handleSubmit} method="POST">
         <Modal.Header className="font-bold">{t('create-task')}</Modal.Header>
         <Modal.Body>
           <div className="mt-2 flex flex-col space-y-4">
@@ -160,7 +151,6 @@ const CreateTask = ({
               </select>
             </div>
             <DragAndDrop inputRef={inputRef} fields={formik.values} />
-         
           </div>
         </Modal.Body>
         <Modal.Actions>

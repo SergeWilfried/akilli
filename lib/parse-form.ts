@@ -4,8 +4,11 @@ import { join } from 'path';
 import * as dateFn from 'date-fns';
 import formidable from 'formidable';
 import { stat } from 'fs/promises';
-import { createFolderIfNotExist } from './storage/minio';
 import env from './env';
+import { PassThrough } from 'stream';
+import { Upload } from '@aws-sdk/lib-storage';
+import { s3 } from './storage/minio';
+import { CompleteMultipartUploadCommandOutput } from '@aws-sdk/client-s3';
 
 export const parseForm = async (
   req: NextApiRequest
@@ -22,18 +25,44 @@ export const parseForm = async (
       await stat(uploadDir);
     } catch (e: any) {
       if (e.code === 'ENOENT') {
-        await createFolderIfNotExist(env.storage.bucketName!, uploadDir);
+        // await createFolderIfNotExist(env.storage.bucketName!, uploadDir);
       } else {
         console.error(e);
         reject(e);
         return;
       }
     }
+    /** @type {Promise<any>[]} */
+    let s3Uploads;
+
+    /** @param {import('formidable').File} file */
+    function fileWriteStreamHandler(file) {
+      const body = new PassThrough();
+      const upload = new Upload({
+        client: s3,
+        params: {
+          Bucket: ROOT_DIR,
+          Key: `${file.mimetype}/${file.originalFilename}`,
+          ContentType: file.mimetype,
+          ACL: 'public-read',
+          Body: body,
+        },
+      });
+      const uploadRequest = upload
+        .done()
+        .then((response: CompleteMultipartUploadCommandOutput) => {
+          file.location = response.Location;
+        });
+      s3Uploads.push(uploadRequest);
+      return body;
+    }
 
     let filename = ''; //  To avoid duplicate upload
     const form = formidable({
-      maxFiles: 5,
-      maxFileSize: 1024 * 1024, // 1mb
+      maxFiles: 10,
+      multiples: true,
+      fileWriteStreamHandler: fileWriteStreamHandler,
+      maxFileSize: 100 * 1024 * 1024, //100 MBs converted to bytes,
       uploadDir,
       filename: (_name, _ext, part) => {
         if (filename !== '') {
@@ -55,7 +84,17 @@ export const parseForm = async (
 
     form.parse(req, function (err, fields, files) {
       if (err) reject(err);
-      else resolve({ fields, files });
+      else {
+        Promise.all(s3Uploads)
+          .then(() => {
+            resolve({ fields, files });
+          })
+          .catch(reject);
+      }
+    });
+
+    form.on('error', (error) => {
+      reject(error.message);
     });
   });
 };
