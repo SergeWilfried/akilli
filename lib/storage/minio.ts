@@ -1,11 +1,9 @@
 import { FetchHttpHandler } from '@smithy/fetch-http-handler';
 import {
   DeleteObjectCommand,
-  GetObjectCommand,
   PutObjectCommand,
   S3Client,
 } from '@aws-sdk/client-s3';
-import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import env from '@/lib/env';
 
 export const s3 = new S3Client({
@@ -61,11 +59,11 @@ interface bucketParams {
 
 export async function getMediaURL(params: bucketParams) {
   try {
-    const url = await getSignedUrl(s3, new GetObjectCommand(params), {
-      expiresIn: 15 * 60,
-    }); // Adjustable expiration.
-    console.log('url:', url);
-    return url;
+    // const url = await getSignedUrl(null, new GetObjectCommand(params), {
+    //   expiresIn: 15 * 60,
+    // }); // Adjustable expiration.
+    console.log('url:', params);
+    return params;
   } catch (err: any) {
     console.log('error', err);
     throw Error(err?.message);
