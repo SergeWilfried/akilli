@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import SimpleProgressBar from '../shared/SimpleProgressBar';
-import { useS3Upload } from 'next-s3-upload';
+import { usePresignedUpload } from 'next-s3-upload';
 
 interface DragAndDropProps {
   inputRef: any;
@@ -14,7 +14,7 @@ export default function DragAndDrop(props: DragAndDropProps) {
 
   const [urls, setUrls] = useState(['']);
 
-  const { uploadToS3, files } = useS3Upload();
+  const { uploadToS3, files } = usePresignedUpload();
 
   const [stateFiles, setFiles] = useState<File[]>([]);
   const dragActive = false; // or false, based on your logic
