@@ -32,16 +32,14 @@ const CreateTask = ({
   const router = useRouter();
   const [audioUrl, setAudioUrl] = useState(``);
   const audioElmRef = useRef(null);
-  const [dragActive, setDragActive] = useState<boolean>(false);
   const inputRef = useRef<any>(null);
-  const [files, setFiles] = useState<any>([]);
   const { languages } = useLanguages();
   const formik = useFormik<NewTaskInput>({
     initialValues: {
       language: languages?.[0].name ?? '',
       name: ``,
       type: '',
-      files: files,
+      files: '',
     },
     validationSchema: Yup.object().shape({
       name: Yup.string().required('Name is Required'),
@@ -159,65 +157,16 @@ const CreateTask = ({
     }
   };
 
-  function handleChange(e: any) {
-    e.preventDefault();
-    if (e.target.files && e.target.files[0]) {
-      for (let i = 0; i < e.target.files['length']; i++) {
-        setFiles((prevState: any) => [...prevState, e.target.files[i]]);
-      }
-    }
-  }
 
-  function handleDrop(e: any) {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(false);
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      for (let i = 0; i < e.dataTransfer.files['length']; i++) {
-        setFiles((prevState: any) => [...prevState, e.dataTransfer.files[i]]);
-      }
-    }
-  }
 
-  function handleDragLeave(e: any) {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(false);
-  }
-
-  function handleDragOver(e: any) {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(true);
-  }
-
-  function handleDragEnter(e: any) {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(true);
-  }
-
-  function openFileExplorer() {
-    inputRef.current.value = '';
-    inputRef.current.click();
-  }
-
-  function removeFile(fileName: any, idx: any) {
-    const newArr = [...files];
-    newArr.splice(idx, 1);
-    setFiles([]);
-    setFiles(newArr);
-  }
+ 
 
   return (
     <Modal open={visible}>
       <form
         onSubmit={formik.handleSubmit}
         method="POST"
-        onDragEnter={handleDragEnter}
-        onDrop={handleDrop}
-        onDragLeave={handleDragLeave}
-        onDragOver={handleDragOver}
+   
       >
         <Modal.Header className="font-bold">{t('create-task')}</Modal.Header>
         <Modal.Body>
@@ -269,14 +218,7 @@ const CreateTask = ({
                 ))}
               </select>
             </div>
-            <DragAndDrop
-              handleChange={handleChange}
-              openFileExplorer={openFileExplorer}
-              removeFile={removeFile}
-              inputRef={inputRef}
-              files={files}
-              dragActive={dragActive}
-            />
+            <DragAndDrop  inputRef={inputRef} fields={formik.values} />
             {audioUrl && (
               <div className="flex justify-between space-x-3">
                 <audio

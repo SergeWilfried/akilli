@@ -147,7 +147,7 @@ export interface NewTaskInput {
   language: string;
   name: string;
   type: string;
-  files: TranscriptFile | TranscriptFile[];
+  files: any;
 }
 
 export interface TranscriptFile {

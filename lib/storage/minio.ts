@@ -1,6 +1,8 @@
 import { FetchHttpHandler } from '@smithy/fetch-http-handler';
 import {
+  DeleteObjectCommand,
   GetObjectCommand,
+  HeadObjectCommand,
   PutObjectCommand,
   S3Client,
 } from '@aws-sdk/client-s3';
@@ -8,7 +10,7 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 import env from '@/lib/env';
 
-const s3 = new S3Client({
+export const s3 = new S3Client({
   region: env.storage.region ? env.storage.region : 'us-east-1',
   requestHandler: new FetchHttpHandler({ keepAlive: false }),
   credentials: {
@@ -70,4 +72,35 @@ export async function getMediaURL(params: bucketParams) {
     console.log('error', err);
     throw Error(err?.message);
   }
+}
+
+async function createFolder(Bucket, Key) {
+  const command = new PutObjectCommand({ Bucket, Key });
+  return s3.send(command);
+}
+
+async function existsFolder(Bucket, Key) {
+  const command = new HeadObjectCommand({ Bucket, Key });
+
+  try {
+    await s3.send(command);
+    return true;
+  } catch (error: any) {
+    if (error.name === 'NotFound') {
+      return false;
+    } else {
+      throw error;
+    }
+  }
+}
+
+export async function createFolderIfNotExist(Bucket, Key) {
+  if (!(await existsFolder(Bucket, Key))) {
+    return createFolder(Bucket, Key);
+  }
+}
+
+export async function deleteFolder(Bucket, Key) {
+  const command = new DeleteObjectCommand({ Bucket, Key });
+  return s3.send(command);
 }

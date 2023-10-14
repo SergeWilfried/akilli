@@ -25,19 +25,18 @@ const AllTasks: NextPageWithLayout = () => {
   return (
     <>
       <div className="flex items-center justify-end">
-      <AccessControl resource="task" actions={['update']}>
-      <Button
-          color="primary"
-          size="md"
-          variant="outline"
-          onClick={() => {
-            setVisible(!visible);
-          }}
-        >
-          {t('create-task')}
-        </Button>
+        <AccessControl resource="task" actions={['update']}>
+          <Button
+            color="primary"
+            size="md"
+            variant="outline"
+            onClick={() => {
+              setVisible(!visible);
+            }}
+          >
+            {t('create-task')}
+          </Button>
         </AccessControl>
-       
       </div>
       <div className="flex flex-col space-y-6">
         <CreateTask visible={visible} setVisible={setVisible} />
