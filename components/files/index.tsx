@@ -12,6 +12,7 @@ import toast from 'react-hot-toast';
 import axios from 'axios';
 import { getAxiosError } from '../../lib/common';
 import React from 'react';
+import { AccessControl } from '../shared/AccessControl';
 
 interface FilesProps {
   currentTask: Task;
@@ -84,9 +85,9 @@ const AllFiles = ({ currentTask }: FilesProps) => {
                     <th scope="col" className="px-6 py-3">
                       {t('created')}
                     </th>
-                    <th scope="col" className="px-6 py-3">
-                      {t('actions')}
-                    </th>
+                      <th scope="col" className="px-6 py-3">
+                        {t('actions')}
+                      </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -118,19 +119,42 @@ const AllFiles = ({ currentTask }: FilesProps) => {
                             />
                           </audio>
                         </td>
-                        <td className="px-6 py-3">
-                          <Button
-                            size="xs"
-                            color="error"
-                            variant="outline"
-                            onClick={() => {
-                              setConfirmationDialogVisible(true);
-                              setSelectedFile(apiKey.id);
-                            }}
-                          >
-                            {t('delete')}
-                          </Button>
-                        </td>
+                        <AccessControl
+                          resource="transcript"
+                          actions={['update']}
+                        >
+                          <td className="px-6 py-3">
+                            <Button
+                              size="xs"
+                              color="error"
+                              variant="outline"
+                              onClick={() => {
+                                setConfirmationDialogVisible(true);
+                                setSelectedFile(apiKey.id);
+                              }}
+                            >
+                              {t('transcribe-audio')}
+                            </Button>
+                          </td>
+                        </AccessControl>
+                        <AccessControl
+                          resource="transcript"
+                          actions={['delete']}
+                        >
+                          <td className="px-6 py-3">
+                            <Button
+                              size="xs"
+                              color="error"
+                              variant="outline"
+                              onClick={() => {
+                                setConfirmationDialogVisible(true);
+                                setSelectedFile(apiKey.id);
+                              }}
+                            >
+                              {t('delete')}
+                            </Button>
+                          </td>
+                        </AccessControl>
                       </tr>
                     );
                   })}
