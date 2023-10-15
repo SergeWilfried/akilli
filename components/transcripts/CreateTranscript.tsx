@@ -85,15 +85,15 @@ const CreateTranscript = ({
             <p>{t('transcribe-audio-desc')}</p>
             <audio controls style={{ width: '100%' }}>
               <source src={url} type="audio/mpeg" />
-              {t("browser-not-supported")}
+              {t('browser-not-supported')}
             </audio>
-              <textarea
-                onChange={formik.handleChange}
-                value={formik.values.text}
-                rows={3}
-                placeholder={t('type-the-transcription-here')}
-                className="textarea textarea-bordered textarea-lg "
-              ></textarea>
+            <textarea
+              onChange={formik.handleChange}
+              value={formik.values.text}
+              rows={3}
+              placeholder={t('type-the-transcription-here')}
+              className="textarea textarea-bordered textarea-lg "
+            ></textarea>
           </div>
         </Modal.Body>
         <Modal.Actions>

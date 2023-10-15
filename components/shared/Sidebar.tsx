@@ -46,7 +46,7 @@ export default forwardRef<HTMLElement, { isCollapsed: boolean }>(
           icon: ChatBubbleLeftRightIcon,
           active: activePathname === `/teams/${slug}/tasks`,
         },
-      
+
         {
           name: t('account'),
           href: '/settings/account',

@@ -44,7 +44,7 @@ const Transcripts: NextPageWithLayout = () => {
               setVisible(!visible);
             }}
           >
-            {t('add-new-transcript')}
+            {task.type === 'VOICE TO TEXT' ? t('add-new-transcript'): 'Add new Sentence'}
           </Button>
         </div>
         <AllTranscripts task={task} />
