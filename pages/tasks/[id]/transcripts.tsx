@@ -48,6 +48,7 @@ const Transcripts: NextPageWithLayout = () => {
               ? t('add-new-transcript')
               : 'Add new Sentence'}
           </Button>
+    
         </div>
         <AllTranscripts task={task} />
         <CreateTranscript
