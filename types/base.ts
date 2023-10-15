@@ -142,7 +142,6 @@ export interface NewTaskInput {
   language: string;
   name: string;
   type: string;
-  teamId: string;
   files?: [];
 }
 

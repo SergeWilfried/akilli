@@ -31,14 +31,12 @@ const CreateTask = ({
       language: languages?.[0].name ?? '',
       name: ``,
       type: '',
-      teamId: team ? team.id : '',
       files: [],
     },
     validationSchema: Yup.object().shape({
       name: Yup.string().required('Name is Required'),
       language: Yup.string().required('Language is Required'),
-      type: Yup.string().required('Type Required'),
-      teamId: Yup.string().required('Type Required'),
+      type: Yup.string().required('Type Required')
     }),
     onSubmit: async (values) => {
       try {
@@ -58,7 +56,7 @@ const CreateTask = ({
             language: values.language,
             type: values.type,
             name: values.name,
-            teamId: values.teamId,
+            teamId: team ? team.id : '',
             status: 'CREATED',
             userId: '',
             createdAt: new Date(),

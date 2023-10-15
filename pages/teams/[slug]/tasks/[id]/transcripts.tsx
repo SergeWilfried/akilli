@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 import useTask from 'hooks/useTask';
 import AllTranscripts from '@/components/transcripts/Transcripts';
 import { Button } from 'react-daisyui';
-import { CreateTask, TasksTab } from '@/components/tasks';
+import { TasksTab } from '@/components/tasks';
 import { useState } from 'react';
 
 const Transcripts: NextPageWithLayout = () => {
@@ -40,7 +40,7 @@ const Transcripts: NextPageWithLayout = () => {
             color="primary"
             size="md"
             onClick={() => {
-              // setVisible(!visible);
+              setVisible(!visible);
 
             }}
           >
@@ -48,7 +48,6 @@ const Transcripts: NextPageWithLayout = () => {
           </Button>
         </div>
         <AllTranscripts task={task} />
-        <CreateTask visible={visible} setVisible={setVisible} />
 
       </div>
      
