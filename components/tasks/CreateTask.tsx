@@ -72,7 +72,7 @@ const CreateTask = ({
           mutateTasks();
           formik.resetForm();
           setVisible(false);
-          router.push(`/tasks`);
+          router.push(`/teams/akilli/tasks`);
         }
       } catch (error: any) {
         toast.error(getAxiosError(error));
