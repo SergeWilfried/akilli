@@ -1,14 +1,14 @@
 import { FetchHttpHandler } from '@smithy/fetch-http-handler';
 import {
+  DeleteObjectCommand,
   GetObjectCommand,
   PutObjectCommand,
   S3Client,
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-
 import env from '@/lib/env';
 
-const s3 = new S3Client({
+export const s3 = new S3Client({
   region: env.storage.region ? env.storage.region : 'us-east-1',
   requestHandler: new FetchHttpHandler({ keepAlive: false }),
   credentials: {
@@ -68,6 +68,16 @@ export async function getMediaURL(params: bucketParams) {
     return url;
   } catch (err: any) {
     console.log('error', err);
+    throw Error(err?.message);
+  }
+}
+
+export async function deleteFolder(Bucket, Key) {
+  const command = new DeleteObjectCommand({ Bucket, Key });
+  try {
+    await s3.send(command);
+  } catch (err: any) {
+    console.error('Error', err);
     throw Error(err?.message);
   }
 }

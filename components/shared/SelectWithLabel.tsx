@@ -27,7 +27,7 @@ const SelectWithLabel = (props: SelectWithLabelProps) => {
       </label>
 
       <select
-        className={classes.join(' ')}
+        className="select-bordered select flex-grow"
         name={name}
         onChange={onChange}
         value={value}
