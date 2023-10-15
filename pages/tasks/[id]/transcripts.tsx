@@ -1,7 +1,7 @@
 import { GetServerSidePropsContext } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import type { NextPageWithLayout } from 'types';
-import { CreateTask, TasksTab } from '@/components/tasks';
+import { TasksTab } from '@/components/tasks';
 import { Error, Loading } from '@/components/shared';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/router';
@@ -9,6 +9,7 @@ import useTask from 'hooks/useTask';
 import AllTranscripts from '@/components/transcripts/Transcripts';
 import { Button } from 'react-daisyui';
 import { useState } from 'react';
+import CreateTranscript from '../../../components/transcripts/CreateTranscript';
 
 const Transcripts: NextPageWithLayout = () => {
   const { t } = useTranslation('common');
@@ -39,17 +40,14 @@ const Transcripts: NextPageWithLayout = () => {
             size="md"
             onClick={() => {
               setVisible(!visible);
-
             }}
           >
             {t('add-new-transcript')}
           </Button>
         </div>
         <AllTranscripts task={task} />
-        <CreateTask visible={visible} setVisible={setVisible} />
-
+        <CreateTranscript visible={visible} setVisible={setVisible} />
       </div>
-    
     </>
   );
 };

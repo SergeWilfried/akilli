@@ -11,11 +11,11 @@ import toast from 'react-hot-toast';
 import { getAxiosError } from '../../lib/common';
 import { AccessControl } from '../shared/AccessControl';
 
-const Tasks = ({isAdmin}:{isAdmin: boolean}) => {
+const Tasks = ({ isAdmin }: { isAdmin: boolean }) => {
   const { t } = useTranslation('common');
   const [currentTask, setTeam] = useState<Task | null>(null);
   const [askConfirmation, setAskConfirmation] = useState(false);
-  const linkOrigin = isAdmin === true ? `tasks` : `/tasks` 
+  const linkOrigin = isAdmin === true ? `tasks` : `/tasks`;
   const { tasks, isLoading, isError, mutateTasks } = useTasks();
   if (isLoading) {
     return <Loading />;
@@ -78,7 +78,13 @@ const Tasks = ({isAdmin}:{isAdmin: boolean}) => {
                       className="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
                     >
                       <td className="px-6 py-3">
-                        <Link href={isAdmin ? `${linkOrigin}/${task.id}/settings` : `${linkOrigin}/${task.id}/editor`}>
+                        <Link
+                          href={
+                            isAdmin
+                              ? `${linkOrigin}/${task.id}/settings`
+                              : `${linkOrigin}/${task.id}/editor`
+                          }
+                        >
                           <div className="flex items-center justify-start space-x-2">
                             <span>{task.name}</span>
                           </div>

@@ -4,16 +4,15 @@ import { useFormik } from 'formik';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { Button, Input, Modal } from 'react-daisyui';
+import { Button, Modal } from 'react-daisyui';
 import toast from 'react-hot-toast';
-import { type ApiResponse, type NewTaskInput, Task } from 'types';
+import { type ApiResponse, type Task } from 'types';
 import * as Yup from 'yup';
 import useTasks from 'hooks/useTasks';
-import { tasksType } from '../../lib/permissions';
 import useLanguages from '../../hooks/useLanguages';
 import useTeam from '../../hooks/useTeam';
 
-const CreateTask = ({
+const CreateTranscript = ({
   visible,
   setVisible,
 }: {
@@ -23,13 +22,13 @@ const CreateTask = ({
   const { t } = useTranslation('common');
   const { mutateTasks } = useTasks();
   const router = useRouter();
-
+  const url = 'https://';
   const { languages } = useLanguages();
   const { team } = useTeam();
-  const formik = useFormik<NewTaskInput>({
+  const formik = useFormik<any>({
     initialValues: {
       language: languages?.[0].name ?? '',
-      name: ``,
+      text: ``,
       type: '',
       files: [],
     },
@@ -86,53 +85,18 @@ const CreateTask = ({
         <Modal.Header className="font-bold">{t('create-task')}</Modal.Header>
         <Modal.Body>
           <div className="mt-2 flex flex-col space-y-4">
-            <p>{t('create-task-desc')}</p>
-            <div className="flex justify-between space-x-3">
-              <Input
-                name="name"
-                className="flex-grow"
+            <p>{t('transcribe-audio-desc')}</p>
+            <audio controls style={{ width: '100%' }}>
+              <source src={url} type="audio/mpeg" />
+              {t("browser-not-supported")}
+            </audio>
+              <textarea
                 onChange={formik.handleChange}
-                value={formik.values.name}
-                placeholder={t('task-name')}
-              />
-            </div>
-            <div className="flex justify-between space-x-3">
-              <select
-                className="select-bordered select flex-grow"
-                name="language"
-                value={formik.values.language}
-                onChange={(event) => {
-                  formik.handleChange(event);
-                  console.log('language', event.currentTarget);
-                }}
-                required
-              >
-                {languages?.map((task) => (
-                  <option value={task.name} key={task.id}>
-                    {task.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="flex justify-between space-x-3">
-              <select
-                className="select-bordered select flex-grow"
-                name="type"
-                // defaultValue={formik.initialValues.type} // Update this line
-                value={formik.values.type}
-                onChange={(event) => {
-                  formik.handleChange(event);
-                  console.log('type', event.currentTarget);
-                }}
-                required
-              >
-                {tasksType.map((task) => (
-                  <option value={task.name} key={task.id}>
-                    {task.name}
-                  </option>
-                ))}
-              </select>
-            </div>
+                value={formik.values.text}
+                rows={3}
+                placeholder={t('type-the-transcription-here')}
+                className="textarea textarea-bordered textarea-lg "
+              ></textarea>
           </div>
         </Modal.Body>
         <Modal.Actions>
@@ -143,7 +107,7 @@ const CreateTask = ({
             size="md"
             disabled={!formik.isValid}
           >
-            {t('create-team')}
+            {t('transcribe-audio')}
           </Button>
           <Button
             type="button"
@@ -161,4 +125,4 @@ const CreateTask = ({
   );
 };
 
-export default CreateTask;
+export default CreateTranscript;

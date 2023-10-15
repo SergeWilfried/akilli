@@ -15,7 +15,7 @@ const AllTasks: NextPageWithLayout = () => {
   const { t } = useTranslation('common');
 
   const { newTeam } = router.query as { newTeam: string };
-  console.warn('new team', newTeam)
+  console.warn('new team', newTeam);
   useEffect(() => {
     if (newTeam) {
       setVisible(true);
