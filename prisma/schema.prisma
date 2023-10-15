@@ -86,6 +86,7 @@ model Team {
   transcribers Transcriber[]
   invitations  Invitation[]
   apiKeys      ApiKey[]
+  tasks        Task[]
 }
 
 model Transcriber {
@@ -172,6 +173,8 @@ model Task {
   transcribers Transcriber[]
   transcripts  Transcript[]
   invitations  Invitation[]
+  team         Team?         @relation(fields: [teamId], references: [id])
+  teamId       String?
 }
 
 model File {
@@ -185,7 +188,6 @@ model File {
   task        Task?    @relation(fields: [taskId], references: [id])
   taskId      String?
 }
-
 
 model Payment {
   id            String      @id @default(uuid())

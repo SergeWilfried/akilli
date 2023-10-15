@@ -55,11 +55,15 @@ export async function addFilesToTask(taskId: string, files: []): Promise<Task> {
 }
 
 export async function getAllTasks(key: { userId: string }): Promise<any> {
+  const { userId } = key;
   try {
-    return await prisma.task.findMany({ where: key });
+    if (userId) {
+      return await prisma.task.findMany({ where: key });
+    }
+    return await prisma.task.findMany();
   } catch (error) {
     console.error(error);
-    throw new Error('Failed to retrieve task');
+    throw new Error('Failed to retrieve tasks');
   }
 }
 
