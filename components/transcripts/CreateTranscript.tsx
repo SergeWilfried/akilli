@@ -108,6 +108,7 @@ const CreateTranscript = ({
               placeholder={t('type-here')}
               className="textarea textarea-bordered textarea-lg "
             ></textarea>
+            
           </div>
         </Modal.Body>
         <Modal.Actions>

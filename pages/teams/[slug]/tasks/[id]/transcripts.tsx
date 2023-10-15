@@ -36,7 +36,10 @@ const Transcripts: NextPageWithLayout = () => {
       <TasksTab activeTab="transcripts" task={task} />
       <div className="flex flex-col space-y-4">
         <div className="flex justify-end mt-4">
+          
+          <div className="join join-vertical lg:join-horizontal">
           <Button
+            className='btn join-item'
             variant="outline"
             color="primary"
             size="md"
@@ -46,6 +49,21 @@ const Transcripts: NextPageWithLayout = () => {
           >
             {isVoiceJob ? t('add-new-transcript') : 'Add new Sentence'}
           </Button>
+          {!isVoiceJob && (
+           <Button
+           className='btn join-item'
+           variant="outline"
+           color="primary"
+           size="md"
+           onClick={() => {
+             setVisible(!visible);
+           }}
+         >
+           {t('import-new-file')}
+         </Button> 
+          )}
+ 
+</div>
         </div>
 
         <AllTranscripts task={task} />
