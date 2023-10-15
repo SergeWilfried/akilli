@@ -3,8 +3,8 @@ import packageInfo from '../package.json';
 const app = {
   version: packageInfo.version,
   name: 'AkilliAI',
-  logoUrl: 'https://boxyhq.com/img/logo.png',
-  url: 'http://localhost:4002',
+  logoUrl: 'https://akilli.ai/img/logo.png',
+  url: 'https://app.akilli.ai',
 };
 
 export default app;
