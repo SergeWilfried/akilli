@@ -8,8 +8,7 @@ import { useRouter } from 'next/router';
 import useTask from 'hooks/useTask';
 import AllTranscripts from '@/components/transcripts/Transcripts';
 import { Button } from 'react-daisyui';
-import { AccessControl } from '@/components/shared/AccessControl';
-import { TasksTab, RemoveTask } from '@/components/tasks';
+import { TasksTab } from '@/components/tasks';
 
 const Transcripts: NextPageWithLayout = () => {
   const { t } = useTranslation('common');
@@ -45,9 +44,7 @@ const Transcripts: NextPageWithLayout = () => {
         </div>
         <AllTranscripts task={task} />
       </div>
-      <AccessControl resource="transcript" actions={['delete']}>
-        <RemoveTask task={task} />
-      </AccessControl>
+     
     </>
   );
 };

@@ -37,7 +37,7 @@ const AllTasks: NextPageWithLayout = () => {
       </div>
       <div className="space-y-6">
         <CreateTask visible={visible} setVisible={setVisible} />
-        <Tasks />
+        <Tasks isAdmin={true} />
       </div>
     </>
   );

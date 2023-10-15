@@ -44,11 +44,14 @@ const AllTranscripts = (props: AllTranscriptsProps) => {
       <Card>
         <Card.Body>
           <Card.Header>
-            <Card.Title>${t('all-transcripts')}</Card.Title>
+            <Card.Title>{t('all-transcripts')}</Card.Title>
           </Card.Header>
           <table className="w-full table-fixed text-left text-sm text-gray-500 dark:text-gray-400">
             <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
               <tr>
+              <th scope="col" className="px-6 py-3">
+                  {t('id')}
+                </th>
                 <th scope="col" className="px-6 py-3">
                   {t('text')}
                 </th>
@@ -69,6 +72,8 @@ const AllTranscripts = (props: AllTranscriptsProps) => {
                       key={task.id}
                       className="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
                     >
+                                            <td className="px-6 py-3">{task.id}</td>
+
                       <td className="px-6 py-3">{task.text}</td>
 
                       <td className="px-6 py-3">

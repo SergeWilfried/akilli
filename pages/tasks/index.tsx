@@ -15,7 +15,7 @@ const AllTasks: NextPageWithLayout = () => {
   const { t } = useTranslation('common');
 
   const { newTeam } = router.query as { newTeam: string };
-
+  console.warn('new team', newTeam)
   useEffect(() => {
     if (newTeam) {
       setVisible(true);
@@ -40,7 +40,7 @@ const AllTasks: NextPageWithLayout = () => {
       </div>
       <div className="flex flex-col space-y-6">
         <CreateTask visible={visible} setVisible={setVisible} />
-        <Tasks />
+        <Tasks isAdmin={false} />
       </div>
     </>
   );

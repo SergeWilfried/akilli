@@ -1,29 +1,38 @@
 import { prisma } from '@/lib/prisma';
 import { Task, Transcriber } from '@prisma/client';
-import { TaskWithFiles } from '../types';
 
-export async function createTask(
-  transcript: TaskWithFiles
-): Promise<TaskWithFiles> {
+export async function createTask(transcript: any) {
   try {
+    console.log(transcript);
     return await prisma.task.create({
       data: {
-        ...transcript,
+        name: transcript.name,
+        language: transcript.language,
+        type: transcript.type,
         status: 'CREATED',
         deadline: new Date(
           new Date().setFullYear(new Date().getFullYear() + 1)
         ),
-        files: {
-          create: [...transcript.files],
+        user: {
+          connect: {
+            id: transcript?.userId,
+          },
+        },
+        files: {},
+        team: {
+          connect: {
+            id: transcript.teamId,
+          },
         },
       },
+
       include: {
         files: true,
       },
     });
   } catch (error) {
     console.error(error);
-    throw new Error('Failed to create transcript');
+    throw new Error('Failed to create new task');
   }
 }
 export async function addFilesToTask(taskId: string, files: []): Promise<Task> {
@@ -54,13 +63,17 @@ export async function addFilesToTask(taskId: string, files: []): Promise<Task> {
   }
 }
 
-export async function getAllTasks(key: { userId: string }): Promise<any> {
-  const { userId } = key;
+export async function getAllTasks(): Promise<any> {
   try {
-    if (userId) {
-      return await prisma.task.findMany({ where: key });
-    }
-    return await prisma.task.findMany();
+    const team = await prisma.team.findFirst({
+      where: {
+        slug: 'akilli',
+      },
+      include: {
+        tasks: true,
+      },
+    });
+    return team?.tasks;
   } catch (error) {
     console.error(error);
     throw new Error('Failed to retrieve tasks');

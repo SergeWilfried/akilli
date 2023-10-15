@@ -6,11 +6,10 @@ import { useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
 import { Button } from 'react-daisyui';
 import toast from 'react-hot-toast';
-import { TaskWithFiles } from '../../types';
 import useTranscribers from '../../hooks/useTranscribers';
 import { useMemo } from 'react';
 
-const AllTranscribers = ({ task }: { task: TaskWithFiles }) => {
+const AllTranscribers = ({ task }: { task: any }) => {
   const { data: session } = useSession();
   const { t } = useTranslation('common');
   const { canAccess } = useCanAccess();

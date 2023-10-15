@@ -1,11 +1,10 @@
 import { Cog6ToothIcon, KeyIcon } from '@heroicons/react/24/outline';
 import classNames from 'classnames';
 import Link from 'next/link';
-import { TaskWithFiles } from '../../types';
 
 interface TasksTabProps {
   activeTab: string;
-  task: TaskWithFiles;
+  task: any;
   heading?: string;
 }
 
@@ -35,7 +34,7 @@ const TasksTab = (props: TasksTabProps) => {
   });
   navigations.push({
     name: 'Transcripts',
-    href: `/teams/${teamSlug}/${task.id}/transcripts`,
+    href: `/teams/${teamSlug}/tasks/${task.id}/transcripts`,
     active: activeTab === 'transcripts',
     icon: KeyIcon,
   });
