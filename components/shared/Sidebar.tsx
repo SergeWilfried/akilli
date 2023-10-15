@@ -46,12 +46,7 @@ export default forwardRef<HTMLElement, { isCollapsed: boolean }>(
           icon: ChatBubbleLeftRightIcon,
           active: activePathname === `/teams/${slug}/tasks`,
         },
-        {
-          name: t('transcripts'),
-          href: `#`,
-          icon: ChatBubbleLeftRightIcon,
-          active: activePathname?.includes('transcripts'),
-        },
+      
         {
           name: t('account'),
           href: '/settings/account',

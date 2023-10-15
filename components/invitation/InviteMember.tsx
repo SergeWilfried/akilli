@@ -87,7 +87,7 @@ const InviteMember = ({
                 }
                 onChange={formik.handleChange}
                 value={formik.values.email}
-                placeholder="jackson@boxyhq.com"
+                placeholder="jackson@akilli.ai"
                 required
               />
               <select

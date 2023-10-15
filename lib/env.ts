@@ -5,7 +5,7 @@ const env = {
   redirectAfterSignIn: '/teams/switch',
   // SAML Jackson configuration
   saml: {
-    issuer: 'https://saml.boxyhq.com',
+    issuer: 'https://saml.akilli.ai',
     path: '/api/oauth/saml',
     callback: `${process.env.APP_URL}`,
   },
