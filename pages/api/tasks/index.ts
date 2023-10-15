@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from '@/lib/session';
 import { createTask, getAllTasks } from 'models/task';
-import { TaskWithFiles } from '../../../types';
 
 export default async function handler(
   req: NextApiRequest,
@@ -31,13 +30,13 @@ export default async function handler(
 }
 
 const handlePOST = async (req: NextApiRequest, res: NextApiResponse) => {
-  const tsc = req.body as TaskWithFiles;
+  const tsc = req.body;
   const session = await getSession(req, res);
 
   //FIXME
   const transcript = await createTask({
     ...tsc,
-    status: tsc.status ? tsc.status : '',
+    status: tsc?.status ? tsc.status : '',
     createdAt: new Date(),
     updatedAt: new Date(),
     userId: session?.user.id as string,
@@ -47,10 +46,6 @@ const handlePOST = async (req: NextApiRequest, res: NextApiResponse) => {
 };
 
 const handleGET = async (req: NextApiRequest, res: NextApiResponse) => {
-  const session = await getSession(req, res);
-
-  const tasks = await getAllTasks({
-    userId: session?.user.id as string,
-  });
+  const tasks = await getAllTasks();
   res.status(200).json({ data: tasks });
 };

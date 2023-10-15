@@ -3,21 +3,15 @@ import axios from 'axios';
 import { useFormik } from 'formik';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
-import React, { useRef } from 'react';
+import React from 'react';
 import { Button, Input, Modal } from 'react-daisyui';
 import toast from 'react-hot-toast';
-import {
-  isValidFileType,
-  type ApiResponse,
-  type NewTaskInput,
-  MAX_FILE_SIZE,
-  Task,
-} from 'types';
+import { type ApiResponse, type NewTaskInput, Task } from 'types';
 import * as Yup from 'yup';
 import useTasks from 'hooks/useTasks';
 import { tasksType } from '../../lib/permissions';
-import DragAndDrop from '../dragAndDrop';
 import useLanguages from '../../hooks/useLanguages';
+import useTeam from '../../hooks/useTeam';
 
 const CreateTask = ({
   visible,
@@ -30,31 +24,21 @@ const CreateTask = ({
   const { mutateTasks } = useTasks();
   const router = useRouter();
 
-  const inputRef = useRef<any>(null);
   const { languages } = useLanguages();
+  const { team } = useTeam();
   const formik = useFormik<NewTaskInput>({
     initialValues: {
       language: languages?.[0].name ?? '',
       name: ``,
       type: '',
-      files: '',
+      teamId: team ? team.id : '',
+      files: [],
     },
     validationSchema: Yup.object().shape({
       name: Yup.string().required('Name is Required'),
       language: Yup.string().required('Language is Required'),
       type: Yup.string().required('Type Required'),
-      files: Yup.array().of(
-        Yup.mixed()
-          .optional()
-          .test('is-valid-type', 'Not a valid file type', (value) =>
-            isValidFileType((value as File)?.name?.toLowerCase(), 'audio')
-          )
-          .test(
-            'is-valid-size',
-            'Max allowed size is 1024KB',
-            (value) => value && (value as File).size <= MAX_FILE_SIZE
-          )
-      ),
+      teamId: Yup.string().required('Type Required'),
     }),
     onSubmit: async (values) => {
       try {
@@ -68,12 +52,13 @@ const CreateTask = ({
         if (links === undefined) {
           /* empty */
         }
-        let task: Task;
+        let task: any;
         if (links !== undefined) {
           task = {
             language: values.language,
             type: values.type,
             name: values.name,
+            teamId: values.teamId,
             status: 'CREATED',
             userId: '',
             createdAt: new Date(),
@@ -150,7 +135,6 @@ const CreateTask = ({
                 ))}
               </select>
             </div>
-            <DragAndDrop inputRef={inputRef} fields={formik.values} />
           </div>
         </Modal.Body>
         <Modal.Actions>

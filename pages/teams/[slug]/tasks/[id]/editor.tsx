@@ -1,5 +1,4 @@
 import React from 'react';
-import Tiptap from '@/components/editor/editor';
 import { useTranslation } from 'react-i18next';
 import { Button } from 'react-daisyui';
 import { TasksTab } from '@/components/tasks';
@@ -34,7 +33,6 @@ export default function TextEditor() {
             {t('create-lang')}{' '}
           </Button>
         </div>
-        <Tiptap task={task} />
       </div>
       {/* <div className="flex flex-col justify-between">
         <div className="flex items-center justify-between">

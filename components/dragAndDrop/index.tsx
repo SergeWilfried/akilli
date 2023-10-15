@@ -28,12 +28,12 @@ export default function DragAndDrop(props: DragAndDropProps) {
           endpoint: {
             request: {
               body: fields,
-              url: "/api/teams/akilli/upload",
+              url: '/api/teams/akilli/upload',
               headers: {
                 'Access-Control-Allow-Origin': 'https://akilli-eta.vercel.app',
                 'Access-Control-Allow-Methods': 'PUT, GET, POST, DELETE, PATCH',
                 'Content-Type': '*',
-              }
+              },
             },
           },
         });

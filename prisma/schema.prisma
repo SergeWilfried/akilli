@@ -86,6 +86,7 @@ model Team {
   transcribers Transcriber[]
   invitations  Invitation[]
   apiKeys      ApiKey[]
+  tasks        Task[]
 }
 
 model Transcriber {
@@ -172,20 +173,22 @@ model Task {
   transcribers Transcriber[]
   transcripts  Transcript[]
   invitations  Invitation[]
+  team         Team?         @relation(fields: [teamId], references: [id])
+  teamId       String?
 }
 
 model File {
-  id          String   @id @default(uuid())
+  id          String       @id @default(uuid())
   url         String
   fileFormat  String
   contentSize Int?
   pathname    String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  task        Task?    @relation(fields: [taskId], references: [id])
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  task        Task?        @relation(fields: [taskId], references: [id])
   taskId      String?
+  transcripts Transcript[]
 }
-
 
 model Payment {
   id            String      @id @default(uuid())
@@ -215,4 +218,8 @@ model Transcript {
   updatedAt DateTime @updatedAt
   task      Task     @relation(fields: [taskId], references: [id])
   taskId    String
+  File      File?    @relation(fields: [fileId], references: [id])
+  fileId    String?
+
+  @@index([taskId, fileId])
 }
