@@ -53,7 +53,9 @@
   "remove-team": "Remove Team",
   "transcribe-audio": "Transcribe audio",
   "transcribe-audio-desc": "Listen to the following audio and enter the transcription below",
-  "type-the-transcription-here": "Type the transcription here",
+  "transcribe-sentence-desc": "Add a new sentence to be transcribe",
+
+  "type-here": "Type here",
   "remove-team-warning": "Deleting the team will delete all resources and data associated with the team forever. This action cannot be undone.",
   "remove-task": "Remove Project",
   "remove-task-warning": "Deleting the projects will delete all resources and data associated with this project forever. This action cannot be undone.",
