@@ -21,7 +21,6 @@ const CreateTranscript = ({
 }) => {
   const { t } = useTranslation('common');
   const { mutateTasks } = useTasks();
-  const router = useRouter();
   const url = 'https://';
   const { languages } = useLanguages();
   const { team } = useTeam();
@@ -60,7 +59,7 @@ const CreateTranscript = ({
             userId: '',
             createdAt: new Date(),
           };
-          response = await axios.post<ApiResponse<Task>>('/api/tasks', {
+          response = await axios.post<ApiResponse<Task>>('/api/transcripts', {
             ...task,
           });
         }
@@ -71,7 +70,6 @@ const CreateTranscript = ({
           mutateTasks();
           formik.resetForm();
           setVisible(false);
-          router.push(`/teams/akilli/tasks`);
         }
       } catch (error: any) {
         toast.error(getAxiosError(error));
