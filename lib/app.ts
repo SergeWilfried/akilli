@@ -4,7 +4,7 @@ const app = {
   version: packageInfo.version,
   name: 'AkilliAI',
   logoUrl: 'https://akilli.ai/img/logo.png',
-  url: 'http://localhost:4002',
+  url: 'https://app.akilli.ai',
 };
 
 export default app;
