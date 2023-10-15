@@ -40,7 +40,7 @@ const Transcripts: NextPageWithLayout = () => {
             color="primary"
             size="md"
             onClick={() => {
-              setVisible(!visible);
+              // setVisible(!visible);
 
             }}
           >
