@@ -2,7 +2,6 @@ import { getAxiosError } from '@/lib/common';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import { useTranslation } from 'next-i18next';
-import { useRouter } from 'next/router';
 import React from 'react';
 import { Button, Modal } from 'react-daisyui';
 import toast from 'react-hot-toast';
