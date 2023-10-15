@@ -14,8 +14,10 @@ import useTeam from '../../hooks/useTeam';
 const CreateTranscript = ({
   visible,
   setVisible,
+  isVoiceJob,
 }: {
   visible: boolean;
+  isVoiceJob: boolean;
   setVisible: (visible: boolean) => void;
 }) => {
   const { t } = useTranslation('common');
@@ -79,19 +81,31 @@ const CreateTranscript = ({
   return (
     <Modal open={visible}>
       <form onSubmit={formik.handleSubmit} method="POST">
-        <Modal.Header className="font-bold">{t('create-task')}</Modal.Header>
+        <Modal.Header className="font-bold">
+          {isVoiceJob ? t('transcribe-audio') : 'Add new Sentence'}
+        </Modal.Header>
         <Modal.Body>
           <div className="mt-2 flex flex-col space-y-4">
-            <p>{t('transcribe-audio-desc')}</p>
-            <audio controls style={{ width: '100%' }}>
-              <source src={url} type="audio/mpeg" />
-              {t('browser-not-supported')}
-            </audio>
+            <p>
+              {isVoiceJob
+                ? t('transcribe-audio-desc')
+                : t('transcribe-sentence-desc')}
+            </p>
+
+            {isVoiceJob && (
+              <>
+                <audio controls style={{ width: '100%' }}>
+                  <source src={url} type="audio/mpeg" />
+                  {t('browser-not-supported')}
+                </audio>
+              </>
+            )}
+
             <textarea
               onChange={formik.handleChange}
               value={formik.values.text}
               rows={3}
-              placeholder={t('type-the-transcription-here')}
+              placeholder={t('type-here')}
               className="textarea textarea-bordered textarea-lg "
             ></textarea>
           </div>
@@ -104,7 +118,7 @@ const CreateTranscript = ({
             size="md"
             disabled={!formik.isValid}
           >
-            {t('transcribe-audio')}
+            {isVoiceJob ? t('transcribe-audio') : 'Add new Sentence'}
           </Button>
           <Button
             type="button"

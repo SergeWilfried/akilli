@@ -19,7 +19,7 @@ const Transcripts: NextPageWithLayout = () => {
   const { id } = router.query as { id: string };
   const { isLoading, isError, task } = useTask(id);
   const [visible, setVisible] = useState(false);
-
+  const isVoiceJob = task.type === 'VOICE TO TEXT';
   if (isLoading) {
     return <Loading />;
   }
@@ -44,11 +44,16 @@ const Transcripts: NextPageWithLayout = () => {
               setVisible(!visible);
             }}
           >
-            {task.type === 'VOICE TO TEXT' ? t('add-new-transcript'): 'Add new Sentence'}
+            {isVoiceJob ? t('add-new-transcript') : 'Add new Sentence'}
           </Button>
         </div>
+
         <AllTranscripts task={task} />
-        <CreateTranscript visible={visible} setVisible={setVisible} />
+        <CreateTranscript
+          visible={visible}
+          setVisible={setVisible}
+          isVoiceJob={isVoiceJob}
+        />
       </div>
     </>
   );

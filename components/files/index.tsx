@@ -85,9 +85,9 @@ const AllFiles = ({ currentTask }: FilesProps) => {
                     <th scope="col" className="px-6 py-3">
                       {t('created')}
                     </th>
-                      <th scope="col" className="px-6 py-3">
-                        {t('actions')}
-                      </th>
+                    <th scope="col" className="px-6 py-3">
+                      {t('actions')}
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
