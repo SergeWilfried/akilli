@@ -19,7 +19,7 @@ const Transcripts: NextPageWithLayout = () => {
   const { id } = router.query as { id: string };
   const { isLoading, isError, task } = useTask(id);
   const [visible, setVisible] = useState(false);
-  const isVoiceJob = task.type === 'VOICE TO TEXT';
+  const isVoiceJob = task?.type === 'VOICE TO TEXT';
   if (isLoading) {
     return <Loading />;
   }
@@ -37,9 +37,8 @@ const Transcripts: NextPageWithLayout = () => {
       <div className="flex flex-col space-y-4">
         <div className="flex justify-end mt-4">
           
-          <div className="join join-vertical lg:join-horizontal">
           <Button
-            className='btn join-item'
+            className='btn'
             variant="outline"
             color="primary"
             size="md"
@@ -51,19 +50,18 @@ const Transcripts: NextPageWithLayout = () => {
           </Button>
           {!isVoiceJob && (
            <Button
-           className='btn join-item'
+           className='btn'
            variant="outline"
            color="primary"
            size="md"
            onClick={() => {
-             setVisible(!visible);
+            //  setVisible(!visible);
            }}
          >
            {t('import-new-file')}
          </Button> 
           )}
  
-</div>
         </div>
 
         <AllTranscripts task={task} />

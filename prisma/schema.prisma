@@ -135,6 +135,10 @@ model Language {
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @default(now())
   transcribers Transcriber[]
+  Transcript   Transcript[]
+  Sentence     Sentence[]
+
+  @@index([name, code])
 }
 
 model PasswordReset {
@@ -175,6 +179,9 @@ model Task {
   invitations  Invitation[]
   team         Team?         @relation(fields: [teamId], references: [id])
   teamId       String?
+  sentences    Sentence[]
+
+  @@index([name, type, language])
 }
 
 model File {
@@ -188,6 +195,8 @@ model File {
   task        Task?        @relation(fields: [taskId], references: [id])
   taskId      String?
   transcripts Transcript[]
+
+  @@index([taskId, fileFormat])
 }
 
 model Payment {
@@ -212,14 +221,32 @@ model Rating {
 }
 
 model Transcript {
-  id        String   @id @default(uuid())
-  text      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  task      Task     @relation(fields: [taskId], references: [id])
-  taskId    String
-  File      File?    @relation(fields: [fileId], references: [id])
-  fileId    String?
+  id         String    @id @default(uuid())
+  text       String    @db.Text
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  task       Task      @relation(fields: [taskId], references: [id])
+  language   Language  @relation(fields: [langCode], references: [code])
+  langCode   String
+  taskId     String
+  file       File?     @relation(fields: [fileId], references: [id])
+  fileId     String?
+  sentence   Sentence? @relation(fields: [sentenceId], references: [id])
+  sentenceId String?
 
-  @@index([taskId, fileId])
+  @@index([taskId, fileId, langCode])
+}
+
+model Sentence {
+  id          String       @id @default(uuid())
+  text        String       @db.Text
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  task        Task         @relation(fields: [taskId], references: [id])
+  taskId      String
+  language    Language     @relation(fields: [langCode], references: [code])
+  langCode    String
+  transcripts Transcript[]
+
+  @@index([taskId, langCode])
 }

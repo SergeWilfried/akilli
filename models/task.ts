@@ -106,7 +106,7 @@ export async function deleteTask(key: { id: string }): Promise<void> {
   try {
     await prisma.task.delete({ where: key });
   } catch (error) {
-    throw new Error('Failed to delete task');
+    throw new Error('Failed to delete Project');
   }
 }
 

@@ -32,7 +32,7 @@ const AllTranscripts = (props: AllTranscriptsProps) => {
   const leaveTeam = async (task: Task) => {
     try {
       await axios.delete<ApiResponse>(`/api/tasks/${task.id}`);
-      toast.success(t('leave-team-success'));
+      toast.success(t('task-removed-successfully'));
       mutateTranscripts();
     } catch (error: any) {
       toast.error(getAxiosError(error));
@@ -45,7 +45,7 @@ const AllTranscripts = (props: AllTranscriptsProps) => {
         <Card.Body>
           <Card.Header>
             <Card.Title>
-              {task.type === 'VOICE TO TEXT'
+              {task?.type === 'VOICE TO TEXT'
                 ? t('all-transcripts')
                 : 'Sentences'}
             </Card.Title>

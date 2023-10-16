@@ -33,7 +33,7 @@ const TasksTab = (props: TasksTabProps) => {
     icon: KeyIcon,
   });
   navigations.push({
-    name: task.type === 'VOICE TO TEXT' ? 'Transcripts' : 'Sentences',
+    name: task?.type === 'VOICE TO TEXT' ? 'Transcripts' : 'Sentences',
     href: `/teams/${teamSlug}/tasks/${task.id}/transcripts`,
     active: activeTab === 'transcripts',
     icon: KeyIcon,
