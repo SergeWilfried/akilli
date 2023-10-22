@@ -10,6 +10,7 @@ import * as Yup from 'yup';
 import useTasks from 'hooks/useTasks';
 import useLanguages from '../../hooks/useLanguages';
 import useTeam from '../../hooks/useTeam';
+import { csvParser } from '../../lib/parser';
 
 const CreateTranscript = ({
   visible,
@@ -27,21 +28,21 @@ const CreateTranscript = ({
   const { team } = useTeam();
   const formik = useFormik<any>({
     initialValues: {
-      language: languages?.[0].name ?? '',
+      language: languages?.[0]?.name ?? '',
       text: ``,
-      type: '',
-      files: [],
+      file: '',
     },
     validationSchema: Yup.object().shape({
       name: Yup.string().required('Name is Required'),
       language: Yup.string().required('Language is Required'),
-      type: Yup.string().required('Type Required'),
+      file: Yup.mixed().required('File Required'),
     }),
     onSubmit: async (values) => {
       try {
         /// FIXME: Handle multiple files
+        const ppp = await csvParser(values.file);
         const irl = 'http://'; // Call the handleFileUpload function
-        console.log(`liens de fichier ${irl}`);
+        console.log(`ppp ${ppp}`);
         let response: any;
         const links = irl?.split(`,`).filter((link) => link !== '');
         console.log('links', links?.length);
@@ -78,6 +79,11 @@ const CreateTranscript = ({
     },
   });
 
+  const changeHandler = async (event) => {
+    const reee = await csvParser(event.target.files[0]);
+    console.log('reee', reee);
+  };
+
   return (
     <Modal open={visible}>
       <form onSubmit={formik.handleSubmit} method="POST">
@@ -101,6 +107,17 @@ const CreateTranscript = ({
               </>
             )}
 
+            {!isVoiceJob && (
+              <>
+                <input
+                  type="file"
+                  name="file"
+                  accept=".csv"
+                  onChange={changeHandler}
+                  style={{ display: 'block', margin: '10px auto' }}
+                />
+              </>
+            )}
             <textarea
               onChange={formik.handleChange}
               value={formik.values.text}

@@ -28,7 +28,7 @@ const CreateTask = ({
   const { team } = useTeam();
   const formik = useFormik<NewTaskInput>({
     initialValues: {
-      language: languages?.[0].name ?? '',
+      language: languages?.[0]?.name ?? '',
       name: ``,
       type: '',
       files: [],

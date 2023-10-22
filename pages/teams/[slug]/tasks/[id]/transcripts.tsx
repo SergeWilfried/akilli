@@ -19,6 +19,7 @@ const Transcripts: NextPageWithLayout = () => {
   const { id } = router.query as { id: string };
   const { isLoading, isError, task } = useTask(id);
   const [visible, setVisible] = useState(false);
+
   const isVoiceJob = task?.type === 'VOICE TO TEXT';
   if (isLoading) {
     return <Loading />;
@@ -48,19 +49,7 @@ const Transcripts: NextPageWithLayout = () => {
           >
             {isVoiceJob ? t('add-new-transcript') : 'Add new Sentence'}
           </Button>
-          {!isVoiceJob && (
-           <Button
-           className='btn'
-           variant="outline"
-           color="primary"
-           size="md"
-           onClick={() => {
-            //  setVisible(!visible);
-           }}
-         >
-           {t('import-new-file')}
-         </Button> 
-          )}
+    
  
         </div>
 
@@ -70,6 +59,7 @@ const Transcripts: NextPageWithLayout = () => {
           setVisible={setVisible}
           isVoiceJob={isVoiceJob}
         />
+
       </div>
     </>
   );
@@ -78,6 +68,7 @@ const Transcripts: NextPageWithLayout = () => {
 export async function getServerSideProps({
   locale,
 }: GetServerSidePropsContext) {
+
   return {
     props: {
       ...(locale ? await serverSideTranslations(locale, ['common']) : {}),

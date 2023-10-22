@@ -10,10 +10,13 @@ import AllTranscripts from '@/components/transcripts/Transcripts';
 import { Button } from 'react-daisyui';
 import { useState } from 'react';
 import CreateTranscript from '../../../components/transcripts/CreateTranscript';
+import { readdirSync } from 'fs';
+import ImportFile from '../../../components/files/ImportFile';
 
 const Transcripts: NextPageWithLayout = () => {
   const { t } = useTranslation('common');
   const router = useRouter();
+  const [isUploaderVisible, setImportVisible] = useState(false);
 
   const { id } = router.query as { id: string };
   const { isLoading, isError, task } = useTask(id);
@@ -56,6 +59,8 @@ const Transcripts: NextPageWithLayout = () => {
           setVisible={setVisible}
           isVoiceJob={isVoiceJob}
         />
+                <ImportFile setVisible={setImportVisible} visible={isUploaderVisible} task={task} />
+
       </div>
     </>
   );
@@ -64,6 +69,10 @@ const Transcripts: NextPageWithLayout = () => {
 export async function getServerSideProps({
   locale,
 }: GetServerSidePropsContext) {
+  const userFiles = readdirSync('./datasets/sentences/fr.csv');
+  console.log(userFiles);
+
+
   return {
     props: {
       ...(locale ? await serverSideTranslations(locale, ['common']) : {}),

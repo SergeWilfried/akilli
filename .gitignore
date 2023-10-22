@@ -15,6 +15,7 @@
 # production
 /build
 
+./docs/*.md
 # misc
 .DS_Store
 *.pem
@@ -47,3 +48,5 @@ yarn-error.log*
 
 # eslint
 .eslintcache
+
+./scripts/*.js
