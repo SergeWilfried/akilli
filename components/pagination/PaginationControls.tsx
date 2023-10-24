@@ -4,15 +4,15 @@ interface PaginationControlsProps {
   hasPrevPage: boolean;
   hasNextPage: boolean;
   currentPage: number;
-  itemsPerPage: number
-  count: number
+  itemsPerPage: number;
+  count: number;
   // task: Task
 }
 export default function PaginationControls(props: PaginationControlsProps) {
   const { hasNextPage, hasPrevPage, count, currentPage, itemsPerPage } = props;
   const router = useRouter();
-  console.warn(`currentPage`, currentPage)
-  console.warn(`itemsPerPage`, itemsPerPage)
+  console.warn(`currentPage`, currentPage);
+  console.warn(`itemsPerPage`, itemsPerPage);
 
   return (
     <div className="flex gap-2">

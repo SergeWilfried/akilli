@@ -6,13 +6,13 @@ import { useEffect, useState } from 'react';
 import { Button } from 'react-daisyui';
 import toast from 'react-hot-toast';
 import { ApiResponse, Task } from 'types';
-import { useInfiniteQuery } from 'react-query'
-import { useInView } from 'react-intersection-observer'
+import { useInfiniteQuery } from 'react-query';
+import { useInView } from 'react-intersection-observer';
 import ConfirmationDialog from '../shared/ConfirmationDialog';
-import { useRouter } from 'next/router';
 import React from 'react';
 import { sentences_detailed } from '@prisma/client';
 import { uuid } from 'next-s3-upload';
+import { TrashIcon, UserPlusIcon } from '@heroicons/react/24/outline';
 interface AllTranscriptsProps {
   task: Task;
 }
@@ -21,31 +21,41 @@ const AllTranscripts = (props: AllTranscriptsProps) => {
   const { task } = props;
 
   const [askConfirmation, setAskConfirmation] = useState(false);
-  const { ref, inView } = useInView()
+  const { ref, inView } = useInView();
 
   // 21-25 parse the page and perPage  from router.query
-  const router = useRouter();
 
   // Lines 27-29: Define limit and skip which is used by DummyJSON API for pagination
-  console.warn(`bibibolo`, task)
-  const { isLoading, isError, data, error, isFetchingNextPage, fetchNextPage, hasNextPage } =
-    useInfiniteQuery(
-      'sentences',
-      async ({ pageParam = '' }) => {
-        await new Promise((res) => setTimeout(res, 1000))
-        const res = await axios.get(`/api/tasks/${task?.id}/sentences?skip=${4}&limit=${10}&cursor=&lang=${task.language}` + pageParam)
-        return res?.data
-      },
-      {
-        getNextPageParam: (lastPage) => lastPage.nextId ?? false,
-      }
-    )
+  console.warn(`bibibolo`, task);
+  const {
+    isLoading,
+    isError,
+    data,
+    error,
+    isFetchingNextPage,
+    fetchNextPage,
+    hasNextPage,
+  } = useInfiniteQuery(
+    'sentences',
+    async ({ pageParam = '' }) => {
+      await new Promise((res) => setTimeout(res, 1000));
+      const res = await axios.get(
+        `/api/tasks/${task?.id}/sentences?skip=${4}&limit=${8}&cursor=&lang=${
+          task.language
+        }` + pageParam
+      );
+      return res?.data;
+    },
+    {
+      getNextPageParam: (lastPage) => lastPage.nextId ?? false,
+    }
+  );
 
-    useEffect(() => {
-      if (inView && hasNextPage) {
-        fetchNextPage()
-      }
-    }, [fetchNextPage, hasNextPage, inView])
+  useEffect(() => {
+    if (inView && hasNextPage) {
+      fetchNextPage();
+    }
+  }, [fetchNextPage, hasNextPage, inView]);
 
   if (isLoading) {
     return <Loading />;
@@ -67,7 +77,6 @@ const AllTranscripts = (props: AllTranscriptsProps) => {
 
   return (
     <>
-    
       <Card>
         <Card.Body>
           <Card.Header>
@@ -99,55 +108,69 @@ const AllTranscripts = (props: AllTranscriptsProps) => {
               </tr>
             </thead>
             <tbody>
-              
               {data &&
                 data.pages.map((task) => {
                   return (
                     <React.Fragment key={task.nextId ?? 'lastPage'}>
-                      {task?.data?.sentences?.map((sentence: sentences_detailed) => (
-                       
-                    <tr
-                    key={uuid()}
-                      className="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
-                    >
-                      <td className="px-6 py-3">{sentence.sentence_id}</td>
+                      {task?.data?.sentences?.map(
+                        (sentence: sentences_detailed) => (
+                          <tr
+                            key={uuid()}
+                            className="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
+                          >
+                            <td className="px-6 py-3">
+                              {sentence.sentence_id}
+                            </td>
 
-                      <td className="px-6 py-3">{sentence.text}</td>
-                      <td className="px-6 py-3">
-                        {sentence.lang?.toLocaleUpperCase()}
-                      </td>
+                            <td className="px-6 py-3">{sentence.text}</td>
+                            <td className="px-6 py-3">
+                              {sentence.lang?.toLocaleUpperCase()}
+                            </td>
 
-                      <td className="px-6 py-3">{sentence.username}</td>
+                            <td className="px-6 py-3">{sentence.username}</td>
 
-                      <td className="px-6 py-3">
-                        <Button
-                          variant="outline"
-                          size="xs"
-                          color="error"
-                          onClick={() => {
-                            router.push('/dashboard');
-                            setAskConfirmation(true);
-                          }}
-                        >
-                          {t('delete-transcript')}
-                        </Button>
-                      </td>
-                    </tr>
-
-                      ))}
+                            <td className="px-6 py-3">
+                              <div className="join">
+                                <Button
+                                  variant="outline"
+                                  size="xs"
+                                  shape="circle"
+                                  color="accent"
+                                  onClick={() => {
+                                    setAskConfirmation(true);
+                                  }}
+                                >
+                                  <UserPlusIcon />
+                                </Button>
+                                <Button
+                                  variant="outline"
+                                  size="xs"
+                                  shape="circle"
+                                  color="error"
+                                  onClick={() => {
+                                    setAskConfirmation(true);
+                                  }}
+                                >
+                                  <TrashIcon />
+                                </Button>
+                              </div>
+                            </td>
+                          </tr>
+                        )
+                      )}
                     </React.Fragment>
-                  )
-                  
+                  );
                 })}
-                  <span style={{ visibility: 'hidden' }} ref={ref}>
-        intersection observer marker
-      </span>
+              {isFetchingNextPage ? (
+                <div className="loading">Loading...</div>
+              ) : null}
+
+              <span style={{ visibility: 'hidden' }} ref={ref}>
+                intersection observer marker
+              </span>
             </tbody>
           </table>
-          {isFetchingNextPage ? <div className="loading">Loading...</div> : null}
-        
         </Card.Body>
-       
       </Card>
       <ConfirmationDialog
         visible={askConfirmation}
