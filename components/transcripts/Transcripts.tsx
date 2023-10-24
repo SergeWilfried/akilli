@@ -2,38 +2,64 @@ import { Card, Error, Loading } from '@/components/shared';
 import { getAxiosError } from '@/lib/common';
 import axios from 'axios';
 import { useTranslation } from 'next-i18next';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from 'react-daisyui';
 import toast from 'react-hot-toast';
 import { ApiResponse, Task } from 'types';
-
+import { useInfiniteQuery } from 'react-query'
+import { useInView } from 'react-intersection-observer'
 import ConfirmationDialog from '../shared/ConfirmationDialog';
-import useSentences from '../../hooks/useSentences';
 import { useRouter } from 'next/router';
+import React from 'react';
+import { sentences_detailed } from '@prisma/client';
+import { uuid } from 'next-s3-upload';
 interface AllTranscriptsProps {
   task: Task;
 }
 const AllTranscripts = (props: AllTranscriptsProps) => {
   const { t } = useTranslation('common');
   const { task } = props;
+
   const [askConfirmation, setAskConfirmation] = useState(false);
+  const { ref, inView } = useInView()
+
+  // 21-25 parse the page and perPage  from router.query
   const router = useRouter();
-  const { transcripts, isLoading, isError, mutateTranscripts } = useSentences(
-    task?.id ?? ''
-  );
+
+  // Lines 27-29: Define limit and skip which is used by DummyJSON API for pagination
+  console.warn(`bibibolo`, task)
+  const { isLoading, isError, data, error, isFetchingNextPage, fetchNextPage, hasNextPage } =
+    useInfiniteQuery(
+      'sentences',
+      async ({ pageParam = '' }) => {
+        await new Promise((res) => setTimeout(res, 1000))
+        const res = await axios.get(`/api/tasks/${task?.id}/sentences?skip=${4}&limit=${10}&cursor=&lang=${task.language}` + pageParam)
+        return res?.data
+      },
+      {
+        getNextPageParam: (lastPage) => lastPage.nextId ?? false,
+      }
+    )
+
+    useEffect(() => {
+      if (inView && hasNextPage) {
+        fetchNextPage()
+      }
+    }, [fetchNextPage, hasNextPage, inView])
+
   if (isLoading) {
     return <Loading />;
   }
 
   if (isError) {
-    return <Error message={isError.message} />;
+    return <Error message={JSON.stringify(error)} />;
   }
 
   const leaveTeam = async (task: Task) => {
     try {
       await axios.delete<ApiResponse>(`/api/tasks/${task.id}`);
       toast.success(t('task-removed-successfully'));
-      mutateTranscripts();
+      // mutateTranscripts();
     } catch (error: any) {
       toast.error(getAxiosError(error));
     }
@@ -41,6 +67,7 @@ const AllTranscripts = (props: AllTranscriptsProps) => {
 
   return (
     <>
+    
       <Card>
         <Card.Body>
           <Card.Header>
@@ -72,21 +99,25 @@ const AllTranscripts = (props: AllTranscriptsProps) => {
               </tr>
             </thead>
             <tbody>
-              {transcripts &&
-                transcripts.map((task) => {
+              
+              {data &&
+                data.pages.map((task) => {
                   return (
+                    <React.Fragment key={task.nextId ?? 'lastPage'}>
+                      {task?.data?.sentences?.map((sentence: sentences_detailed) => (
+                       
                     <tr
-                      key={task.sentence_id}
+                    key={uuid()}
                       className="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
                     >
-                      <td className="px-6 py-3">{task.sentence_id}</td>
+                      <td className="px-6 py-3">{sentence.sentence_id}</td>
 
-                      <td className="px-6 py-3">{task.text}</td>
-                      <td className="px-6 py-3">{task.lang?.toLocaleUpperCase()}</td>
-
+                      <td className="px-6 py-3">{sentence.text}</td>
                       <td className="px-6 py-3">
-                        {task.username}
+                        {sentence.lang?.toLocaleUpperCase()}
                       </td>
+
+                      <td className="px-6 py-3">{sentence.username}</td>
 
                       <td className="px-6 py-3">
                         <Button
@@ -102,11 +133,21 @@ const AllTranscripts = (props: AllTranscriptsProps) => {
                         </Button>
                       </td>
                     </tr>
-                  );
+
+                      ))}
+                    </React.Fragment>
+                  )
+                  
                 })}
+                  <span style={{ visibility: 'hidden' }} ref={ref}>
+        intersection observer marker
+      </span>
             </tbody>
           </table>
+          {isFetchingNextPage ? <div className="loading">Loading...</div> : null}
+        
         </Card.Body>
+       
       </Card>
       <ConfirmationDialog
         visible={askConfirmation}

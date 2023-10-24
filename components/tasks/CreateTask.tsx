@@ -28,7 +28,7 @@ const CreateTask = ({
   const { team } = useTeam();
   const formik = useFormik<NewTaskInput>({
     initialValues: {
-      language: languages?.[0]?.name ?? '',
+      language: languages?.[0]?.code ?? '',
       name: ``,
       type: '',
       files: [],
@@ -107,9 +107,9 @@ const CreateTask = ({
                 }}
                 required
               >
-                {languages?.map((task) => (
-                  <option value={task.name} key={task.id}>
-                    {task.name}
+                {languages?.map((lang) => (
+                  <option value={lang.code} key={lang.id}>
+                    {lang.name}
                   </option>
                 ))}
               </select>

@@ -42,11 +42,23 @@ export default async function handler(
 }
 
 const handleGET = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { id } = req.query as { id: string };
-  console.warn(`sentences`, id);
-  const transcripts = await getAllSentences(undefined);
+  const { skip, limit, cursor, lang } = req.query as {
+    skip: string;
+    limit: string;
+    cursor: string;
+    lang: string;
+  };
+  const transcripts = await getAllSentences(
+    undefined,
+    Number(skip),
+    Number(limit),
+    cursor,
+    lang
+  );
 
-  res.status(200).json({ data: transcripts });
+  res.status(200).json({
+    data: transcripts,
+  });
 };
 
 const handlePUT = async (req: NextApiRequest, res: NextApiResponse) => {

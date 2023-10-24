@@ -84,21 +84,60 @@ export async function deleteSentence(
  * @returns all sentences for the task
  */
 export async function getAllSentences(
-  taskId: string | undefined
-): Promise<sentences_detailed[]> {
+  taskId: string | undefined,
+  skip: number,
+  limit: number,
+  cursor: string,
+  lang: string
+) {
   try {
+    const cursorObj =
+      cursor === ''
+        ? undefined
+        : { sentence_id: parseInt(cursor as string, 10) };
+
     if (taskId) {
-      const tasks = await prisma.sentences_detailed.findMany({
-        where: { taskId: taskId },
-      });
+      const [sentences] = await prisma.$transaction([
+        prisma.sentences_detailed.findMany({
+          where: { taskId: taskId, lang: lang.toLocaleLowerCase() },
+          take: limit,
+          skip: cursor !== '' ? 1 : 0,
+          cursor: cursorObj,
+        }),
+        prisma.sentences_detailed.count({
+          where: { taskId: taskId, lang: lang.toLocaleLowerCase() },
+        }),
+      ]);
 
-      return tasks;
+      return {
+        nextId:
+          sentences.length === limit
+            ? sentences[limit - 1].sentence_id
+            : undefined,
+        sentences,
+      };
     } else {
-      const sentences = await prisma.sentences_detailed.findMany({
-        take: 20,
-      });
+      const [sentences] = await prisma.$transaction([
+        prisma.sentences_detailed.findMany({
+          where: {
+            lang: lang.toLocaleLowerCase(),
+          },
+          take: limit,
+          skip: cursor !== '' ? 1 : 0,
+          cursor: cursorObj,
+        }),
+        prisma.sentences_detailed.count({
+          where: { lang: lang.toLocaleLowerCase() },
+        }),
+      ]);
 
-      return sentences;
+      return {
+        nextId:
+          sentences.length === limit
+            ? sentences[limit - 1].sentence_id
+            : undefined,
+        sentences,
+      };
     }
   } catch (error) {
     console.error(error);

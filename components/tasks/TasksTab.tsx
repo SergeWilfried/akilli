@@ -34,7 +34,7 @@ const TasksTab = (props: TasksTabProps) => {
   });
   navigations.push({
     name: task?.type === 'VOICE TO TEXT' ? 'Transcripts' : 'Sentences',
-    href: `/teams/${teamSlug}/tasks/${task.id}/transcripts`,
+    href: `/teams/${teamSlug}/tasks/${task.id}/transcripts?page=1&perPage=10`,
     active: activeTab === 'transcripts',
     icon: KeyIcon,
   });

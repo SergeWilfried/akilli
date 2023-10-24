@@ -18,12 +18,12 @@ const CreateTranscript = ({
   setVisible,
   isVoiceJob,
   withDataImport,
-  task
+  task,
 }: {
   visible: boolean;
   isVoiceJob: boolean;
   task: Task;
-  withDataImport: boolean
+  withDataImport: boolean;
   setVisible: (visible: boolean) => void;
 }) => {
   const { t } = useTranslation('common');
@@ -43,21 +43,22 @@ const CreateTranscript = ({
     }),
     onSubmit: async (values) => {
       try {
-        
-
         if (values.files) {
           /* empty */
         }
-         const payload = {
-            language: values.language,
-            text: values.text,
-            taskId: task ? task.id : '',
-            createdAt: new Date(),
-          };
-         const response = await axios.post<ApiResponse<sentences_detailed>>(`/api/tasks/${task.id}/transcripts`, {
+        const payload = {
+          language: values.language,
+          text: values.text,
+          taskId: task ? task.id : '',
+          createdAt: new Date(),
+        };
+        const response = await axios.post<ApiResponse<sentences_detailed>>(
+          `/api/tasks/${task.id}/transcripts`,
+          {
             ...payload,
-          });
-        
+          }
+        );
+
         const { data: teamCreated } = response.data;
 
         if (teamCreated) {
@@ -111,16 +112,16 @@ const CreateTranscript = ({
                 />
               </>
             )}
-              <InputWithLabel
-                  type="text"
-                  name="language"
-                  label='Language'
-                  disabled={true}
-                  value={task.language}
-                />
+            <InputWithLabel
+              type="text"
+              name="language"
+              label="Language"
+              disabled={true}
+              value={task.language}
+            />
             <textarea
-            name='text'
-            id='sentences'
+              name="text"
+              id="sentences"
               onChange={formik.handleChange}
               value={formik.values.text}
               rows={3}
