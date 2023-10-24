@@ -19,21 +19,26 @@ const CreateTranscript = ({
   isVoiceJob,
   withDataImport,
   task,
+  sentence,
+  desiredAction,
 }: {
   visible: boolean;
   isVoiceJob: boolean;
   task: Task;
+  sentence: sentences_detailed | undefined;
   withDataImport: boolean;
+  desiredAction: string | undefined;
   setVisible: (visible: boolean) => void;
 }) => {
   const { t } = useTranslation('common');
   const { mutateTasks } = useTasks();
   const url = 'https://';
   const { languages } = useLanguages();
+  console.warn(`valuessss`,sentence?.text)
   const formik = useFormik<any>({
     initialValues: {
       language: languages?.[0]?.code ?? '',
-      text: ``,
+      text: sentence?.text,
       file: '',
     },
     validationSchema: Yup.object().shape({
@@ -52,13 +57,22 @@ const CreateTranscript = ({
           taskId: task ? task.id : '',
           createdAt: new Date(),
         };
-        const response = await axios.post<ApiResponse<sentences_detailed>>(
-          `/api/tasks/${task.id}/transcripts`,
+        let response;
+
+        if (desiredAction === 'update') {
+          response = await axios.put<ApiResponse<sentences_detailed>>(
+            `/api/tasks/${task.id}/sentences/${sentence?.sentence_id}`,
+            {
+              ...payload,
+            }
+          );
+        }
+        response = await axios.post<ApiResponse<sentences_detailed>>(
+          `/api/tasks/${task.id}/sentences`,
           {
             ...payload,
           }
         );
-
         const { data: teamCreated } = response.data;
 
         if (teamCreated) {
@@ -74,8 +88,7 @@ const CreateTranscript = ({
   });
 
   const changeHandler = async (event) => {
-    const reee = await csvParser(event.target.files[0]);
-    console.log('reee', reee);
+    await csvParser(event.target.files[0]);
   };
 
   return (
@@ -121,7 +134,7 @@ const CreateTranscript = ({
             />
             <textarea
               name="text"
-              id="sentences"
+              id="text"
               onChange={formik.handleChange}
               value={formik.values.text}
               rows={3}
@@ -131,15 +144,27 @@ const CreateTranscript = ({
           </div>
         </Modal.Body>
         <Modal.Actions>
-          <Button
-            type="submit"
-            color="primary"
-            loading={formik.isSubmitting}
-            size="md"
-            disabled={!formik.isValid}
-          >
-            {isVoiceJob ? t('transcribe-audio') : 'Add new Sentence'}
-          </Button>
+          {isVoiceJob ? (
+            <Button
+              type="submit"
+              color="primary"
+              loading={formik.isSubmitting}
+              size="md"
+              disabled={!formik.isValid}
+            >
+              {t('transcribe-audio')}
+            </Button>
+          ) : (
+            <Button
+              type="submit"
+              color="primary"
+              loading={formik.isSubmitting}
+              size="md"
+              disabled={!formik.isValid}
+            >
+              {sentence ? 'Update Sentence' : 'Add new Sentence'}
+            </Button>
+          )}
 
           <Button
             type="button"

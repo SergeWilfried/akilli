@@ -40,12 +40,12 @@ export async function createSentence(
 export async function updateSentence(
   sentenceId: number,
   text: string,
-  langCode: string
+  taskId: string | undefined
 ): Promise<sentences_detailed> {
   try {
     const updatedSentence = await prisma.sentences_detailed.update({
-      where: { sentence_id: sentenceId, lang: langCode },
-      data: { text },
+      where: { sentence_id: sentenceId },
+      data: { text, taskId },
       // include: { task: true },
     });
 
@@ -62,12 +62,11 @@ export async function updateSentence(
  * @returns the deleted sentence
  */
 export async function deleteSentence(
-  sentenceId: number,
-  langCode: string
+  sentenceId?: number
 ): Promise<sentences_detailed> {
   try {
     const deletedSentence = await prisma.sentences_detailed.delete({
-      where: { sentence_id: sentenceId, lang: langCode },
+      where: { sentence_id: sentenceId },
       // include: { task: true },
     });
 

@@ -19,7 +19,9 @@ const Transcripts: NextPageWithLayout = () => {
   const { id } = router.query as { id: string };
   const { isLoading, isError, task } = useTask(id);
   const [visible, setVisible] = useState(false);
-  const [withDataImport, enableImport] = useState(false);
+  const [fromDatasets, setUseDataset] = useState(true);
+
+  const [withDataImport] = useState(false);
 
   const isVoiceJob = task?.type === 'VOICE TO TEXT';
   if (isLoading) {
@@ -71,8 +73,7 @@ const Transcripts: NextPageWithLayout = () => {
               </li>
               <li
                 onClick={() => {
-                  enableImport(!withDataImport);
-                  setVisible(!visible);
+                  setUseDataset(!fromDatasets);
                 }}
               >
                 <a>Import From Datasets</a>
@@ -81,13 +82,15 @@ const Transcripts: NextPageWithLayout = () => {
           </div>
         </div>
 
-        <AllTranscripts task={task} />
+        <AllTranscripts task={task} fromDataset={fromDatasets}  />
         <CreateTranscript
           visible={visible}
           setVisible={setVisible}
           isVoiceJob={isVoiceJob}
           withDataImport={withDataImport}
           task={task}
+          desiredAction={undefined}
+          sentence={undefined}
         />
       </div>
     </>

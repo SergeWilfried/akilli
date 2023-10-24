@@ -1,10 +1,12 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import {
-  updateTranscript,
   createTranscript,
   deleteTranscript,
-} from '../../../../models/transcripts';
-import { getAllSentences } from '../../../../models/sentence';
+} from '../../../../../models/transcripts';
+import {
+  getAllSentences,
+  updateSentence,
+} from '../../../../../models/sentence';
 
 export default async function handler(
   req: NextApiRequest,
@@ -42,14 +44,15 @@ export default async function handler(
 }
 
 const handleGET = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { skip, limit, cursor, lang } = req.query as {
+  const { id, skip, limit, cursor, lang } = req.query as {
+    id: any;
     skip: string;
     limit: string;
     cursor: string;
     lang: string;
   };
   const transcripts = await getAllSentences(
-    undefined,
+    id,
     Number(skip),
     Number(limit),
     cursor,
@@ -63,10 +66,9 @@ const handleGET = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const handlePUT = async (req: NextApiRequest, res: NextApiResponse) => {
   const { id } = req.query as { id: string };
-  const { text } = req.body as { text: string };
+  const { taskId, text } = req.body as { taskId: string; text: string };
 
-  await updateTranscript(id, text);
-
+  await updateSentence(Number(id), text, taskId);
   res.status(200).json({ data: {} });
 };
 

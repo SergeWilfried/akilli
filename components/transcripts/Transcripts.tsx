@@ -16,21 +16,29 @@ import {
   TrashIcon,
   PlusSmallIcon,
   PencilIcon,
+  MicrophoneIcon
 } from '@heroicons/react/24/outline';
 import CreateTranscript from './CreateTranscript';
 interface AllTranscriptsProps {
   task: Task;
+  fromDataset: boolean
 }
-const AllTranscripts = (props: AllTranscriptsProps) => {
+const   AllTranscripts = (props: AllTranscriptsProps) => {
   const { t } = useTranslation('common');
-  const { task } = props;
+  const { task, fromDataset } = props;
   const isVoiceJob = task?.type === 'VOICE TO TEXT';
 
   const [askConfirmation, setAskConfirmation] = useState(false);
-  const { ref, inView } = useInView();
+  const { inView } = useInView();
   const [visible, setVisible] = useState(false);
   const [confirmTitle, setTitle] = useState(`${t('leave-team')} ${task?.name}`);
   const [confirmText, setConfimText] = useState(`${t('leave-team')}`);
+  const [selectedSentence, setSelectedSentence] =
+    useState<sentences_detailed>();
+  const [desiredAction, setDesiredAction] = useState<
+    'update' | 'delete' | 'use'
+  >('delete');
+
   const [confirmationMessage, setConfimationMessage] = useState(
     `${t('leave-team-confirmation')}`
   );
@@ -50,8 +58,16 @@ const AllTranscripts = (props: AllTranscriptsProps) => {
     'sentences',
     async ({ pageParam = '' }) => {
       await new Promise((res) => setTimeout(res, 1000));
+      if(fromDataset) {
+        const res = await axios.get(
+          `/api/tasks/${task?.id}/sentences?skip=${4}&limit=${8}&cursor=&lang=${
+            task.language
+          }` + pageParam
+        );
+        return res?.data;
+      }
       const res = await axios.get(
-        `/api/tasks/${task?.id}/sentences?skip=${4}&limit=${8}&cursor=&lang=${
+        `/api/tasks/sentences?skip=${4}&limit=${8}&cursor=&lang=${
           task.language
         }` + pageParam
       );
@@ -87,7 +103,34 @@ const AllTranscripts = (props: AllTranscriptsProps) => {
 
   const leaveTeam = async (task: Task) => {
     try {
-      await axios.delete<ApiResponse>(`/api/tasks/${task.id}`);
+      await axios.delete<ApiResponse>(`/api/tasks/${task.id}/sentences/${selectedSentence?.sentence_id}`);
+      toast.success(t('task-removed-successfully'));
+      // mutateTranscripts();
+    } catch (error: any) {
+      toast.error(getAxiosError(error));
+    }
+  };
+
+  const updateSentence = async (task: Task) => {
+    try {
+      await axios.put<ApiResponse>(
+        `/api/tasks/${task.id}/sentences/${selectedSentence?.sentence_id}`
+      );
+      toast.success(t('task-removed-successfully'));
+      // mutateTranscripts();
+    } catch (error: any) {
+      toast.error(getAxiosError(error));
+    }
+  };
+
+  const addSentence = async (task: Task) => {
+    try {
+      await axios.put<ApiResponse>(
+        `/api/tasks/${task.id}/sentences/${selectedSentence?.sentence_id}`,
+        {
+          taskId: task.id
+        }
+      );
       toast.success(t('task-removed-successfully'));
       // mutateTranscripts();
     } catch (error: any) {
@@ -162,6 +205,8 @@ const AllTranscripts = (props: AllTranscriptsProps) => {
                                     setConfimationMessage(
                                       'Add this sentence template in to your project'
                                     );
+                                    setSelectedSentence(sentence);
+                                    setDesiredAction('use');
                                     setAskConfirmation(true);
                                   }}
                                 >
@@ -173,6 +218,8 @@ const AllTranscripts = (props: AllTranscriptsProps) => {
                                   shape="circle"
                                   color="primary"
                                   onClick={() => {
+                                    setSelectedSentence(sentence);
+                                    setDesiredAction('update');
                                     setVisible(!visible);
                                   }}
                                 >
@@ -182,9 +229,24 @@ const AllTranscripts = (props: AllTranscriptsProps) => {
                                   variant="outline"
                                   size="xs"
                                   shape="circle"
+                                  color="secondary"
+                                  onClick={() => {
+                                    setSelectedSentence(sentence);
+                                    setAskConfirmation(true);
+                                    setDesiredAction('delete');
+                                  }}
+                                >
+                                  <MicrophoneIcon />
+                                </Button>
+                                <Button
+                                  variant="outline"
+                                  size="xs"
+                                  shape="circle"
                                   color="error"
                                   onClick={() => {
+                                    setSelectedSentence(sentence);
                                     setAskConfirmation(true);
+                                    setDesiredAction('delete');
                                   }}
                                 >
                                   <TrashIcon />
@@ -209,8 +271,14 @@ const AllTranscripts = (props: AllTranscriptsProps) => {
         title={confirmTitle}
         onCancel={() => setAskConfirmation(false)}
         onConfirm={() => {
-          if (task) {
+          if (desiredAction === 'delete') {
             leaveTeam(task);
+          }
+          if (desiredAction === 'update') {
+            updateSentence(task);
+          }
+          if (desiredAction === 'use') {
+            addSentence(task);
           }
         }}
         confirmText={confirmText}
@@ -223,6 +291,8 @@ const AllTranscripts = (props: AllTranscriptsProps) => {
         isVoiceJob={isVoiceJob}
         withDataImport={withDataImport}
         task={task}
+        sentence={selectedSentence}
+        desiredAction={undefined}
       />
     </>
   );

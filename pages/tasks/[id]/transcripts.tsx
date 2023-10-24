@@ -54,13 +54,15 @@ const Transcripts: NextPageWithLayout = () => {
               : 'Add new Sentence'}
           </Button>
         </div>
-        <AllTranscripts task={task} />
+        <AllTranscripts task={task} fromDataset={false} />
         <CreateTranscript
           visible={visible}
           setVisible={setVisible}
           isVoiceJob={isVoiceJob}
           withDataImport={withDataImport}
           task={task}
+          desiredAction={undefined}
+          sentence={undefined}
         />
         <ImportFile
           setVisible={setImportVisible}
