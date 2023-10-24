@@ -12,21 +12,32 @@ import ConfirmationDialog from '../shared/ConfirmationDialog';
 import React from 'react';
 import { sentences_detailed } from '@prisma/client';
 import { uuid } from 'next-s3-upload';
-import { TrashIcon, UserPlusIcon } from '@heroicons/react/24/outline';
+import {
+  TrashIcon,
+  PlusSmallIcon,
+  PencilIcon,
+} from '@heroicons/react/24/outline';
+import CreateTranscript from './CreateTranscript';
 interface AllTranscriptsProps {
   task: Task;
 }
 const AllTranscripts = (props: AllTranscriptsProps) => {
   const { t } = useTranslation('common');
   const { task } = props;
+  const isVoiceJob = task?.type === 'VOICE TO TEXT';
 
   const [askConfirmation, setAskConfirmation] = useState(false);
   const { ref, inView } = useInView();
-
+  const [visible, setVisible] = useState(false);
+  const [confirmTitle, setTitle] = useState(`${t('leave-team')} ${task?.name}`);
+  const [confirmText, setConfimText] = useState(`${t('leave-team')}`);
+  const [confirmationMessage, setConfimationMessage] = useState(
+    `${t('leave-team-confirmation')}`
+  );
+  const [withDataImport] = useState(false);
   // 21-25 parse the page and perPage  from router.query
 
   // Lines 27-29: Define limit and skip which is used by DummyJSON API for pagination
-  console.warn(`bibibolo`, task);
   const {
     isLoading,
     isError,
@@ -64,6 +75,15 @@ const AllTranscripts = (props: AllTranscriptsProps) => {
   if (isError) {
     return <Error message={JSON.stringify(error)} />;
   }
+  // async function useSentenceTemplate(sentence: sentences_detailed) {
+  //   try {
+  //     await axios.post<ApiResponse>(`/api/tasks/${task.id}/sentences/${sentence.sentence_id}`);
+  //     toast.success(t('task-removed-successfully'));
+  //     // mutateTranscripts();
+  //   } catch (error: any) {
+  //     toast.error(getAxiosError(error));
+  //   }
+  // }
 
   const leaveTeam = async (task: Task) => {
     try {
@@ -137,10 +157,26 @@ const AllTranscripts = (props: AllTranscriptsProps) => {
                                   shape="circle"
                                   color="accent"
                                   onClick={() => {
+                                    setTitle('Use Template');
+                                    setConfimText('Use Template');
+                                    setConfimationMessage(
+                                      'Add this sentence template in to your project'
+                                    );
                                     setAskConfirmation(true);
                                   }}
                                 >
-                                  <UserPlusIcon />
+                                  <PlusSmallIcon />
+                                </Button>
+                                <Button
+                                  variant="outline"
+                                  size="xs"
+                                  shape="circle"
+                                  color="primary"
+                                  onClick={() => {
+                                    setVisible(!visible);
+                                  }}
+                                >
+                                  <PencilIcon />
                                 </Button>
                                 <Button
                                   variant="outline"
@@ -164,27 +200,30 @@ const AllTranscripts = (props: AllTranscriptsProps) => {
               {isFetchingNextPage ? (
                 <div className="loading">Loading...</div>
               ) : null}
-
-              <span style={{ visibility: 'hidden' }} ref={ref}>
-                intersection observer marker
-              </span>
             </tbody>
           </table>
         </Card.Body>
       </Card>
       <ConfirmationDialog
         visible={askConfirmation}
-        title={`${t('leave-team')} ${task?.name}`}
+        title={confirmTitle}
         onCancel={() => setAskConfirmation(false)}
         onConfirm={() => {
           if (task) {
             leaveTeam(task);
           }
         }}
-        confirmText={t('leave-team')}
+        confirmText={confirmText}
       >
-        {t('leave-team-confirmation')}
+        {confirmationMessage}
       </ConfirmationDialog>
+      <CreateTranscript
+        visible={visible}
+        setVisible={setVisible}
+        isVoiceJob={isVoiceJob}
+        withDataImport={withDataImport}
+        task={task}
+      />
     </>
   );
 };
