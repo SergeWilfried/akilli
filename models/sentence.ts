@@ -94,11 +94,14 @@ export async function getAllSentences(
 
       return tasks;
     } else {
-      const sentences = await prisma.sentences_detailed.findMany();
+      const sentences = await prisma.sentences_detailed.findMany({
+        take: 20,
+      });
 
       return sentences;
     }
   } catch (error) {
+    console.error(error);
     throw new Error('Failed to get sentences');
   }
 }

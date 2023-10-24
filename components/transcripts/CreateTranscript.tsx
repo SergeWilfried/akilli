@@ -9,17 +9,20 @@ import { type ApiResponse, type Task } from 'types';
 import * as Yup from 'yup';
 import useTasks from 'hooks/useTasks';
 import useLanguages from '../../hooks/useLanguages';
-import useTeam from '../../hooks/useTeam';
 import { csvParser } from '../../lib/parser';
+import { InputWithLabel } from '../shared';
+import { sentences_detailed } from '@prisma/client';
 
 const CreateTranscript = ({
   visible,
   setVisible,
   isVoiceJob,
   withDataImport,
+  task
 }: {
   visible: boolean;
   isVoiceJob: boolean;
+  task: Task;
   withDataImport: boolean
   setVisible: (visible: boolean) => void;
 }) => {
@@ -27,46 +30,34 @@ const CreateTranscript = ({
   const { mutateTasks } = useTasks();
   const url = 'https://';
   const { languages } = useLanguages();
-  const { team } = useTeam();
   const formik = useFormik<any>({
     initialValues: {
-      language: languages?.[0]?.name ?? '',
+      language: languages?.[0]?.code ?? '',
       text: ``,
       file: '',
     },
     validationSchema: Yup.object().shape({
-      name: Yup.string().required('Name is Required'),
+      text: Yup.string().required('Name is Required'),
       language: Yup.string().required('Language is Required'),
-      file: Yup.mixed().required('File Required'),
+      file: Yup.mixed().optional(),
     }),
     onSubmit: async (values) => {
       try {
-        /// FIXME: Handle multiple files
-        const ppp = await csvParser(values.file);
-        const irl = 'http://'; // Call the handleFileUpload function
-        console.log(`ppp ${ppp}`);
-        let response: any;
-        const links = irl?.split(`,`).filter((link) => link !== '');
-        console.log('links', links?.length);
+        
 
-        if (links === undefined) {
+        if (values.files) {
           /* empty */
         }
-        let task: any;
-        if (links !== undefined) {
-          task = {
+         const payload = {
             language: values.language,
-            type: values.type,
-            name: values.name,
-            teamId: team ? team.id : '',
-            status: 'CREATED',
-            userId: '',
+            text: values.text,
+            taskId: task ? task.id : '',
             createdAt: new Date(),
           };
-          response = await axios.post<ApiResponse<Task>>('/api/transcripts', {
-            ...task,
+         const response = await axios.post<ApiResponse<sentences_detailed>>(`/api/tasks/${task.id}/transcripts`, {
+            ...payload,
           });
-        }
+        
         const { data: teamCreated } = response.data;
 
         if (teamCreated) {
@@ -120,7 +111,16 @@ const CreateTranscript = ({
                 />
               </>
             )}
+              <InputWithLabel
+                  type="text"
+                  name="language"
+                  label='Language'
+                  disabled={true}
+                  value={task.language}
+                />
             <textarea
+            name='text'
+            id='sentences'
               onChange={formik.handleChange}
               value={formik.values.text}
               rows={3}

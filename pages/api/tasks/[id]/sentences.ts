@@ -3,8 +3,8 @@ import {
   updateTranscript,
   createTranscript,
   deleteTranscript,
-  getAllTranscripts,
 } from '../../../../models/transcripts';
+import { getAllSentences } from '../../../../models/sentence';
 
 export default async function handler(
   req: NextApiRequest,
@@ -43,7 +43,8 @@ export default async function handler(
 
 const handleGET = async (req: NextApiRequest, res: NextApiResponse) => {
   const { id } = req.query as { id: string };
-  const transcripts = await getAllTranscripts(id);
+  console.warn(`sentences`, id);
+  const transcripts = await getAllSentences(undefined);
 
   res.status(200).json({ data: transcripts });
 };

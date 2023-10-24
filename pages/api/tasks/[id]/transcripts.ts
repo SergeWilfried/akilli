@@ -67,7 +67,7 @@ const handleDELETE = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const handlePOST = async (req: NextApiRequest, res: NextApiResponse) => {
   const { id } = req.query as { id: string };
-  const { text } = req.body as { text: string };
+  const { text } = req.body as { text: string; taskId: string; lang: string };
 
   const transcript = await createTranscript(id, text);
 

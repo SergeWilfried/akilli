@@ -8,7 +8,7 @@ import toast from 'react-hot-toast';
 import { ApiResponse, Task } from 'types';
 
 import ConfirmationDialog from '../shared/ConfirmationDialog';
-import useTranscripts from '../../hooks/useTranscripts';
+import useSentences from '../../hooks/useSentences';
 import { useRouter } from 'next/router';
 interface AllTranscriptsProps {
   task: Task;
@@ -18,7 +18,7 @@ const AllTranscripts = (props: AllTranscriptsProps) => {
   const { task } = props;
   const [askConfirmation, setAskConfirmation] = useState(false);
   const router = useRouter();
-  const { transcripts, isLoading, isError, mutateTranscripts } = useTranscripts(
+  const { transcripts, isLoading, isError, mutateTranscripts } = useSentences(
     task?.id ?? ''
   );
   if (isLoading) {
@@ -59,9 +59,12 @@ const AllTranscripts = (props: AllTranscriptsProps) => {
                 <th scope="col" className="px-6 py-3">
                   {t('text')}
                 </th>
+                <th scope="col" className="px-6 py-3">
+                  {t('lang')}
+                </th>
 
                 <th scope="col" className="px-6 py-3">
-                  {t('created-at')}
+                  {t('username')}
                 </th>
                 <th scope="col" className="px-6 py-3">
                   {t('actions')}
@@ -73,15 +76,16 @@ const AllTranscripts = (props: AllTranscriptsProps) => {
                 transcripts.map((task) => {
                   return (
                     <tr
-                      key={task.id}
+                      key={task.sentence_id}
                       className="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
                     >
-                      <td className="px-6 py-3">{task.id}</td>
+                      <td className="px-6 py-3">{task.sentence_id}</td>
 
                       <td className="px-6 py-3">{task.text}</td>
+                      <td className="px-6 py-3">{task.lang?.toLocaleUpperCase()}</td>
 
                       <td className="px-6 py-3">
-                        {new Date(task.createdAt).toDateString()}
+                        {task.username}
                       </td>
 
                       <td className="px-6 py-3">

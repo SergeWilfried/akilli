@@ -21,6 +21,8 @@ const Transcripts: NextPageWithLayout = () => {
   const { id } = router.query as { id: string };
   const { isLoading, isError, task } = useTask(id);
   const [visible, setVisible] = useState(false);
+  const [withDataImport] = useState(false);
+
   const isVoiceJob = task?.type === 'VOICE TO TEXT';
 
   if (isLoading) {
@@ -57,6 +59,8 @@ const Transcripts: NextPageWithLayout = () => {
           visible={visible}
           setVisible={setVisible}
           isVoiceJob={isVoiceJob}
+          withDataImport={withDataImport}
+          task={task}
         />
         <ImportFile
           setVisible={setImportVisible}

@@ -62,16 +62,17 @@ const Transcripts: NextPageWithLayout = () => {
               tabIndex={0}
               className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
             >
-              <li  onClick={() => {
+              <li
+                onClick={() => {
                   setVisible(!visible);
-                }}>
+                }}
+              >
                 <a>Create new sentence</a>
               </li>
               <li
                 onClick={() => {
                   enableImport(!withDataImport);
                   setVisible(!visible);
-
                 }}
               >
                 <a>Import From Datasets</a>
@@ -86,6 +87,7 @@ const Transcripts: NextPageWithLayout = () => {
           setVisible={setVisible}
           isVoiceJob={isVoiceJob}
           withDataImport={withDataImport}
+          task={task}
         />
       </div>
     </>
