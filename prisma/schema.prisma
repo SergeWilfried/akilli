@@ -161,15 +161,17 @@ model Task {
 }
 
 model File {
-  id          String   @id @default(uuid())
-  url         String
-  fileFormat  String
-  contentSize Int?
-  pathname    String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  taskId      String?
-  task        Task?    @relation(fields: [taskId], references: [id])
+  id                            String              @id @default(uuid())
+  url                           String
+  fileFormat                    String
+  contentSize                   Int?
+  pathname                      String?
+  createdAt                     DateTime            @default(now())
+  updatedAt                     DateTime            @updatedAt
+  taskId                        String?
+  task                          Task?               @relation(fields: [taskId], references: [id])
+  sentence                      sentences_detailed? @relation(fields: [sentence_id], references: [sentence_id])
+  sentence_id Int?
 }
 
 model Payment {
@@ -209,6 +211,7 @@ model sentences_detailed {
   username           String?   @db.VarChar(20)
   date_added         DateTime? @db.Timestamp(6)
   date_last_modified DateTime? @db.Timestamp(6)
+  files              File[]
 
   @@index([username], map: "ix_sentences_detailed_username")
 }
