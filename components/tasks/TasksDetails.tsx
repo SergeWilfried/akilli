@@ -47,7 +47,7 @@ const TasksDetails = ({ task }: { task: Task }) => {
 
         if (taskUpdated) {
           toast.success(t('successfully-updated'));
-          return router.push(`teams/akilli/tasks/${taskUpdated.id}/settings`);
+          return router.push(`/teams/akilli/tasks/${taskUpdated.id}/settings`);
         }
       } catch (error: any) {
         toast.error(getAxiosError(error));
@@ -88,7 +88,7 @@ const TasksDetails = ({ task }: { task: Task }) => {
                   {t('select-status')}
                 </option>
                 {TaskStatus.map((status) => (
-                  <option key={status.id} value={status.id}>
+                  <option key={status.id} value={status.name}>
                     {status.name}
                   </option>
                 ))}
@@ -105,7 +105,7 @@ const TasksDetails = ({ task }: { task: Task }) => {
                   {t('select-type')}
                 </option>
                 {tasksType.map((status) => (
-                  <option key={status.id} value={status.id}>
+                  <option key={status.id} value={status.name}>
                     {status.name}
                   </option>
                 ))}
