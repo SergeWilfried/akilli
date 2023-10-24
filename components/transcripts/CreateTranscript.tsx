@@ -16,9 +16,11 @@ const CreateTranscript = ({
   visible,
   setVisible,
   isVoiceJob,
+  withDataImport,
 }: {
   visible: boolean;
   isVoiceJob: boolean;
+  withDataImport: boolean
   setVisible: (visible: boolean) => void;
 }) => {
   const { t } = useTranslation('common');
@@ -107,7 +109,7 @@ const CreateTranscript = ({
               </>
             )}
 
-            {!isVoiceJob && (
+            {withDataImport && (
               <>
                 <input
                   type="file"
@@ -137,6 +139,7 @@ const CreateTranscript = ({
           >
             {isVoiceJob ? t('transcribe-audio') : 'Add new Sentence'}
           </Button>
+
           <Button
             type="button"
             variant="outline"

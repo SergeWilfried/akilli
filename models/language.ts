@@ -5,12 +5,12 @@ export const createLanguage = async (param: {
   description: string;
   code: string;
 }) => {
-  const { name, description } = param;
+  const { name, description, code } = param;
   return await prisma.language.create({
     data: {
       description: description,
       name: name,
-      code: name.slice(0, 2),
+      code: code,
     },
   });
 };

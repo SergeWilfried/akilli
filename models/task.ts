@@ -3,7 +3,6 @@ import { Task, Transcriber } from '@prisma/client';
 
 export async function createTask(transcript: any) {
   try {
-    console.log(transcript);
     return await prisma.task.create({
       data: {
         name: transcript.name,
@@ -19,11 +18,6 @@ export async function createTask(transcript: any) {
           },
         },
         files: {},
-        team: {
-          connect: {
-            id: transcript.teamId,
-          },
-        },
       },
 
       include: {
@@ -65,15 +59,12 @@ export async function addFilesToTask(taskId: string, files: []): Promise<Task> {
 
 export async function getAllTasks(): Promise<any> {
   try {
-    const team = await prisma.team.findFirst({
-      where: {
-        slug: 'akilli',
-      },
+    const team = await prisma.task.findMany({
       include: {
-        tasks: true,
+        files: true,
       },
     });
-    return team?.tasks;
+    return team;
   } catch (error) {
     console.error(error);
     throw new Error('Failed to retrieve tasks');

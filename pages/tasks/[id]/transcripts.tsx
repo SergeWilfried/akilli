@@ -51,7 +51,6 @@ const Transcripts: NextPageWithLayout = () => {
               ? t('add-new-transcript')
               : 'Add new Sentence'}
           </Button>
-    
         </div>
         <AllTranscripts task={task} />
         <CreateTranscript
@@ -59,8 +58,11 @@ const Transcripts: NextPageWithLayout = () => {
           setVisible={setVisible}
           isVoiceJob={isVoiceJob}
         />
-                <ImportFile setVisible={setImportVisible} visible={isUploaderVisible} task={task} />
-
+        <ImportFile
+          setVisible={setImportVisible}
+          visible={isUploaderVisible}
+          task={task}
+        />
       </div>
     </>
   );
@@ -71,7 +73,6 @@ export async function getServerSideProps({
 }: GetServerSidePropsContext) {
   const userFiles = readdirSync('./datasets/sentences/fr.csv');
   console.log(userFiles);
-
 
   return {
     props: {

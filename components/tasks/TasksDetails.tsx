@@ -13,7 +13,7 @@ import * as Yup from 'yup';
 
 import { AccessControl } from '../shared/AccessControl';
 import useLanguages from '../../hooks/useLanguages';
-import { TaskStatus } from '../../lib/permissions';
+import { TaskStatus, tasksType } from '../../lib/permissions';
 
 const TasksDetails = ({ task }: { task: Task }) => {
   const router = useRouter();
@@ -25,11 +25,13 @@ const TasksDetails = ({ task }: { task: Task }) => {
       name: task.name,
       status: task.status,
       language: task.language,
+      type: task.type,
     },
     validationSchema: Yup.object().shape({
       name: Yup.string().required('Name is required'),
       status: Yup.string().required('Slug is required'),
       language: Yup.string().nullable(),
+      type: Yup.string().required(),
     }),
     enableReinitialize: true,
     onSubmit: async (values) => {
@@ -77,7 +79,7 @@ const TasksDetails = ({ task }: { task: Task }) => {
               </div>
 
               <select
-                name="slug"
+                name="status"
                 className="select-bordered select flex-grow"
                 value={formik.values.status ? formik.values.status : 'STARTED'}
                 onChange={formik.handleChange}
@@ -91,10 +93,25 @@ const TasksDetails = ({ task }: { task: Task }) => {
                   </option>
                 ))}
               </select>
-
               <select
-                id="domain"
-                name="domain"
+                name="type"
+                className="select-bordered select flex-grow"
+                value={
+                  formik.values.type ? formik.values.type : 'VOICE TO TEXT'
+                }
+                onChange={formik.handleChange}
+              >
+                <option value="" disabled>
+                  {t('select-type')}
+                </option>
+                {tasksType.map((status) => (
+                  <option key={status.id} value={status.id}>
+                    {status.name}
+                  </option>
+                ))}
+              </select>
+              <select
+                name="language"
                 className="select-bordered select flex-grow"
                 value={formik.values.language ? formik.values.language : ''}
                 onChange={formik.handleChange}

@@ -1,12 +1,12 @@
 import fetcher from '@/lib/fetcher';
-import type { Transcript } from '@prisma/client';
+import type { sentences_detailed } from '@prisma/client';
 import useSWR, { mutate } from 'swr';
 import type { ApiResponse } from 'types';
 
 const useSentences = (id: string) => {
   const url = `/api/tasks/${id}/sentences`;
 
-  const { data, error, isLoading } = useSWR<ApiResponse<Transcript[]>>(
+  const { data, error, isLoading } = useSWR<ApiResponse<sentences_detailed[]>>(
     url,
     fetcher
   );

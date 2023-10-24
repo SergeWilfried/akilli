@@ -132,6 +132,8 @@
   "new-photo": "Select New Photo",
   "all-lang": "All Languages",
   "create-lang": "Add new Language",
+  "lang-code": "Code",
+  "lang-code-description": "Language ISO Code",
   "lang-name": "Name",
   "lang-description": "Description",
   "add-profile-picture": "Add a profile picture",

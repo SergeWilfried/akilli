@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/prisma';
-import { Sentence } from '@prisma/client';
+import { sentences_detailed } from '@prisma/client';
 
 /**
  * Create a new sentence for a task
@@ -13,14 +13,10 @@ export async function createSentence(
   languageCode: string
 ): Promise<any> {
   try {
-    const newSentence = await prisma.sentence.create({
+    const newSentence = await prisma.sentences_detailed.create({
       data: {
         text,
-        language: {
-          connect: {
-            code: languageCode,
-          },
-        },
+        lang: languageCode,
         task: {
           connect: {
             id: taskId,
@@ -42,13 +38,13 @@ export async function createSentence(
  * @returns the updated sentence
  */
 export async function updateSentence(
-  sentenceId: string,
+  sentenceId: number,
   text: string,
   langCode: string
-): Promise<Sentence> {
+): Promise<sentences_detailed> {
   try {
-    const updatedSentence = await prisma.sentence.update({
-      where: { id: sentenceId, langCode },
+    const updatedSentence = await prisma.sentences_detailed.update({
+      where: { sentence_id: sentenceId, lang: langCode },
       data: { text },
       // include: { task: true },
     });
@@ -66,12 +62,12 @@ export async function updateSentence(
  * @returns the deleted sentence
  */
 export async function deleteSentence(
-  sentenceId: string,
+  sentenceId: number,
   langCode: string
-): Promise<Sentence> {
+): Promise<sentences_detailed> {
   try {
-    const deletedSentence = await prisma.sentence.delete({
-      where: { id: sentenceId, langCode },
+    const deletedSentence = await prisma.sentences_detailed.delete({
+      where: { sentence_id: sentenceId, lang: langCode },
       // include: { task: true },
     });
 
@@ -87,14 +83,21 @@ export async function deleteSentence(
  * @param taskId - the id of the task to get sentences for
  * @returns all sentences for the task
  */
-export async function getAllSentences(taskId: string): Promise<Sentence[]> {
+export async function getAllSentences(
+  taskId: string | undefined
+): Promise<sentences_detailed[]> {
   try {
-    const sentences = await prisma.sentence.findMany({
-      where: { id: taskId },
-      // include: { task: true },
-    });
+    if (taskId) {
+      const tasks = await prisma.sentences_detailed.findMany({
+        where: { taskId: taskId },
+      });
 
-    return sentences;
+      return tasks;
+    } else {
+      const sentences = await prisma.sentences_detailed.findMany();
+
+      return sentences;
+    }
   } catch (error) {
     throw new Error('Failed to get sentences');
   }
@@ -108,11 +111,11 @@ export async function getAllSentences(taskId: string): Promise<Sentence[]> {
  */
 export async function getSentence(
   taskId: string,
-  sentenceId: string
-): Promise<Sentence> {
+  sentenceId: number
+): Promise<sentences_detailed> {
   try {
-    const sentence = await prisma.sentence.findUnique({
-      where: { id: sentenceId },
+    const sentence = await prisma.sentences_detailed.findUnique({
+      where: { sentence_id: sentenceId, taskId: taskId },
       // include: { task: true },
     });
     if (sentence) {
@@ -133,10 +136,10 @@ export async function getSentence(
  */
 export async function getSentencesByLang(
   langCode: string
-): Promise<Sentence[]> {
+): Promise<sentences_detailed[]> {
   try {
-    const sentences = await prisma.sentence.findMany({
-      where: { langCode: langCode },
+    const sentences = await prisma.sentences_detailed.findMany({
+      where: { lang: langCode },
       // include: { task: true },
       take: 20,
     });

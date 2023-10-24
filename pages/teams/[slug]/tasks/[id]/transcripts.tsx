@@ -19,6 +19,7 @@ const Transcripts: NextPageWithLayout = () => {
   const { id } = router.query as { id: string };
   const { isLoading, isError, task } = useTask(id);
   const [visible, setVisible] = useState(false);
+  const [withDataImport, enableImport] = useState(false);
 
   const isVoiceJob = task?.type === 'VOICE TO TEXT';
   if (isLoading) {
@@ -37,20 +38,46 @@ const Transcripts: NextPageWithLayout = () => {
       <TasksTab activeTab="transcripts" task={task} />
       <div className="flex flex-col space-y-4">
         <div className="flex justify-end mt-4">
-          
-          <Button
-            className='btn'
-            variant="outline"
-            color="primary"
-            size="md"
-            onClick={() => {
-              setVisible(!visible);
-            }}
-          >
-            {isVoiceJob ? t('add-new-transcript') : 'Add new Sentence'}
-          </Button>
-    
- 
+          {isVoiceJob && (
+            <>
+              {' '}
+              <Button
+                className="btn"
+                variant="outline"
+                color="primary"
+                size="md"
+                onClick={() => {
+                  setVisible(!visible);
+                }}
+              >
+                {t('add-new-transcript')}
+              </Button>
+            </>
+          )}
+          <div className="dropdown">
+            <label tabIndex={0} className="btn m-1">
+              Add New
+            </label>
+            <ul
+              tabIndex={0}
+              className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+            >
+              <li  onClick={() => {
+                  setVisible(!visible);
+                }}>
+                <a>Create new sentence</a>
+              </li>
+              <li
+                onClick={() => {
+                  enableImport(!withDataImport);
+                  setVisible(!visible);
+
+                }}
+              >
+                <a>Import From Datasets</a>
+              </li>
+            </ul>
+          </div>
         </div>
 
         <AllTranscripts task={task} />
@@ -58,8 +85,8 @@ const Transcripts: NextPageWithLayout = () => {
           visible={visible}
           setVisible={setVisible}
           isVoiceJob={isVoiceJob}
+          withDataImport={withDataImport}
         />
-
       </div>
     </>
   );
@@ -68,7 +95,6 @@ const Transcripts: NextPageWithLayout = () => {
 export async function getServerSideProps({
   locale,
 }: GetServerSidePropsContext) {
-
   return {
     props: {
       ...(locale ? await serverSideTranslations(locale, ['common']) : {}),
