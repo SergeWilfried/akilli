@@ -40,7 +40,6 @@ const Transcripts: NextPageWithLayout = () => {
       <TasksTab activeTab="transcripts" task={task} />
       <div className="flex flex-col space-y-4">
         <div className="flex justify-end mt-4">
-         
           <div className="dropdown">
             <label tabIndex={0} className="btn m-1">
               Add New
@@ -67,7 +66,7 @@ const Transcripts: NextPageWithLayout = () => {
           </div>
         </div>
 
-        <AllTranscripts task={task} fromDataset={fromDatasets}  />
+        <AllTranscripts task={task} fromDataset={fromDatasets} />
         <CreateTranscript
           visible={visible}
           setVisible={setVisible}

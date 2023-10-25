@@ -16,14 +16,14 @@ import {
   TrashIcon,
   PlusSmallIcon,
   PencilIcon,
-  MicrophoneIcon
+  MicrophoneIcon,
 } from '@heroicons/react/24/outline';
 import CreateTranscript from './CreateTranscript';
 interface AllTranscriptsProps {
   task: Task;
-  fromDataset: boolean
+  fromDataset: boolean;
 }
-const   AllTranscripts = (props: AllTranscriptsProps) => {
+const AllTranscripts = (props: AllTranscriptsProps) => {
   const { t } = useTranslation('common');
   const { task, fromDataset } = props;
   const isVoiceJob = task?.type === 'VOICE TO TEXT';
@@ -58,7 +58,7 @@ const   AllTranscripts = (props: AllTranscriptsProps) => {
     'sentences',
     async ({ pageParam = '' }) => {
       await new Promise((res) => setTimeout(res, 1000));
-      if(fromDataset) {
+      if (fromDataset) {
         const res = await axios.get(
           `/api/tasks/${task?.id}/sentences?skip=${4}&limit=${8}&cursor=&lang=${
             task.language
@@ -103,7 +103,9 @@ const   AllTranscripts = (props: AllTranscriptsProps) => {
 
   const leaveTeam = async (task: Task) => {
     try {
-      await axios.delete<ApiResponse>(`/api/tasks/${task.id}/sentences/${selectedSentence?.sentence_id}`);
+      await axios.delete<ApiResponse>(
+        `/api/tasks/${task.id}/sentences/${selectedSentence?.sentence_id}`
+      );
       toast.success(t('task-removed-successfully'));
       // mutateTranscripts();
     } catch (error: any) {
@@ -128,7 +130,7 @@ const   AllTranscripts = (props: AllTranscriptsProps) => {
       await axios.put<ApiResponse>(
         `/api/tasks/${task.id}/sentences/${selectedSentence?.sentence_id}`,
         {
-          taskId: task.id
+          taskId: task.id,
         }
       );
       toast.success(t('task-removed-successfully'));

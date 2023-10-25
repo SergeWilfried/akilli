@@ -1,16 +1,16 @@
-import { APIRoute } from 'next-s3-upload';
-import env from 'lib/env';
+import { APIRoute, sanitizeKey } from 'next-s3-upload';
 
 export default APIRoute.configure({
-  async key(req, filename) {
-    const params = req.body; // 123
-    console.log(params);
-    return filename;
+  key(req, filename) {
+    const filetype = req.body?.filetype; // 123
+    const lang = req.body?.lang; // 123
+    const taskId = req.body?.taskId; // 123
+
+    console.log(`lang`, lang);
+    console.log(`taskId`, taskId);
+
+    const date = new Date().toISOString();
+
+    return `${lang}/${taskId}/${filetype}/${date}/${sanitizeKey(filename)}`;
   },
-  endpoint: env.storage.publicEndpoint!,
-  forcePathStyle: true,
-  accessKeyId: env.storage.accessKey,
-  secretAccessKey: env.storage.secretKey,
-  region: env.storage.region,
-  bucket: env.storage.bucketName!,
 });

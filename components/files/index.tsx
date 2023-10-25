@@ -12,7 +12,7 @@ import toast from 'react-hot-toast';
 import axios from 'axios';
 import { getAxiosError } from '../../lib/common';
 import React from 'react';
-import { AccessControl } from '../shared/AccessControl';
+import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 
 interface FilesProps {
   currentTask: Task;
@@ -20,13 +20,20 @@ interface FilesProps {
 
 const AllFiles = ({ currentTask }: FilesProps) => {
   const { t } = useTranslation('common');
-  const [confirmationDialogVisible, setConfirmationDialogVisible] =
-    useState(false);
+
   const { isLoading, isError, task, mutateTasks } = useTask(
     currentTask.id ?? ''
   );
-  const [selectedFile, setSelectedFile] = useState<string | null>(null);
+  const [visible, setVisible] = useState(false);
+  const [askConfirmation, setAskConfirmation] = useState(false);
+  const [confirmationMessage] = useState(`${t('leave-team-confirmation')}`);
+  const [selectedFile, setSelectedFile] = useState<any | null>(null);
+  const [confirmTitle, setTitle] = useState(`${t('leave-team')} ${task?.name}`);
+  const [confirmText, setConfimText] = useState(`${t('leave-team')}`);
 
+  const [desiredAction, setDesiredAction] = useState<
+    'update' | 'delete' | 'use'
+  >('delete');
   // Fetch API Keys
 
   // Delete File
@@ -91,70 +98,58 @@ const AllFiles = ({ currentTask }: FilesProps) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {task.files.map((apiKey) => {
+                  {task.files.map((file) => {
                     return (
-                      <tr key={apiKey.url} className="border-b bg-white">
+                      <tr key={file.url} className="border-b bg-white">
                         <td className="px-6 py-3">
                           <input type="checkbox" />
                         </td>
-                        <td className="px-6 py-3">{apiKey.url}</td>
-                        <td className="px-6 py-3">{apiKey.contentSize}</td>
+                        <td className="px-6 py-3">{file.url}</td>
+                        <td className="px-6 py-3">{file.contentSize}</td>
 
                         <td className="px-6 py-3">
                           <Badge
                             color={
-                              apiKey.fileFormat === 'audio/wav'
+                              file.fileFormat === 'audio/wav'
                                 ? 'success'
                                 : 'secondary'
                             }
                           >
-                            {apiKey.fileFormat}
+                            {file.fileFormat}
                           </Badge>
                         </td>
+                        <td className="px-6 py-3"></td>
                         <td className="px-6 py-3">
-                          <audio controls>
-                            <source
-                              src={`http://localhost:9000/${apiKey.url}`}
-                              type={apiKey.fileFormat}
-                            />
-                          </audio>
+                          <div className="join">
+                            <Button
+                              variant="outline"
+                              size="xs"
+                              shape="circle"
+                              color="primary"
+                              onClick={() => {
+                                setSelectedFile(file);
+                                setDesiredAction('update');
+                                setVisible(!visible);
+                              }}
+                            >
+                              <PencilIcon />
+                            </Button>
+
+                            <Button
+                              variant="outline"
+                              size="xs"
+                              shape="circle"
+                              color="error"
+                              onClick={() => {
+                                setSelectedFile(file);
+                                setAskConfirmation(true);
+                                setDesiredAction('delete');
+                              }}
+                            >
+                              <TrashIcon />
+                            </Button>
+                          </div>
                         </td>
-                        <AccessControl
-                          resource="transcript"
-                          actions={['update']}
-                        >
-                          <td className="px-6 py-3">
-                            <Button
-                              size="xs"
-                              color="error"
-                              variant="outline"
-                              onClick={() => {
-                                setConfirmationDialogVisible(true);
-                                setSelectedFile(apiKey.id);
-                              }}
-                            >
-                              {t('transcribe-audio')}
-                            </Button>
-                          </td>
-                        </AccessControl>
-                        <AccessControl
-                          resource="transcript"
-                          actions={['delete']}
-                        >
-                          <td className="px-6 py-3">
-                            <Button
-                              size="xs"
-                              color="error"
-                              variant="outline"
-                              onClick={() => {
-                                setConfirmationDialogVisible(true);
-                                setSelectedFile(apiKey.id);
-                              }}
-                            >
-                              {t('delete')}
-                            </Button>
-                          </td>
-                        </AccessControl>
                       </tr>
                     );
                   })}
@@ -163,18 +158,21 @@ const AllFiles = ({ currentTask }: FilesProps) => {
             </Card.Body>
           </Card>
           <ConfirmationDialog
-            title={t('delete-file')}
-            visible={confirmationDialogVisible}
+            visible={askConfirmation}
+            title={confirmTitle}
+            onCancel={() => setAskConfirmation(false)}
             onConfirm={() => {
-              if (selectedFile) {
+              if (desiredAction === 'delete') {
                 deleteFile();
               }
+              if (desiredAction === 'update') {
+              }
+              if (desiredAction === 'use') {
+              }
             }}
-            onCancel={() => setConfirmationDialogVisible(false)}
-            cancelText={t('cancel')}
-            confirmText={t('delete-file')}
+            confirmText={confirmText}
           >
-            {t('delete-file-confirm')}
+            {confirmationMessage}
           </ConfirmationDialog>
         </>
       )}

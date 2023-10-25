@@ -34,7 +34,7 @@ const CreateTranscript = ({
   const { mutateTasks } = useTasks();
   const url = 'https://';
   const { languages } = useLanguages();
-  console.warn(`valuessss`,sentence?.text)
+  console.warn(`valuessss`, sentence?.text);
   const formik = useFormik<any>({
     initialValues: {
       language: languages?.[0]?.code ?? '',
