@@ -42,9 +42,19 @@ export default async function handler(
 }
 
 const handleGET = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { id } = req.query as { id: string };
-  const transcripts = await getAllTranscripts(id);
-
+  const { skip, limit, cursor, taskId } = req.query as {
+    id: any;
+    skip: string;
+    limit: string;
+    cursor: string;
+    taskId: string;
+  };
+  const transcripts = await getAllTranscripts(
+    taskId,
+    Number(skip),
+    Number(limit),
+    cursor
+  );
   res.status(200).json({ data: transcripts });
 };
 
