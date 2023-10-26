@@ -4,9 +4,6 @@ import { useState } from 'react';
 import SimpleProgressBar from '../shared/SimpleProgressBar';
 import { usePresignedUpload } from 'next-s3-upload';
 import { useSession } from 'next-auth/react';
-import axios from 'axios';
-import { ApiResponse } from '../../types';
-import toast from 'react-hot-toast';
 
 interface DragAndDropProps {
   inputRef: any;
@@ -16,13 +13,13 @@ interface DragAndDropProps {
 export default function DragAndDrop(props: DragAndDropProps) {
   const { inputRef, fields } = props;
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [urls, setUrls] = useState(['']);
   const { data } = useSession();
   const { uploadToS3, files } = usePresignedUpload();
 
   const [stateFiles, setFiles] = useState<File[]>([]);
   const dragActive = false; // or false, based on your logic
-  console.log(urls);
   async function handleChange(e: any) {
     e.preventDefault();
     if (e.target.files && e.target.files[0]) {
@@ -50,18 +47,7 @@ export default function DragAndDrop(props: DragAndDropProps) {
     inputRef.current.value = '';
     inputRef.current.click();
   }
-  async function handleTaskUpdate(url) {
-    try {
-      await axios.put<ApiResponse>(
-        `/api/teams/akilli/tasks/${fields.taskId}/files`,
-        {
-          url,
-        }
-      );
-    } catch (error: any) {
-      toast.error(error?.message);
-    }
-  }
+ 
   function removeFile(fileName: any, idx: any) {
     const newArr = [...stateFiles];
     newArr.splice(idx, 1);

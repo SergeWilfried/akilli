@@ -7,7 +7,6 @@ import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/router';
 import useTask from 'hooks/useTask';
 import AllTranscripts from '@/components/transcripts/Transcripts';
-import { Button } from 'react-daisyui';
 import { TasksTab } from '@/components/tasks';
 import { useState } from 'react';
 import CreateTranscript from '../../../../../components/transcripts/CreateTranscript';
@@ -75,6 +74,7 @@ const Transcripts: NextPageWithLayout = () => {
           setVisible={setVisible}
           isVoiceJob={isVoiceJob}
           withDataImport={withDataImport}
+          audioFileUrl={undefined}
           task={task}
           desiredAction={undefined}
           sentence={undefined}
