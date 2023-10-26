@@ -11,6 +11,7 @@ import { Button } from 'react-daisyui';
 import { TasksTab } from '@/components/tasks';
 import { useState } from 'react';
 import CreateTranscript from '../../../../../components/transcripts/CreateTranscript';
+import AllSentences from '../../../../../components/transcripts/Sentences';
 
 const Transcripts: NextPageWithLayout = () => {
   const { t } = useTranslation('common');
@@ -65,8 +66,10 @@ const Transcripts: NextPageWithLayout = () => {
             </ul>
           </div>
         </div>
-
-        <AllTranscripts task={task} fromDataset={fromDatasets} />
+        {isVoiceJob && (
+          <AllTranscripts task={task} fromDataset={fromDatasets} />
+        )}
+        {!isVoiceJob && <AllSentences task={task} fromDataset={fromDatasets} />}
         <CreateTranscript
           visible={visible}
           setVisible={setVisible}

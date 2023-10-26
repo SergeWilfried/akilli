@@ -1,8 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import {
-  createTranscript,
-  deleteTranscript,
-} from '../../../../../models/transcripts';
+import { deleteTranscript } from '../../../../../models/transcripts';
 import {
   getAllSentences,
   updateSentence,
@@ -84,7 +81,7 @@ const handlePOST = async (req: NextApiRequest, res: NextApiResponse) => {
   const { id } = req.query as { id: string };
   const { text } = req.body as { text: string };
 
-  const transcript = await createTranscript(id, text);
+  // const transcript = await createTranscript(id, text);
 
-  res.status(200).json({ data: transcript });
+  res.status(200).json({ data: { id, text } });
 };

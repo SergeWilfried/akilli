@@ -10,7 +10,7 @@ import { useInfiniteQuery } from 'react-query';
 import { useInView } from 'react-intersection-observer';
 import ConfirmationDialog from '../shared/ConfirmationDialog';
 import React from 'react';
-import { Transcript } from '@prisma/client';
+import { sentences_detailed } from '@prisma/client';
 import { uuid } from 'next-s3-upload';
 import {
   TrashIcon,
@@ -23,9 +23,9 @@ interface AllTranscriptsProps {
   task: Task;
   fromDataset: boolean;
 }
-const AllTranscripts = (props: AllTranscriptsProps) => {
+const AllSentences = (props: AllTranscriptsProps) => {
   const { t } = useTranslation('common');
-  const { task } = props;
+  const { task, fromDataset } = props;
   const isVoiceJob = task?.type === 'VOICE TO TEXT';
 
   const [askConfirmation, setAskConfirmation] = useState(false);
@@ -34,7 +34,7 @@ const AllTranscripts = (props: AllTranscriptsProps) => {
   const [confirmTitle, setTitle] = useState(`${t('leave-team')} ${task?.name}`);
   const [confirmText, setConfimText] = useState(`${t('leave-team')}`);
   const [selectedSentence, setSelectedSentence] =
-    useState<Transcript>();
+    useState<sentences_detailed>();
   const [desiredAction, setDesiredAction] = useState<
     'update' | 'delete' | 'use'
   >('delete');
@@ -55,17 +55,22 @@ const AllTranscripts = (props: AllTranscriptsProps) => {
     fetchNextPage,
     hasNextPage,
   } = useInfiniteQuery(
-    'transcripts',
+    'sentences',
     async ({ pageParam = '' }) => {
       await new Promise((res) => setTimeout(res, 1000));
-
+      if (fromDataset) {
+        const res = await axios.get(
+          `/api/tasks/${task?.id}/sentences?skip=${4}&limit=${8}&cursor=&lang=${
+            task.language
+          }` + pageParam
+        );
+        return res?.data;
+      }
       const res = await axios.get(
-        `/api/tasks/transcripts?skip=${4}&limit=${8}&cursor=&lang=${
+        `/api/tasks/sentences?skip=${4}&limit=${8}&cursor=&lang=${
           task.language
         }` + pageParam
       );
-            console.warn(`transcripts`, res)
-
       return res?.data;
     },
     {
@@ -86,12 +91,20 @@ const AllTranscripts = (props: AllTranscriptsProps) => {
   if (isError) {
     return <Error message={JSON.stringify(error)} />;
   }
-
+  // async function useSentenceTemplate(sentence: sentences_detailed) {
+  //   try {
+  //     await axios.post<ApiResponse>(`/api/tasks/${task.id}/sentences/${sentence.sentence_id}`);
+  //     toast.success(t('task-removed-successfully'));
+  //     // mutateTranscripts();
+  //   } catch (error: any) {
+  //     toast.error(getAxiosError(error));
+  //   }
+  // }
 
   const leaveTeam = async (task: Task) => {
     try {
       await axios.delete<ApiResponse>(
-        `/api/tasks/${task.id}/sentences/${selectedSentence?.id}`
+        `/api/tasks/${task.id}/sentences/${selectedSentence?.sentence_id}`
       );
       toast.success(t('task-removed-successfully'));
       // mutateTranscripts();
@@ -103,7 +116,7 @@ const AllTranscripts = (props: AllTranscriptsProps) => {
   const updateSentence = async (task: Task) => {
     try {
       await axios.put<ApiResponse>(
-        `/api/tasks/${task.id}/sentences/${selectedSentence?.id}`
+        `/api/tasks/${task.id}/sentences/${selectedSentence?.sentence_id}`
       );
       toast.success(t('task-removed-successfully'));
       // mutateTranscripts();
@@ -115,7 +128,7 @@ const AllTranscripts = (props: AllTranscriptsProps) => {
   const addSentence = async (task: Task) => {
     try {
       await axios.put<ApiResponse>(
-        `/api/tasks/${task.id}/sentences/${selectedSentence?.id}`,
+        `/api/tasks/${task.id}/sentences/${selectedSentence?.sentence_id}`,
         {
           taskId: task.id,
         }
@@ -164,14 +177,14 @@ const AllTranscripts = (props: AllTranscriptsProps) => {
                 data.pages.map((task) => {
                   return (
                     <React.Fragment key={task.nextId ?? 'lastPage'}>
-                      {task?.data?.transcripts?.map(
-                        (sentence: Transcript) => (
+                      {task?.data?.sentences?.map(
+                        (sentence: sentences_detailed) => (
                           <tr
                             key={uuid()}
                             className="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
                           >
                             <td className="px-6 py-3">
-                              {sentence.id}
+                              {sentence.sentence_id}
                             </td>
 
                             <td className="px-6 py-3">{sentence.text}</td>
@@ -183,7 +196,24 @@ const AllTranscripts = (props: AllTranscriptsProps) => {
 
                             <td className="px-6 py-3">
                               <div className="join">
-                           
+                                <Button
+                                  variant="outline"
+                                  size="xs"
+                                  shape="circle"
+                                  color="accent"
+                                  onClick={() => {
+                                    setTitle('Use Template');
+                                    setConfimText('Use Template');
+                                    setConfimationMessage(
+                                      'Add this sentence template in to your project'
+                                    );
+                                    setSelectedSentence(sentence);
+                                    setDesiredAction('use');
+                                    setAskConfirmation(true);
+                                  }}
+                                >
+                                  <PlusSmallIcon />
+                                </Button>
                                 <Button
                                   variant="outline"
                                   size="xs"
@@ -197,7 +227,19 @@ const AllTranscripts = (props: AllTranscriptsProps) => {
                                 >
                                   <PencilIcon />
                                 </Button>
-                          
+                                <Button
+                                  variant="outline"
+                                  size="xs"
+                                  shape="circle"
+                                  color="secondary"
+                                  onClick={() => {
+                                    setSelectedSentence(sentence);
+                                    setAskConfirmation(true);
+                                    setDesiredAction('delete');
+                                  }}
+                                >
+                                  <MicrophoneIcon />
+                                </Button>
                                 <Button
                                   variant="outline"
                                   size="xs"
@@ -252,11 +294,11 @@ const AllTranscripts = (props: AllTranscriptsProps) => {
         audioFileUrl={undefined}
         withDataImport={withDataImport}
         task={task}
-        sentence={undefined}
+        sentence={selectedSentence}
         desiredAction={undefined}
       />
     </>
   );
 };
 
-export default AllTranscripts;
+export default AllSentences;

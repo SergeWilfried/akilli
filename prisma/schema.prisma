@@ -164,15 +164,16 @@ model Task {
 }
 
 model File {
-  id          String   @id @default(uuid())
+  id          String       @id @default(uuid())
   url         String
   fileFormat  String
   contentSize Int?
   pathname    String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
   taskId      String?
-  task        Task?    @relation(fields: [taskId], references: [id])
+  task        Task?        @relation(fields: [taskId], references: [id])
+  Transcript  Transcript[]
 }
 
 model Payment {
@@ -201,8 +202,13 @@ model Transcript {
   text      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  lang               String?   @db.VarChar(4)
+  username           String?   @db.VarChar(20)
+
   taskId    String
+  file      File     @relation(fields: [fileId], references: [id])
   task      Task     @relation(fields: [taskId], references: [id])
+  fileId    String
 }
 
 model sentences_detailed {

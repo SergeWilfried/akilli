@@ -9,12 +9,29 @@ import { Transcript } from '@prisma/client';
  */
 export async function createTranscript(
   taskId: string,
-  text: string
-): Promise<any> {
+  text: string,
+  audioFileUrl: string
+): Promise<Transcript> {
   try {
-    // const newTranscript = await prisma.transcript.create({});
-    console.log(taskId, text);
-    return 'newTranscript';
+    const file = await prisma.file.findFirst({
+      where: { url: audioFileUrl },
+    });
+    const newTranscript = await prisma.transcript.create({
+      data: {
+        text,
+        task: {
+          connect: {
+            id: taskId,
+          },
+        },
+        file: {
+          connect: {
+            id: file?.id,
+          },
+        },
+      },
+    });
+    return newTranscript;
   } catch (error) {
     console.error(error);
     throw new Error('Failed to create transcript');
@@ -71,12 +88,31 @@ export async function deleteTranscript(
  * @param taskId - the id of the task to get transcripts for
  * @returns all transcripts for the task
  */
-export async function getAllTranscripts(taskId: string): Promise<Transcript[]> {
+export async function getAllTranscripts(
+  taskId: string,
+  skip: number,
+  limit: number,
+  cursor: string
+): Promise<any> {
   try {
-    const transcripts = await prisma.transcript.findMany({
-      where: { id: taskId },
-      // include: { task: true },
-    });
+    const cursorObj = cursor === '' ? undefined : { id: cursor as string };
+    const [transcripts] = await prisma.$transaction([
+      prisma.transcript.findMany({
+        where: { taskId: taskId },
+        take: limit,
+        skip: cursor !== '' ? 1 : 0,
+        cursor: cursorObj,
+      }),
+      prisma.transcript.count({
+        where: { taskId: taskId },
+      }),
+    ]);
+
+    return {
+      nextId:
+        transcripts.length === limit ? transcripts[limit - 1].id : undefined,
+      transcripts,
+    };
 
     return transcripts;
   } catch (error) {

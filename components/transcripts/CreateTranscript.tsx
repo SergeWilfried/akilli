@@ -35,17 +35,17 @@ const CreateTranscript = ({
   const { t } = useTranslation('common');
   const { mutateTasks } = useTasks();
   const url = 'https://';
-  const { languages } = useLanguages();
-  console.warn(`valuessss`, sentence?.text);
   const formik = useFormik<any>({
     initialValues: {
-      language: languages?.[0]?.code ?? '',
+      language: task?.language ?? '',
       text: sentence ? sentence?.text : '',
       file: '',
     },
     validationSchema: Yup.object().shape({
       text: Yup.string().required('Name is Required'),
-      language: sentence ? Yup.string().required('Language is Required') : Yup.string().optional(),
+      language: sentence
+        ? Yup.string().required('Language is Required')
+        : Yup.string().optional(),
       file: Yup.mixed().optional(),
     }),
     onSubmit: async (values) => {
@@ -55,17 +55,18 @@ const CreateTranscript = ({
             language: values.language,
             text: values.text,
             taskId: task ? task.id : '',
+            audioFileUrl: audioFileUrl,
             createdAt: new Date(),
           };
 
-          const response = await axios.post<ApiResponse<sentences_detailed>>(
+          const response = await axios.post<ApiResponse<any>>(
             `/api/tasks/${task.id}/transcripts`,
             {
               ...payload,
             }
           );
           const { data: teamCreated } = response.data;
-
+          console.log(`transcript`, teamCreated);
           if (teamCreated) {
             toast.success(t('transcript-created'));
             mutateTasks();
