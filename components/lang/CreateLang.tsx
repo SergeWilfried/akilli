@@ -24,10 +24,12 @@ const CreateLang = ({
   const formik = useFormik({
     initialValues: {
       name: '',
+      code: '',
       description: '',
     },
     validationSchema: Yup.object().shape({
       name: Yup.string().required(),
+      code: Yup.string().required().min(2).max(3),
       description: Yup.string().required(),
     }),
     onSubmit: async (values) => {
@@ -43,7 +45,7 @@ const CreateLang = ({
           mutateTeams();
           formik.resetForm();
           setVisible(false);
-          router.push(`/language`);
+          router.push(`/teams/akilli/language`);
         }
       } catch (error: any) {
         toast.error(getAxiosError(error));
@@ -65,6 +67,15 @@ const CreateLang = ({
                 onChange={formik.handleChange}
                 value={formik.values.name}
                 placeholder={t('lang-name')}
+              />
+            </div>
+            <div className="flex justify-between space-x-3">
+              <Input
+                name="code"
+                className="flex-grow"
+                onChange={formik.handleChange}
+                value={formik.values.code}
+                placeholder={t('lang-code-description')}
               />
             </div>
             <div className="flex justify-between space-x-3">

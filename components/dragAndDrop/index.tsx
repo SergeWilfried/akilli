@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import SimpleProgressBar from '../shared/SimpleProgressBar';
 import { usePresignedUpload } from 'next-s3-upload';
+import { useSession } from 'next-auth/react';
 
 interface DragAndDropProps {
   inputRef: any;
@@ -12,27 +13,27 @@ interface DragAndDropProps {
 export default function DragAndDrop(props: DragAndDropProps) {
   const { inputRef, fields } = props;
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [urls, setUrls] = useState(['']);
-
+  const { data } = useSession();
   const { uploadToS3, files } = usePresignedUpload();
 
   const [stateFiles, setFiles] = useState<File[]>([]);
   const dragActive = false; // or false, based on your logic
-  console.log(urls);
   async function handleChange(e: any) {
     e.preventDefault();
     if (e.target.files && e.target.files[0]) {
       for (let i = 0; i < e.target.files['length']; i++) {
         setFiles((prevState: any) => [...prevState, e.target.files[i]]);
-        const { url } = await uploadToS3(e.target.files[i], {
+        const date = new Date().toISOString();
+        const renamedFile = renameFile(e.target.files[i], date);
+        const { url } = await uploadToS3(renamedFile, {
           endpoint: {
             request: {
               body: fields,
               url: '/api/teams/akilli/upload',
               headers: {
-                'Access-Control-Allow-Origin': 'https://akilli-eta.vercel.app',
-                'Access-Control-Allow-Methods': 'PUT, GET, POST, DELETE, PATCH',
-                'Content-Type': '*',
+                authorization: data ? data.user.id : '',
               },
             },
           },
@@ -46,7 +47,7 @@ export default function DragAndDrop(props: DragAndDropProps) {
     inputRef.current.value = '';
     inputRef.current.click();
   }
-
+ 
   function removeFile(fileName: any, idx: any) {
     const newArr = [...stateFiles];
     newArr.splice(idx, 1);
@@ -102,4 +103,12 @@ export default function DragAndDrop(props: DragAndDropProps) {
       </div>
     </div>
   );
+}
+
+function renameFile(originalFile: File, newName) {
+  const blob = originalFile.slice(0, originalFile?.size, originalFile?.type);
+  const fileExtension = originalFile?.type === 'audio/wav' ? 'wav' : 'mp3';
+  return new File([blob], `${newName}.${fileExtension}`, {
+    type: originalFile?.type,
+  });
 }

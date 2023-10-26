@@ -120,6 +120,8 @@ model Language {
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @default(now())
   transcribers Transcriber[] @relation("LanguageToTranscriber")
+
+  @@index([code])
 }
 
 model PasswordReset {
@@ -144,34 +146,34 @@ model ApiKey {
 }
 
 model Task {
-  id           String        @id @default(uuid())
+  id           String               @id @default(uuid())
   language     String
   type         String
   name         String
   status       String
   deadline     DateTime
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
   userId       String
   files        File[]
   invitations  Invitation[]
-  user         User          @relation(fields: [userId], references: [id])
+  user         User                 @relation(fields: [userId], references: [id])
   transcripts  Transcript[]
-  transcribers Transcriber[] @relation("TaskToTranscriber")
+  sentences    sentences_detailed[]
+  transcribers Transcriber[]        @relation("TaskToTranscriber")
 }
 
 model File {
-  id                            String              @id @default(uuid())
-  url                           String
-  fileFormat                    String
-  contentSize                   Int?
-  pathname                      String?
-  createdAt                     DateTime            @default(now())
-  updatedAt                     DateTime            @updatedAt
-  taskId                        String?
-  task                          Task?               @relation(fields: [taskId], references: [id])
-  sentence                      sentences_detailed? @relation(fields: [sentence_id], references: [sentence_id])
-  sentence_id Int?
+  id          String       @id @default(uuid())
+  url         String
+  fileFormat  String
+  contentSize Int?
+  pathname    String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  taskId      String?
+  task        Task?        @relation(fields: [taskId], references: [id])
+  Transcript  Transcript[]
 }
 
 model Payment {
@@ -200,8 +202,13 @@ model Transcript {
   text      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  lang               String?   @db.VarChar(4)
+  username           String?   @db.VarChar(20)
+
   taskId    String
+  file      File     @relation(fields: [fileId], references: [id])
   task      Task     @relation(fields: [taskId], references: [id])
+  fileId    String
 }
 
 model sentences_detailed {
@@ -211,9 +218,10 @@ model sentences_detailed {
   username           String?   @db.VarChar(20)
   date_added         DateTime? @db.Timestamp(6)
   date_last_modified DateTime? @db.Timestamp(6)
-  files              File[]
+  task               Task?     @relation(fields: [taskId], references: [id])
+  taskId             String?
 
-  @@index([username], map: "ix_sentences_detailed_username")
+  @@index([username, lang, taskId], map: "ix_sentences_detailed_username")
 }
 
 model user_languages {

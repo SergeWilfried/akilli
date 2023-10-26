@@ -16,6 +16,9 @@ export default async function handler(
       case 'POST':
         await handlePOST(req, res);
         break;
+      case 'PUT':
+        await handlePUT(req, res);
+        break;
       default:
         res.setHeader('Allow', 'GET, POST, PUT');
         res.status(405).json({
@@ -44,20 +47,8 @@ const handleGET = async (req: NextApiRequest, res: NextApiResponse) => {
   res.status(200).json({ data: file });
 };
 
-// const handlePUT = async (req: NextApiRequest, res: NextApiResponse) => {
-//   const form = formidable();
-//   // with Promise
-//   const [fields, files] = await form.parse(req);
+const handlePUT = async (req: NextApiRequest, res: NextApiResponse) => {
+  // with Promise
 
-//   if (files) {
-//     const uploadCommand = new PutObjectCommand({
-//       Bucket: env.storage.bucketName,
-//       Key: files[0].originalFilename,
-//       Body: createReadStream(files[0].filePath),
-//     });
-
-//     const response = await s3.send(uploadCommand);
-//     res.status(200).json(response);
-//   }
-//   res.status(400).json('No file uploaded');
-// };
+  res.status(400).json('No file uploaded');
+};

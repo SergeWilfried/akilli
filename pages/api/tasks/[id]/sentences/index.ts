@@ -1,10 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import { deleteTranscript } from '../../../../../models/transcripts';
 import {
-  updateTranscript,
-  createTranscript,
-  deleteTranscript,
-  getAllTranscripts,
-} from '../../../../models/transcripts';
+  getAllSentences,
+  updateSentence,
+} from '../../../../../models/sentence';
 
 export default async function handler(
   req: NextApiRequest,
@@ -42,28 +41,31 @@ export default async function handler(
 }
 
 const handleGET = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { skip, limit, cursor, taskId } = req.query as {
+  const { id, skip, limit, cursor, lang } = req.query as {
     id: any;
     skip: string;
     limit: string;
     cursor: string;
-    taskId: string;
+    lang: string;
   };
-  const transcripts = await getAllTranscripts(
-    taskId,
+  const transcripts = await getAllSentences(
+    id,
     Number(skip),
     Number(limit),
-    cursor
+    cursor,
+    lang
   );
-  res.status(200).json({ data: transcripts });
+
+  res.status(200).json({
+    data: transcripts,
+  });
 };
 
 const handlePUT = async (req: NextApiRequest, res: NextApiResponse) => {
   const { id } = req.query as { id: string };
-  const { text } = req.body as { text: string };
+  const { taskId, text } = req.body as { taskId: string; text: string };
 
-  await updateTranscript(id, text);
-
+  await updateSentence(Number(id), text, taskId);
   res.status(200).json({ data: {} });
 };
 
@@ -77,12 +79,9 @@ const handleDELETE = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const handlePOST = async (req: NextApiRequest, res: NextApiResponse) => {
   const { id } = req.query as { id: string };
-  const { text, audioFileUrl } = req.body as {
-    text: string;
-    taskId: string;
-    audioFileUrl: string;
-  };
-  const transcript = await createTranscript(id, text, audioFileUrl);
+  const { text } = req.body as { text: string };
 
-  res.status(200).json({ data: transcript });
+  // const transcript = await createTranscript(id, text);
+
+  res.status(200).json({ data: { id, text } });
 };

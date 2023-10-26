@@ -10,7 +10,8 @@ import mixpanel from 'mixpanel-browser';
 import '../styles/globals.css';
 import { useEffect } from 'react';
 import env from '@/lib/env';
-
+import { QueryClient, QueryClientProvider } from 'react-query';
+const queryClient = new QueryClient();
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const { session, ...props } = pageProps;
 
@@ -35,7 +36,9 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       </Head>
       <SessionProvider session={session}>
         <Toaster toastOptions={{ duration: 4000 }} />
-        {getLayout(<Component {...props} />)}
+        <QueryClientProvider client={queryClient}>
+          {getLayout(<Component {...props} />)}
+        </QueryClientProvider>
       </SessionProvider>
     </>
   );

@@ -29,6 +29,8 @@ export default async function handler(
 
 const handleDELETE = async (req: NextApiRequest, res: NextApiResponse) => {
   const { fileId } = req.query as { fileId: string };
+  console.warn(`fileId`, fileId);
+  console.error(`req`, req.query);
 
   await deleteFile(fileId);
 

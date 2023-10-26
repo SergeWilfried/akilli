@@ -8,75 +8,118 @@ import toast from 'react-hot-toast';
 import { type ApiResponse, type Task } from 'types';
 import * as Yup from 'yup';
 import useTasks from 'hooks/useTasks';
-import useLanguages from '../../hooks/useLanguages';
-import useTeam from '../../hooks/useTeam';
+import { csvParser } from '../../lib/parser';
+import { InputWithLabel } from '../shared';
+import { sentences_detailed } from '@prisma/client';
 
 const CreateTranscript = ({
   visible,
   setVisible,
   isVoiceJob,
+  withDataImport,
+  task,
+  audioFileUrl,
+  sentence,
+  desiredAction,
 }: {
   visible: boolean;
   isVoiceJob: boolean;
+  task: Task;
+  sentence: sentences_detailed | undefined;
+  withDataImport: boolean;
+  desiredAction: string | undefined;
+  audioFileUrl: string | undefined;
   setVisible: (visible: boolean) => void;
 }) => {
   const { t } = useTranslation('common');
   const { mutateTasks } = useTasks();
   const url = 'https://';
-  const { languages } = useLanguages();
-  const { team } = useTeam();
   const formik = useFormik<any>({
     initialValues: {
-      language: languages?.[0].name ?? '',
-      text: ``,
-      type: '',
-      files: [],
+      language: task?.language ?? '',
+      text: sentence ? sentence?.text : '',
+      file: '',
     },
     validationSchema: Yup.object().shape({
-      name: Yup.string().required('Name is Required'),
-      language: Yup.string().required('Language is Required'),
-      type: Yup.string().required('Type Required'),
+      text: Yup.string().required('Name is Required'),
+      language: sentence
+        ? Yup.string().required('Language is Required')
+        : Yup.string().optional(),
+      file: Yup.mixed().optional(),
     }),
     onSubmit: async (values) => {
-      try {
-        /// FIXME: Handle multiple files
-        const irl = 'http://'; // Call the handleFileUpload function
-        console.log(`liens de fichier ${irl}`);
-        let response: any;
-        const links = irl?.split(`,`).filter((link) => link !== '');
-        console.log('links', links?.length);
-
-        if (links === undefined) {
-          /* empty */
-        }
-        let task: any;
-        if (links !== undefined) {
-          task = {
+      if (isVoiceJob && audioFileUrl) {
+        try {
+          const payload = {
             language: values.language,
-            type: values.type,
-            name: values.name,
-            teamId: team ? team.id : '',
-            status: 'CREATED',
-            userId: '',
+            text: values.text,
+            taskId: task ? task.id : '',
+            audioFileUrl: audioFileUrl,
             createdAt: new Date(),
           };
-          response = await axios.post<ApiResponse<Task>>('/api/transcripts', {
-            ...task,
-          });
-        }
-        const { data: teamCreated } = response.data;
 
-        if (teamCreated) {
-          toast.success(t('transcript-created'));
-          mutateTasks();
-          formik.resetForm();
-          setVisible(false);
+          const response = await axios.post<ApiResponse<any>>(
+            `/api/tasks/${task.id}/transcripts`,
+            {
+              ...payload,
+            }
+          );
+          const { data: teamCreated } = response.data;
+          console.log(`transcript`, teamCreated);
+          if (teamCreated) {
+            toast.success(t('transcript-created'));
+            mutateTasks();
+            formik.resetForm();
+            setVisible(false);
+          }
+        } catch (error: any) {
+          toast.error(getAxiosError(error));
         }
-      } catch (error: any) {
-        toast.error(getAxiosError(error));
+      } else {
+        try {
+          if (values.files) {
+            /* empty */
+          }
+          const payload = {
+            language: values.language,
+            text: values.text,
+            taskId: task ? task.id : '',
+            createdAt: new Date(),
+          };
+          let response;
+
+          if (desiredAction === 'update') {
+            response = await axios.put<ApiResponse<sentences_detailed>>(
+              `/api/tasks/${task.id}/sentences/${sentence?.sentence_id}`,
+              {
+                ...payload,
+              }
+            );
+          }
+          response = await axios.post<ApiResponse<sentences_detailed>>(
+            `/api/tasks/${task.id}/sentences`,
+            {
+              ...payload,
+            }
+          );
+          const { data: teamCreated } = response.data;
+
+          if (teamCreated) {
+            toast.success(t('sentence-created'));
+            mutateTasks();
+            formik.resetForm();
+            setVisible(false);
+          }
+        } catch (error: any) {
+          toast.error(getAxiosError(error));
+        }
       }
     },
   });
+
+  const changeHandler = async (event) => {
+    await csvParser(event.target.files[0]);
+  };
 
   return (
     <Modal open={visible}>
@@ -92,7 +135,7 @@ const CreateTranscript = ({
                 : t('transcribe-sentence-desc')}
             </p>
 
-            {isVoiceJob && (
+            {isVoiceJob && audioFileUrl && (
               <>
                 <audio controls style={{ width: '100%' }}>
                   <source src={url} type="audio/mpeg" />
@@ -101,26 +144,58 @@ const CreateTranscript = ({
               </>
             )}
 
+            {withDataImport && (
+              <>
+                <input
+                  type="file"
+                  name="file"
+                  accept=".csv"
+                  onChange={changeHandler}
+                  style={{ display: 'block', margin: '10px auto' }}
+                />
+              </>
+            )}
+            <InputWithLabel
+              type="text"
+              name="language"
+              label="Language"
+              disabled={true}
+              value={task.language}
+            />
             <textarea
+              name="text"
+              id="text"
               onChange={formik.handleChange}
               value={formik.values.text}
               rows={3}
               placeholder={t('type-here')}
               className="textarea textarea-bordered textarea-lg "
             ></textarea>
-            
           </div>
         </Modal.Body>
         <Modal.Actions>
-          <Button
-            type="submit"
-            color="primary"
-            loading={formik.isSubmitting}
-            size="md"
-            disabled={!formik.isValid}
-          >
-            {isVoiceJob ? t('transcribe-audio') : 'Add new Sentence'}
-          </Button>
+          {isVoiceJob ? (
+            <Button
+              type="submit"
+              color="primary"
+              loading={formik.isSubmitting}
+              size="md"
+              disabled={!formik.isValid}
+            >
+              {t('transcribe-audio')}
+            </Button>
+          ) : (
+            <Button
+              type="submit"
+              color="primary"
+              loading={formik.isSubmitting}
+              size="md"
+              disabled={!formik.isValid}
+            >
+              {sentence ? 'Update Sentence' : 'Add new Sentence'}
+            </Button>
+          )}
+
           <Button
             type="button"
             variant="outline"

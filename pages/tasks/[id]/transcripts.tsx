@@ -10,15 +10,20 @@ import AllTranscripts from '@/components/transcripts/Transcripts';
 import { Button } from 'react-daisyui';
 import { useState } from 'react';
 import CreateTranscript from '../../../components/transcripts/CreateTranscript';
+import { readdirSync } from 'fs';
+import ImportFile from '../../../components/files/ImportFile';
 
 const Transcripts: NextPageWithLayout = () => {
   const { t } = useTranslation('common');
   const router = useRouter();
+  const [isUploaderVisible, setImportVisible] = useState(false);
 
   const { id } = router.query as { id: string };
   const { isLoading, isError, task } = useTask(id);
   const [visible, setVisible] = useState(false);
-  const isVoiceJob = task.type === 'VOICE TO TEXT';
+  const [withDataImport] = useState(false);
+
+  const isVoiceJob = task?.type === 'VOICE TO TEXT';
 
   if (isLoading) {
     return <Loading />;
@@ -44,17 +49,26 @@ const Transcripts: NextPageWithLayout = () => {
               setVisible(!visible);
             }}
           >
-            {task.type === 'VOICE TO TEXT'
+            {task?.type === 'VOICE TO TEXT'
               ? t('add-new-transcript')
               : 'Add new Sentence'}
           </Button>
-    
         </div>
-        <AllTranscripts task={task} />
+        <AllTranscripts task={task} fromDataset={false} />
         <CreateTranscript
           visible={visible}
           setVisible={setVisible}
           isVoiceJob={isVoiceJob}
+          withDataImport={withDataImport}
+          audioFileUrl={undefined}
+          task={task}
+          desiredAction={undefined}
+          sentence={undefined}
+        />
+        <ImportFile
+          setVisible={setImportVisible}
+          visible={isUploaderVisible}
+          task={task}
         />
       </div>
     </>
@@ -64,6 +78,9 @@ const Transcripts: NextPageWithLayout = () => {
 export async function getServerSideProps({
   locale,
 }: GetServerSidePropsContext) {
+  const userFiles = readdirSync('./datasets/sentences/fr.csv');
+  console.log(userFiles);
+
   return {
     props: {
       ...(locale ? await serverSideTranslations(locale, ['common']) : {}),

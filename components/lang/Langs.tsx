@@ -49,6 +49,9 @@ const Languages = () => {
                   {t('name')}
                 </th>
                 <th scope="col" className="px-6 py-3">
+                  {t('code')}
+                </th>
+                <th scope="col" className="px-6 py-3">
                   {t('description')}
                 </th>
                 <th scope="col" className="px-6 py-3">
@@ -72,6 +75,8 @@ const Languages = () => {
                       className="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
                     >
                       <td className="px-6 py-3">{team.name}</td>
+                      <td className="px-6 py-3">{team.code}</td>
+
                       <td className="px-6 py-3">{team.description}</td>
                       <td className="px-6 py-3">
                         <Link href={`/lang/${team.name}/tasks`}>

@@ -7,10 +7,10 @@ import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/router';
 import useTask from 'hooks/useTask';
 import AllTranscripts from '@/components/transcripts/Transcripts';
-import { Button } from 'react-daisyui';
 import { TasksTab } from '@/components/tasks';
 import { useState } from 'react';
 import CreateTranscript from '../../../../../components/transcripts/CreateTranscript';
+import AllSentences from '../../../../../components/transcripts/Sentences';
 
 const Transcripts: NextPageWithLayout = () => {
   const { t } = useTranslation('common');
@@ -19,7 +19,11 @@ const Transcripts: NextPageWithLayout = () => {
   const { id } = router.query as { id: string };
   const { isLoading, isError, task } = useTask(id);
   const [visible, setVisible] = useState(false);
-  const isVoiceJob = task.type === 'VOICE TO TEXT';
+  const [fromDatasets, setUseDataset] = useState(true);
+
+  const [withDataImport] = useState(false);
+
+  const isVoiceJob = task?.type === 'VOICE TO TEXT';
   if (isLoading) {
     return <Loading />;
   }
@@ -36,41 +40,44 @@ const Transcripts: NextPageWithLayout = () => {
       <TasksTab activeTab="transcripts" task={task} />
       <div className="flex flex-col space-y-4">
         <div className="flex justify-end mt-4">
-          
-          <div className="join join-vertical lg:join-horizontal">
-          <Button
-            className='btn join-item'
-            variant="outline"
-            color="primary"
-            size="md"
-            onClick={() => {
-              setVisible(!visible);
-            }}
-          >
-            {isVoiceJob ? t('add-new-transcript') : 'Add new Sentence'}
-          </Button>
-          {!isVoiceJob && (
-           <Button
-           className='btn join-item'
-           variant="outline"
-           color="primary"
-           size="md"
-           onClick={() => {
-             setVisible(!visible);
-           }}
-         >
-           {t('import-new-file')}
-         </Button> 
-          )}
- 
-</div>
+          <div className="dropdown">
+            <label tabIndex={0} className="btn m-1">
+              Add New
+            </label>
+            <ul
+              tabIndex={0}
+              className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+            >
+              <li
+                onClick={() => {
+                  setVisible(!visible);
+                }}
+              >
+                <a>Create new sentence</a>
+              </li>
+              <li
+                onClick={() => {
+                  setUseDataset(!fromDatasets);
+                }}
+              >
+                <a>Import From Datasets</a>
+              </li>
+            </ul>
+          </div>
         </div>
-
-        <AllTranscripts task={task} />
+        {isVoiceJob && (
+          <AllTranscripts task={task} fromDataset={fromDatasets} />
+        )}
+        {!isVoiceJob && <AllSentences task={task} fromDataset={fromDatasets} />}
         <CreateTranscript
           visible={visible}
           setVisible={setVisible}
           isVoiceJob={isVoiceJob}
+          withDataImport={withDataImport}
+          audioFileUrl={undefined}
+          task={task}
+          desiredAction={undefined}
+          sentence={undefined}
         />
       </div>
     </>

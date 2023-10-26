@@ -91,7 +91,7 @@ const Tasks = ({ isAdmin }: { isAdmin: boolean }) => {
                         </Link>
                       </td>
                       <td className="px-6 py-3">{task.language}</td>
-                      <td className="px-6 py-3">{task.type}</td>
+                      <td className="px-6 py-3">{task?.type}</td>
 
                       <td className="px-6 py-3">{task.status}</td>
 
