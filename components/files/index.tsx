@@ -39,7 +39,7 @@ const AllFiles = ({ currentTask }: FilesProps) => {
   // Delete File
   const deleteFile = async () => {
     try {
-      await axios.delete(`/api/tasks/${task?.id}/files/${selectedFile}`);
+      await axios.delete(`/api/tasks/${task?.id}/files/${selectedFile?.id}`);
       toast.success(t('file-deleted'));
       mutateTasks();
     } catch (error: any) {
@@ -105,7 +105,7 @@ const AllFiles = ({ currentTask }: FilesProps) => {
                           <input type="checkbox" />
                         </td>
                         <td className="px-6 py-3">{file.url}</td>
-                        <td className="px-6 py-3">{file.contentSize}</td>
+                        <td className="px-6 py-3">{Math.ceil(file.contentSize / 10e6) + `MB`}</td>
 
                         <td className="px-6 py-3">
                           <Badge
@@ -118,7 +118,7 @@ const AllFiles = ({ currentTask }: FilesProps) => {
                             {file.fileFormat}
                           </Badge>
                         </td>
-                        <td className="px-6 py-3"></td>
+                        <td className="px-6 py-3">{new Date(file?.createdAt).toDateString()}</td>
                         <td className="px-6 py-3">
                           <div className="join">
                             <Button

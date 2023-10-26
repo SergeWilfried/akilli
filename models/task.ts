@@ -44,7 +44,7 @@ export async function addFilesToTask(taskId: string, files: []): Promise<Task> {
             data: files.map((file: any) => ({
               url: file?.url,
               fileFormat: file.type,
-              contentSize: file.size,
+              contentSize: file.contentSize,
             })),
           },
         },

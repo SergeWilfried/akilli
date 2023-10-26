@@ -99,16 +99,16 @@ const ImportFile = ({
       url,
       key,
       type: file.type,
+      contentSize: file.size
     };
     setUrls((current) => [...current, staeeb]);
   };
-  function handleChange(e: any) {
+  async function handleChange(e: any) {
     e.preventDefault();
-    console.log('File has been added');
     if (e.target.files && e.target.files[0]) {
       for (let i = 0; i < e.target.files['length']; i++) {
         setFiles((prevState: any) => [...prevState, e.target.files[i]]);
-        handleFileChange(e.target.files[i]);
+        await handleFileChange(e.target.files[i]);
       }
     }
   }
@@ -221,7 +221,7 @@ const ImportFile = ({
             color="primary"
             loading={formik.isSubmitting}
             size="md"
-            disabled={!formik.isValid}
+            disabled={!formik.isValid && urls}
           >
             {t('create-team')}
           </Button>
