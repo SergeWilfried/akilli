@@ -59,7 +59,7 @@ const CreateTranscript = ({
           };
 
           const response = await axios.post<ApiResponse<sentences_detailed>>(
-            `/api/tasks/${task.id}/sentences`,
+            `/api/tasks/${task.id}/transcripts`,
             {
               ...payload,
             }
