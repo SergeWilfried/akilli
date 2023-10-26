@@ -14,9 +14,7 @@ import { Transcript } from '@prisma/client';
 import { uuid } from 'next-s3-upload';
 import {
   TrashIcon,
-  PlusSmallIcon,
   PencilIcon,
-  MicrophoneIcon,
 } from '@heroicons/react/24/outline';
 import CreateTranscript from './CreateTranscript';
 interface AllTranscriptsProps {
@@ -31,15 +29,15 @@ const AllTranscripts = (props: AllTranscriptsProps) => {
   const [askConfirmation, setAskConfirmation] = useState(false);
   const { inView } = useInView();
   const [visible, setVisible] = useState(false);
-  const [confirmTitle, setTitle] = useState(`${t('leave-team')} ${task?.name}`);
-  const [confirmText, setConfimText] = useState(`${t('leave-team')}`);
+  const [confirmTitle] = useState(`${t('leave-team')} ${task?.name}`);
+  const [confirmText] = useState(`${t('leave-team')}`);
   const [selectedSentence, setSelectedSentence] =
     useState<Transcript>();
   const [desiredAction, setDesiredAction] = useState<
     'update' | 'delete' | 'use'
   >('delete');
 
-  const [confirmationMessage, setConfimationMessage] = useState(
+  const [confirmationMessage] = useState(
     `${t('leave-team-confirmation')}`
   );
   const [withDataImport] = useState(false);
