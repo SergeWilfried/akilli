@@ -60,6 +60,7 @@ const Transcripts: NextPageWithLayout = () => {
           setVisible={setVisible}
           isVoiceJob={isVoiceJob}
           withDataImport={withDataImport}
+          audioFileUrl={undefined}
           task={task}
           desiredAction={undefined}
           sentence={undefined}
