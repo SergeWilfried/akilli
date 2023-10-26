@@ -13,6 +13,7 @@ import axios from 'axios';
 import { getAxiosError } from '../../lib/common';
 import React from 'react';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
+import CreateTranscript from '../transcripts/CreateTranscript';
 
 interface FilesProps {
   currentTask: Task;
@@ -105,7 +106,9 @@ const AllFiles = ({ currentTask }: FilesProps) => {
                           <input type="checkbox" />
                         </td>
                         <td className="px-6 py-3">{file.url}</td>
-                        <td className="px-6 py-3">{Math.ceil(file.contentSize / 10e6) + `MB`}</td>
+                        <td className="px-6 py-3">
+                          {Math.ceil(file.contentSize / 10e6) + `MB`}
+                        </td>
 
                         <td className="px-6 py-3">
                           <Badge
@@ -118,7 +121,9 @@ const AllFiles = ({ currentTask }: FilesProps) => {
                             {file.fileFormat}
                           </Badge>
                         </td>
-                        <td className="px-6 py-3">{new Date(file?.createdAt).toDateString()}</td>
+                        <td className="px-6 py-3">
+                          {new Date(file?.createdAt).toDateString()}
+                        </td>
                         <td className="px-6 py-3">
                           <div className="join">
                             <Button
@@ -174,6 +179,16 @@ const AllFiles = ({ currentTask }: FilesProps) => {
           >
             {confirmationMessage}
           </ConfirmationDialog>
+          <CreateTranscript
+            visible={visible}
+            setVisible={setVisible}
+            isVoiceJob={true}
+            withDataImport={false}
+            task={task}
+            audioFileUrl={selectedFile?.url}
+            sentence={undefined}
+            desiredAction={undefined}
+          />
         </>
       )}
     </WithLoadingAndError>

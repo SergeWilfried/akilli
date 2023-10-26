@@ -70,7 +70,7 @@ const ImportFile = ({
         const { data: teamCreated } = response.data;
 
         if (teamCreated) {
-          toast.success(t('transcript-created'));
+          toast.success(t('file-imported'));
           mutateTasks();
           formik.resetForm();
           setVisible(false);
@@ -99,7 +99,7 @@ const ImportFile = ({
       url,
       key,
       type: file.type,
-      contentSize: file.size
+      contentSize: file.size,
     };
     setUrls((current) => [...current, staeeb]);
   };

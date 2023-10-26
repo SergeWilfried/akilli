@@ -68,7 +68,7 @@ const CreateTask = ({
         const { data: teamCreated } = response.data;
 
         if (teamCreated) {
-          toast.success(t('transcript-created'));
+          toast.success(t('task-created'));
           mutateTasks();
           formik.resetForm();
           setVisible(false);

@@ -19,6 +19,7 @@ const CreateTranscript = ({
   isVoiceJob,
   withDataImport,
   task,
+  audioFileUrl,
   sentence,
   desiredAction,
 }: {
@@ -28,6 +29,7 @@ const CreateTranscript = ({
   sentence: sentences_detailed | undefined;
   withDataImport: boolean;
   desiredAction: string | undefined;
+  audioFileUrl: string | undefined;
   setVisible: (visible: boolean) => void;
 }) => {
   const { t } = useTranslation('common');
@@ -38,51 +40,79 @@ const CreateTranscript = ({
   const formik = useFormik<any>({
     initialValues: {
       language: languages?.[0]?.code ?? '',
-      text: sentence?.text,
+      text: sentence ? sentence?.text : '',
       file: '',
     },
     validationSchema: Yup.object().shape({
       text: Yup.string().required('Name is Required'),
-      language: Yup.string().required('Language is Required'),
+      language: sentence ? Yup.string().required('Language is Required') : Yup.string().optional(),
       file: Yup.mixed().optional(),
     }),
     onSubmit: async (values) => {
-      try {
-        if (values.files) {
-          /* empty */
-        }
-        const payload = {
-          language: values.language,
-          text: values.text,
-          taskId: task ? task.id : '',
-          createdAt: new Date(),
-        };
-        let response;
+      if (isVoiceJob && audioFileUrl) {
+        try {
+          const payload = {
+            language: values.language,
+            text: values.text,
+            taskId: task ? task.id : '',
+            createdAt: new Date(),
+          };
 
-        if (desiredAction === 'update') {
-          response = await axios.put<ApiResponse<sentences_detailed>>(
-            `/api/tasks/${task.id}/sentences/${sentence?.sentence_id}`,
+          const response = await axios.post<ApiResponse<sentences_detailed>>(
+            `/api/tasks/${task.id}/sentences`,
             {
               ...payload,
             }
           );
-        }
-        response = await axios.post<ApiResponse<sentences_detailed>>(
-          `/api/tasks/${task.id}/sentences`,
-          {
-            ...payload,
-          }
-        );
-        const { data: teamCreated } = response.data;
+          const { data: teamCreated } = response.data;
 
-        if (teamCreated) {
-          toast.success(t('transcript-created'));
-          mutateTasks();
-          formik.resetForm();
-          setVisible(false);
+          if (teamCreated) {
+            toast.success(t('transcript-created'));
+            mutateTasks();
+            formik.resetForm();
+            setVisible(false);
+          }
+        } catch (error: any) {
+          toast.error(getAxiosError(error));
         }
-      } catch (error: any) {
-        toast.error(getAxiosError(error));
+      } else {
+        try {
+          if (values.files) {
+            /* empty */
+          }
+          const payload = {
+            language: values.language,
+            text: values.text,
+            taskId: task ? task.id : '',
+            createdAt: new Date(),
+          };
+          let response;
+
+          if (desiredAction === 'update') {
+            response = await axios.put<ApiResponse<sentences_detailed>>(
+              `/api/tasks/${task.id}/sentences/${sentence?.sentence_id}`,
+              {
+                ...payload,
+              }
+            );
+          }
+          response = await axios.post<ApiResponse<sentences_detailed>>(
+            `/api/tasks/${task.id}/sentences`,
+            {
+              ...payload,
+            }
+          );
+          const { data: teamCreated } = response.data;
+
+          if (teamCreated) {
+            toast.success(t('sentence-created'));
+            mutateTasks();
+            formik.resetForm();
+            setVisible(false);
+          }
+        } catch (error: any) {
+          toast.error(getAxiosError(error));
+        }
       }
     },
   });
@@ -105,7 +135,7 @@ const CreateTranscript = ({
                 : t('transcribe-sentence-desc')}
             </p>
 
-            {isVoiceJob && (
+            {isVoiceJob && audioFileUrl && (
               <>
                 <audio controls style={{ width: '100%' }}>
                   <source src={url} type="audio/mpeg" />
