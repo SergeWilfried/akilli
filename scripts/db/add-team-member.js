@@ -8,17 +8,21 @@ async function run() {
   try {
     return await prisma.transcriber.upsert({
       create: {
-        teamId: '3993ae8c-1c2d-405c-8231-a60a1587c091',
-        userId: 'c2d36b2e-857e-44a9-8094-1e4c1549a36e',
-        role: 'TRANSCRIBER',
-        email: 'info@boxyhq.io',
+        teamId: 'e9f45b46-20bd-4ccd-ba24-c81067ceadd8',
+        userId: '15504df9-5220-44aa-805d-cccff2e0d773',
+        role: 'ADMIN',
+        email: 'info@bo.ai',
         name: 'Serge OUEDRAOGO',
       },
       where: {
         teamId_userId: {
-          teamId: '3993ae8c-1c2d-405c-8231-a60a1587c091',
-          userId: 'c2d36b2e-857e-44a9-8094-1e4c1549a36e',
+          teamId: 'e9f45b46-20bd-4ccd-ba24-c81067ceadd8',
+          userId: '15504df9-5220-44aa-805d-cccff2e0d773',
         },
+      },
+      update: {
+        email: 'info@bo.ai',
+        name: 'Serge OUEDRAOGO',
       },
     });
   } catch (error) {

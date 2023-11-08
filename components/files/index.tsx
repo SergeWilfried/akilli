@@ -30,7 +30,7 @@ const AllFiles = ({ currentTask }: FilesProps) => {
   const [confirmationMessage] = useState(`${t('leave-team-confirmation')}`);
   const [selectedFile, setSelectedFile] = useState<any | null>(null);
   const [confirmTitle] = useState(`${t('leave-team')} ${task?.name}`);
-  const [confirmText ] = useState(`${t('leave-team')}`);
+  const [confirmText] = useState(`${t('leave-team')}`);
 
   const [desiredAction, setDesiredAction] = useState<
     'update' | 'delete' | 'use'
@@ -170,7 +170,6 @@ const AllFiles = ({ currentTask }: FilesProps) => {
               if (desiredAction === 'delete') {
                 deleteFile();
               }
-          
             }}
             confirmText={confirmText}
           >

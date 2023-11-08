@@ -47,7 +47,7 @@ export default function DragAndDrop(props: DragAndDropProps) {
     inputRef.current.value = '';
     inputRef.current.click();
   }
- 
+
   function removeFile(fileName: any, idx: any) {
     const newArr = [...stateFiles];
     newArr.splice(idx, 1);

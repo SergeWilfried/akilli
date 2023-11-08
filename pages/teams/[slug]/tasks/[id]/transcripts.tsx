@@ -11,6 +11,8 @@ import { TasksTab } from '@/components/tasks';
 import { useState } from 'react';
 import CreateTranscript from '../../../../../components/transcripts/CreateTranscript';
 import AllSentences from '../../../../../components/transcripts/Sentences';
+import { Button } from 'react-daisyui';
+import RecordVoiceTranscript from '../../../../../components/transcripts/RecordVoiceTranscript';
 
 const Transcripts: NextPageWithLayout = () => {
   const { t } = useTranslation('common');
@@ -40,45 +42,51 @@ const Transcripts: NextPageWithLayout = () => {
       <TasksTab activeTab="transcripts" task={task} />
       <div className="flex flex-col space-y-4">
         <div className="flex justify-end mt-4">
-          <div className="dropdown">
-            <label tabIndex={0} className="btn m-1">
-              Add New
-            </label>
-            <ul
-              tabIndex={0}
-              className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+          <div>
+            <Button
+              onClick={() => {
+                setVisible(!visible);
+              }}
+              color="primary"
+              loading={false}
+              active={true}
+              fullWidth
+              size="md"
             >
-              <li
-                onClick={() => {
-                  setVisible(!visible);
-                }}
-              >
-                <a>Create new sentence</a>
-              </li>
-              <li
-                onClick={() => {
-                  setUseDataset(!fromDatasets);
-                }}
-              >
-                <a>Import From Datasets</a>
-              </li>
-            </ul>
+              Add New
+            </Button>
+          </div>
+          <div>
+            <Button
+              onClick={() => {
+                setUseDataset(!fromDatasets);
+              }}
+              color="secondary"
+              loading={false}
+              active={true}
+              fullWidth
+              size="md"
+            >
+              Import
+            </Button>
           </div>
         </div>
         {isVoiceJob && (
           <AllTranscripts task={task} fromDataset={fromDatasets} />
         )}
         {!isVoiceJob && <AllSentences task={task} fromDataset={fromDatasets} />}
-        <CreateTranscript
-          visible={visible}
-          setVisible={setVisible}
-          isVoiceJob={isVoiceJob}
-          withDataImport={withDataImport}
-          audioFileUrl={undefined}
-          task={task}
-          desiredAction={undefined}
-          sentence={undefined}
-        />
+        {!isVoiceJob && (
+          <CreateTranscript
+            visible={visible}
+            setVisible={setVisible}
+            isVoiceJob={isVoiceJob}
+            withDataImport={withDataImport}
+            audioFileUrl={undefined}
+            task={task}
+            desiredAction={undefined}
+            sentence={undefined}
+          />
+        )}
       </div>
     </>
   );

@@ -67,7 +67,7 @@ model Team {
   name         String
   slug         String        @unique
   domain       String?       @unique
-  defaultRole  Role          @default(MEMBER)
+  defaultRole  Role          @default(TRANSCRIBER)
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @default(now())
   apiKeys      ApiKey[]

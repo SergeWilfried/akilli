@@ -12,10 +12,7 @@ import ConfirmationDialog from '../shared/ConfirmationDialog';
 import React from 'react';
 import { Transcript } from '@prisma/client';
 import { uuid } from 'next-s3-upload';
-import {
-  TrashIcon,
-  PencilIcon,
-} from '@heroicons/react/24/outline';
+import { TrashIcon, PencilIcon } from '@heroicons/react/24/outline';
 import CreateTranscript from './CreateTranscript';
 interface AllTranscriptsProps {
   task: Task;
@@ -31,15 +28,12 @@ const AllTranscripts = (props: AllTranscriptsProps) => {
   const [visible, setVisible] = useState(false);
   const [confirmTitle] = useState(`${t('leave-team')} ${task?.name}`);
   const [confirmText] = useState(`${t('leave-team')}`);
-  const [selectedSentence, setSelectedSentence] =
-    useState<Transcript>();
+  const [selectedSentence, setSelectedSentence] = useState<Transcript>();
   const [desiredAction, setDesiredAction] = useState<
     'update' | 'delete' | 'use'
   >('delete');
 
-  const [confirmationMessage] = useState(
-    `${t('leave-team-confirmation')}`
-  );
+  const [confirmationMessage] = useState(`${t('leave-team-confirmation')}`);
   const [withDataImport] = useState(false);
   // 21-25 parse the page and perPage  from router.query
 
@@ -55,14 +49,13 @@ const AllTranscripts = (props: AllTranscriptsProps) => {
   } = useInfiniteQuery(
     'transcripts',
     async ({ pageParam = '' }) => {
-      await new Promise((res) => setTimeout(res, 1000));
+      await new Promise((res) => setTimeout(res, 500));
 
       const res = await axios.get(
         `/api/tasks/transcripts?skip=${4}&limit=${8}&cursor=&lang=${
           task.language
         }` + pageParam
       );
-            console.warn(`transcripts`, res)
 
       return res?.data;
     },
@@ -84,7 +77,6 @@ const AllTranscripts = (props: AllTranscriptsProps) => {
   if (isError) {
     return <Error message={JSON.stringify(error)} />;
   }
-
 
   const leaveTeam = async (task: Task) => {
     try {
@@ -162,58 +154,53 @@ const AllTranscripts = (props: AllTranscriptsProps) => {
                 data.pages.map((task) => {
                   return (
                     <React.Fragment key={task.nextId ?? 'lastPage'}>
-                      {task?.data?.transcripts?.map(
-                        (sentence: Transcript) => (
-                          <tr
-                            key={uuid()}
-                            className="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
-                          >
-                            <td className="px-6 py-3">
-                              {sentence.id}
-                            </td>
+                      {task?.data?.transcripts?.map((sentence: Transcript) => (
+                        <tr
+                          key={uuid()}
+                          className="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
+                        >
+                          <td className="px-6 py-3">{sentence.id}</td>
 
-                            <td className="px-6 py-3">{sentence.text}</td>
-                            <td className="px-6 py-3">
-                              {sentence.lang?.toLocaleUpperCase()}
-                            </td>
+                          <td className="px-6 py-3">{sentence.text}</td>
+                          <td className="px-6 py-3">
+                            {sentence.lang?.toLocaleUpperCase()}
+                          </td>
 
-                            <td className="px-6 py-3">{sentence.username}</td>
+                          <td className="px-6 py-3">{sentence.username}</td>
 
-                            <td className="px-6 py-3">
-                              <div className="join">
-                           
-                                <Button
-                                  variant="outline"
-                                  size="xs"
-                                  shape="circle"
-                                  color="primary"
-                                  onClick={() => {
-                                    setSelectedSentence(sentence);
-                                    setDesiredAction('update');
-                                    setVisible(!visible);
-                                  }}
-                                >
-                                  <PencilIcon />
-                                </Button>
-                          
-                                <Button
-                                  variant="outline"
-                                  size="xs"
-                                  shape="circle"
-                                  color="error"
-                                  onClick={() => {
-                                    setSelectedSentence(sentence);
-                                    setAskConfirmation(true);
-                                    setDesiredAction('delete');
-                                  }}
-                                >
-                                  <TrashIcon />
-                                </Button>
-                              </div>
-                            </td>
-                          </tr>
-                        )
-                      )}
+                          <td className="px-6 py-3">
+                            <div className="join">
+                              <Button
+                                variant="outline"
+                                size="xs"
+                                shape="circle"
+                                color="primary"
+                                onClick={() => {
+                                  setSelectedSentence(sentence);
+                                  setDesiredAction('update');
+                                  setVisible(!visible);
+                                }}
+                              >
+                                <PencilIcon />
+                              </Button>
+
+                              <Button
+                                variant="outline"
+                                size="xs"
+                                shape="circle"
+                                color="error"
+                                onClick={() => {
+                                  setSelectedSentence(sentence);
+                                  setAskConfirmation(true);
+                                  setDesiredAction('delete');
+                                }}
+                              >
+                                <TrashIcon />
+                              </Button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
                     </React.Fragment>
                   );
                 })}

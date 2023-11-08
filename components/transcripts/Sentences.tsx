@@ -15,10 +15,10 @@ import { uuid } from 'next-s3-upload';
 import {
   TrashIcon,
   PlusSmallIcon,
-  PencilIcon,
+  
   MicrophoneIcon,
 } from '@heroicons/react/24/outline';
-import CreateTranscript from './CreateTranscript';
+import RecordVoiceTranscript from './RecordVoiceTranscript';
 interface AllTranscriptsProps {
   task: Task;
   fromDataset: boolean;
@@ -26,7 +26,6 @@ interface AllTranscriptsProps {
 const AllSentences = (props: AllTranscriptsProps) => {
   const { t } = useTranslation('common');
   const { task, fromDataset } = props;
-  const isVoiceJob = task?.type === 'VOICE TO TEXT';
 
   const [askConfirmation, setAskConfirmation] = useState(false);
   const { inView } = useInView();
@@ -36,13 +35,12 @@ const AllSentences = (props: AllTranscriptsProps) => {
   const [selectedSentence, setSelectedSentence] =
     useState<sentences_detailed>();
   const [desiredAction, setDesiredAction] = useState<
-    'update' | 'delete' | 'use'
+    'update' | 'delete' | 'use' | 'record'
   >('delete');
 
   const [confirmationMessage, setConfimationMessage] = useState(
     `${t('leave-team-confirmation')}`
   );
-  const [withDataImport] = useState(false);
   // 21-25 parse the page and perPage  from router.query
 
   // Lines 27-29: Define limit and skip which is used by DummyJSON API for pagination
@@ -65,13 +63,14 @@ const AllSentences = (props: AllTranscriptsProps) => {
           }` + pageParam
         );
         return res?.data;
+      } else {
+        const res = await axios.get(
+          `/api/tasks/sentences?skip=${4}&limit=${8}&cursor=&lang=${
+            task.language
+          }` + pageParam
+        );
+        return res?.data;
       }
-      const res = await axios.get(
-        `/api/tasks/sentences?skip=${4}&limit=${8}&cursor=&lang=${
-          task.language
-        }` + pageParam
-      );
-      return res?.data;
     },
     {
       getNextPageParam: (lastPage) => lastPage.nextId ?? false,
@@ -91,15 +90,7 @@ const AllSentences = (props: AllTranscriptsProps) => {
   if (isError) {
     return <Error message={JSON.stringify(error)} />;
   }
-  // async function useSentenceTemplate(sentence: sentences_detailed) {
-  //   try {
-  //     await axios.post<ApiResponse>(`/api/tasks/${task.id}/sentences/${sentence.sentence_id}`);
-  //     toast.success(t('task-removed-successfully'));
-  //     // mutateTranscripts();
-  //   } catch (error: any) {
-  //     toast.error(getAxiosError(error));
-  //   }
-  // }
+ 
 
   const leaveTeam = async (task: Task) => {
     try {
@@ -196,37 +187,27 @@ const AllSentences = (props: AllTranscriptsProps) => {
 
                             <td className="px-6 py-3">
                               <div className="join">
-                                <Button
-                                  variant="outline"
-                                  size="xs"
-                                  shape="circle"
-                                  color="accent"
-                                  onClick={() => {
-                                    setTitle('Use Template');
-                                    setConfimText('Use Template');
-                                    setConfimationMessage(
-                                      'Add this sentence template in to your project'
-                                    );
-                                    setSelectedSentence(sentence);
-                                    setDesiredAction('use');
-                                    setAskConfirmation(true);
-                                  }}
-                                >
-                                  <PlusSmallIcon />
-                                </Button>
-                                <Button
-                                  variant="outline"
-                                  size="xs"
-                                  shape="circle"
-                                  color="primary"
-                                  onClick={() => {
-                                    setSelectedSentence(sentence);
-                                    setDesiredAction('update');
-                                    setVisible(!visible);
-                                  }}
-                                >
-                                  <PencilIcon />
-                                </Button>
+                                {!fromDataset && (
+                                  <Button
+                                    variant="outline"
+                                    size="xs"
+                                    shape="circle"
+                                    color="accent"
+                                    onClick={() => {
+                                      setTitle('Use Template');
+                                      setConfimText('Use Template');
+                                      setConfimationMessage(
+                                        'Add this sentence template in to your project'
+                                      );
+                                      setSelectedSentence(sentence);
+                                      setDesiredAction('use');
+                                      setAskConfirmation(true);
+                                    }}
+                                  >
+                                    <PlusSmallIcon />
+                                  </Button>
+                                )}
+
                                 <Button
                                   variant="outline"
                                   size="xs"
@@ -234,8 +215,8 @@ const AllSentences = (props: AllTranscriptsProps) => {
                                   color="secondary"
                                   onClick={() => {
                                     setSelectedSentence(sentence);
-                                    setAskConfirmation(true);
-                                    setDesiredAction('delete');
+                                    setDesiredAction('record');
+                                    setVisible(!visible);
                                   }}
                                 >
                                   <MicrophoneIcon />
@@ -276,6 +257,9 @@ const AllSentences = (props: AllTranscriptsProps) => {
           if (desiredAction === 'delete') {
             leaveTeam(task);
           }
+          if (desiredAction === 'record') {
+            leaveTeam(task);
+          }
           if (desiredAction === 'update') {
             updateSentence(task);
           }
@@ -287,15 +271,13 @@ const AllSentences = (props: AllTranscriptsProps) => {
       >
         {confirmationMessage}
       </ConfirmationDialog>
-      <CreateTranscript
+
+      <RecordVoiceTranscript
         visible={visible}
         setVisible={setVisible}
-        isVoiceJob={isVoiceJob}
-        audioFileUrl={undefined}
-        withDataImport={withDataImport}
         task={task}
+        audioFileUrl={undefined}
         sentence={selectedSentence}
-        desiredAction={undefined}
       />
     </>
   );
