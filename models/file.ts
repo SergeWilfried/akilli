@@ -23,7 +23,6 @@ export async function updateFile(
 }
 
 export async function deleteFile(id: string) {
-  console.warn('file id', id);
   return await prisma.file.delete({
     where: { id },
   });

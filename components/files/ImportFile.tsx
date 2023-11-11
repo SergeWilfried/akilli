@@ -26,12 +26,12 @@ const ImportFile = ({
   const { mutateTasks } = useTasks();
   const router = useRouter();
   const [urls, setUrls] = useState<any>([]);
-  const { uploadToS3 } = usePresignedUpload();
+  const { uploadToS3, files, resetFiles } = usePresignedUpload();
   const { data } = useSession();
 
   const [dragActive, setDragActive] = useState<boolean>(false);
   const inputRef = useRef<any>(null);
-  const [files, setFiles] = useState<any>([]);
+  const [stateFiles, setFiles] = useState<any>([]);
   const formik = useFormik<any>({
     initialValues: {
       files: '',
@@ -41,7 +41,7 @@ const ImportFile = ({
     validationSchema: Yup.object().shape({
       files: Yup.array().of(
         Yup.mixed()
-          .required()
+          .optional()
           .test('is-valid-type', 'Not a valid file type', (value) =>
             isValidFileType((value as File)?.name?.toLowerCase(), 'audio')
           )
@@ -72,11 +72,11 @@ const ImportFile = ({
         if (teamCreated) {
           toast.success(t('file-imported'));
           mutateTasks();
-          formik.resetForm();
           setVisible(false);
           router.push(`/teams/akilli/tasks/${task.id}/files`);
         }
       } catch (error: any) {
+        resetFiles();
         toast.error(getAxiosError(error));
       }
     },
@@ -130,6 +130,11 @@ const ImportFile = ({
     setDragActive(false);
   }
 
+  function handleRemove(file: any, idx: any) {
+    removeFile(file?.name, idx);
+    resetFiles();
+  }
+
   function handleDragOver(e: any) {
     e.preventDefault();
     e.stopPropagation();
@@ -143,7 +148,7 @@ const ImportFile = ({
   }
 
   function removeFile(fileName: any, idx: any) {
-    const newArr = [...files];
+    const newArr = [...stateFiles];
     newArr.splice(idx, 1);
     setFiles([]);
     setFiles(newArr);
@@ -198,12 +203,12 @@ const ImportFile = ({
                 <div key={idx} className="flex flex-row space-x-5">
                   <span>{file.name}</span>
                   <span>
-                    File #{idx} progress: {file.progress}%
+                    File Upload In Progress: {Math.round(file.progress)}%
                   </span>
 
                   <span
                     className="text-red-500 cursor-pointer"
-                    onClick={() => removeFile(file.name, idx)}
+                    onClick={() => handleRemove(file.name, idx)}
                   >
                     remove
                   </span>
@@ -221,7 +226,7 @@ const ImportFile = ({
             color="primary"
             loading={formik.isSubmitting}
             size="md"
-            disabled={!formik.isValid && urls}
+            disabled={files.length == 0}
           >
             {t('create-team')}
           </Button>
@@ -229,6 +234,7 @@ const ImportFile = ({
             type="button"
             variant="outline"
             onClick={() => {
+              formik.resetForm();
               setVisible(!visible);
             }}
             size="md"
@@ -243,7 +249,7 @@ const ImportFile = ({
 
 export default ImportFile;
 
-function renameFile(originalFile: File, newName) {
+export function renameFile(originalFile: File, newName) {
   const blob = originalFile.slice(0, originalFile?.size, originalFile?.type);
   return new File([blob], `${newName}.${originalFile?.type}`, {
     type: originalFile?.type,

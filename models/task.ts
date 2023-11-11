@@ -53,6 +53,7 @@ export async function addFilesToTask(taskId: string, files: []): Promise<Task> {
 
     return updatedTask;
   } catch (error) {
+    console.error(error);
     throw new Error('Failed to add files to task');
   }
 }

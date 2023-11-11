@@ -10,12 +10,9 @@ import { Transcript } from '@prisma/client';
 export async function createTranscript(
   taskId: string,
   text: string,
-  audioFileUrl: string
+  fileId: string
 ): Promise<Transcript> {
   try {
-    const file = await prisma.file.findFirst({
-      where: { url: audioFileUrl },
-    });
     const newTranscript = await prisma.transcript.create({
       data: {
         text,
@@ -26,7 +23,7 @@ export async function createTranscript(
         },
         file: {
           connect: {
-            id: file?.id,
+            id: fileId,
           },
         },
       },

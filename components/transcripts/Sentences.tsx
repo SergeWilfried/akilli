@@ -15,7 +15,6 @@ import { uuid } from 'next-s3-upload';
 import {
   TrashIcon,
   PlusSmallIcon,
-  
   MicrophoneIcon,
 } from '@heroicons/react/24/outline';
 import RecordVoiceTranscript from './RecordVoiceTranscript';
@@ -90,7 +89,6 @@ const AllSentences = (props: AllTranscriptsProps) => {
   if (isError) {
     return <Error message={JSON.stringify(error)} />;
   }
- 
 
   const leaveTeam = async (task: Task) => {
     try {
