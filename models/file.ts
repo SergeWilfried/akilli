@@ -2,11 +2,11 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export async function getFile(id: string) {
+export const getFile = async (key: { id: string } | { url: string }) => {
   return await prisma.file.findUnique({
-    where: { id },
+    where: key,
   });
-}
+};
 
 export async function updateFile(
   id: string,

@@ -70,6 +70,7 @@ const AudioRecorder: React.FC<IProps> = ({ onFinish }) => {
 
   return (
     <Button
+      type="button"
       variant="outline"
       size="xs"
       shape="circle"

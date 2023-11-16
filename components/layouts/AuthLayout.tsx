@@ -1,6 +1,7 @@
 import app from '@/lib/app';
 import { useTranslation } from 'next-i18next';
 import Image from 'next/image';
+import profilePic from '../../public/logo.png'
 
 interface AuthLayoutProps {
   children: React.ReactNode;
@@ -20,7 +21,7 @@ export default function AuthLayout({
       <div className="w-full max-w-md space-y-8">
         <div>
           <Image
-            src={app.logoUrl}
+            src={profilePic}
             className="mx-auto h-12 w-auto"
             alt={app.name}
             width={48}

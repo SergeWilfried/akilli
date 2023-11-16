@@ -52,7 +52,7 @@ const RecordVoiceTranscript = ({
     },
     validationSchema: Yup.object().shape({
       text: Yup.string().optional(),
-      language: sentence
+      language: task
         ? Yup.string().optional()
         : Yup.string().optional(),
       file: Yup.mixed().optional(),
@@ -67,7 +67,7 @@ const RecordVoiceTranscript = ({
       );
 
       const { data: fileCreated } = response.data;
-      console.log(`fileCreated`, fileCreated)
+
       if (fileCreated) {
         try {
           const payload = {
@@ -106,6 +106,7 @@ const RecordVoiceTranscript = ({
     const fileName = 'audio-recording';
     const _id = nanoid();
     const file = new File([audio], fileName);
+    formik.setFieldValue('file', file)
     const renamedFile = renameFile(file, _id);
 
     const { url, key } = await uploadToS3(renamedFile, {

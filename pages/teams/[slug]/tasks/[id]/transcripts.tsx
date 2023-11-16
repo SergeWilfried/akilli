@@ -12,7 +12,6 @@ import { useState } from 'react';
 import CreateTranscript from '../../../../../components/transcripts/CreateTranscript';
 import AllSentences from '../../../../../components/transcripts/Sentences';
 import { Button } from 'react-daisyui';
-import RecordVoiceTranscript from '../../../../../components/transcripts/RecordVoiceTranscript';
 
 const Transcripts: NextPageWithLayout = () => {
   const { t } = useTranslation('common');
@@ -43,6 +42,8 @@ const Transcripts: NextPageWithLayout = () => {
       <div className="flex flex-col space-y-4">
         <div className="flex justify-end mt-4">
           <div>
+       
+            {!isVoiceJob && 
             <Button
               onClick={() => {
                 setVisible(!visible);
@@ -54,9 +55,10 @@ const Transcripts: NextPageWithLayout = () => {
               size="md"
             >
               Add New
-            </Button>
+            </Button>}
           </div>
           <div>
+            {!isVoiceJob && 
             <Button
               onClick={() => {
                 setUseDataset(!fromDatasets);
@@ -68,7 +70,8 @@ const Transcripts: NextPageWithLayout = () => {
               size="md"
             >
               Import
-            </Button>
+            </Button>}
+            
           </div>
         </div>
         {isVoiceJob && (

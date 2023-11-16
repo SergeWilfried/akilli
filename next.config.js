@@ -5,7 +5,7 @@ const { i18n } = require('./next-i18next.config');
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['akilli.ai'],
+    domains: ['akilli-eta.vercel.app'],
   },
   i18n,
   async redirects() {

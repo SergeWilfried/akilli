@@ -165,15 +165,17 @@ model Task {
 
 model File {
   id          String       @id @default(uuid())
-  url         String
+  url         String       @unique  
   fileFormat  String
   contentSize Int?
-  pathname    String?
+  pathname    String?      @unique
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
   taskId      String?
   task        Task?        @relation(fields: [taskId], references: [id])
-  Transcript  Transcript[]
+  transcript  Transcript[]
+
+  @@index([url, pathname])
 }
 
 model Payment {

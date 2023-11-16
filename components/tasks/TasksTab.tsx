@@ -21,7 +21,7 @@ const TasksTab = (props: TasksTabProps) => {
     },
   ];
   navigations.push({
-    name: 'Files',
+    name: task?.type === 'VOICE TO TEXT' ? 'Audio' : 'Transcripts',
     href: `/teams/${teamSlug}/tasks/${task.id}/files`,
     active: activeTab === 'files',
     icon: KeyIcon,

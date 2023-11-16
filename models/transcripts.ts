@@ -10,7 +10,8 @@ import { Transcript } from '@prisma/client';
 export async function createTranscript(
   taskId: string,
   text: string,
-  fileId: string
+  fileId: string,
+  lang: string
 ): Promise<Transcript> {
   try {
     const newTranscript = await prisma.transcript.create({
@@ -26,6 +27,7 @@ export async function createTranscript(
             id: fileId,
           },
         },
+        lang,
       },
     });
     return newTranscript;
