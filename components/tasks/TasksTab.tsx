@@ -20,25 +20,45 @@ const TasksTab = (props: TasksTabProps) => {
       icon: Cog6ToothIcon,
     },
   ];
-  navigations.push({
-    name: task?.type === 'VOICE TO TEXT' ? 'Audio' : 'Transcripts',
-    href: `/teams/${teamSlug}/tasks/${task.id}/files`,
-    active: activeTab === 'files',
-    icon: KeyIcon,
-  });
+  if(task?.type === 'VOICE TO TEXT' ) {
+    navigations.push({
+      name: task?.type === 'VOICE TO TEXT' ? 'Audio' : 'Transcripts',
+      href: `/teams/${teamSlug}/tasks/${task.id}/files`,
+      active: activeTab === 'files',
+      icon: KeyIcon,
+    });
+    
+    navigations.push({
+      name: task?.type === 'VOICE TO TEXT' ? 'Transcripts' : 'Sentences',
+      href: `/teams/${teamSlug}/tasks/${task.id}/transcripts?skip=1&limit=8`,
+      active: activeTab === 'transcripts',
+      icon: KeyIcon,
+    });
+  
+  
+  } else {
+    navigations.push({
+      name: task?.type === 'VOICE TO TEXT' ? 'Transcripts' : 'Sentences',
+      href: `/teams/${teamSlug}/tasks/${task.id}/transcripts?skip=1&limit=8`,
+      active: activeTab === 'transcripts',
+      icon: KeyIcon,
+    });
+
+    navigations.push({
+      name: task?.type === 'VOICE TO TEXT' ? 'Audio' : 'Transcripts',
+      href: `/teams/${teamSlug}/tasks/${task.id}/files`,
+      active: activeTab === 'files',
+      icon: KeyIcon,
+    });
+   
+  }
+
   navigations.push({
     name: 'Transcribers',
     href: `/teams/${teamSlug}/tasks/${task.id}/transcribers`,
     active: activeTab === 'transcribers',
     icon: KeyIcon,
   });
-  navigations.push({
-    name: task?.type === 'VOICE TO TEXT' ? 'Transcripts' : 'Sentences',
-    href: `/teams/${teamSlug}/tasks/${task.id}/transcripts?skip=1&limit=8`,
-    active: activeTab === 'transcripts',
-    icon: KeyIcon,
-  });
-
   return (
     <div className="flex flex-col">
       <h2 className="text-xl font-semibold mb-2">

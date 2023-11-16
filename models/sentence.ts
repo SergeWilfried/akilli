@@ -90,21 +90,15 @@ export async function getAllSentences(
   lang: string
 ) {
   try {
-    const cursorObj =
-      cursor === ''
-        ? undefined
-        : { sentence_id: parseInt(cursor as string, 10) };
-
     if (taskId) {
       const [sentences] = await prisma.$transaction([
         prisma.sentences_detailed.findMany({
-          where: { taskId: taskId, lang: lang.toLocaleLowerCase() },
+          where: { taskId: taskId, lang: lang?.toLocaleLowerCase() },
           take: limit,
           skip: cursor !== '' ? 1 : 0,
-          cursor: cursorObj,
         }),
         prisma.sentences_detailed.count({
-          where: { taskId: taskId, lang: lang.toLocaleLowerCase() },
+          where: { taskId: taskId, lang: lang?.toLocaleLowerCase() },
         }),
       ]);
 
@@ -119,14 +113,13 @@ export async function getAllSentences(
       const [sentences] = await prisma.$transaction([
         prisma.sentences_detailed.findMany({
           where: {
-            lang: lang.toLocaleLowerCase(),
+            lang: lang?.toLocaleLowerCase(),
           },
           take: limit,
           skip: cursor !== '' ? 1 : 0,
-          cursor: cursorObj,
         }),
         prisma.sentences_detailed.count({
-          where: { lang: lang.toLocaleLowerCase() },
+          where: { lang: lang?.toLocaleLowerCase() },
         }),
       ]);
 

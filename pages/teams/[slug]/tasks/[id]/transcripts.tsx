@@ -58,19 +58,7 @@ const Transcripts: NextPageWithLayout = () => {
             </Button>}
           </div>
           <div>
-            {!isVoiceJob && 
-            <Button
-              onClick={() => {
-                setUseDataset(!fromDatasets);
-              }}
-              color="secondary"
-              loading={false}
-              active={true}
-              fullWidth
-              size="md"
-            >
-              Import
-            </Button>}
+           
             
           </div>
         </div>

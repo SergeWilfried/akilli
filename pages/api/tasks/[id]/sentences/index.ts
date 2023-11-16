@@ -41,7 +41,7 @@ export default async function handler(
 }
 
 const handleGET = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { id, skip, limit, cursor, lang } = req.query as {
+  const { skip, limit, cursor, lang } = req.query as {
     id: any;
     skip: string;
     limit: string;
@@ -49,7 +49,7 @@ const handleGET = async (req: NextApiRequest, res: NextApiResponse) => {
     lang: string;
   };
   const transcripts = await getAllSentences(
-    id,
+    undefined,
     Number(skip),
     Number(limit),
     cursor,

@@ -75,9 +75,10 @@ const RecordVoiceTranscript = ({
             text: values.text,
             fileId: fileCreated?.id,
             taskId: task ? task.id : '',
+            audioFileUrl: urls,
             createdAt: new Date(),
           };
-
+        
           const response = await axios.post<ApiResponse<any>>(
             `/api/tasks/${task.id}/transcripts`,
             {
@@ -189,7 +190,7 @@ const RecordVoiceTranscript = ({
             size="md"
             disabled={!formik.isValid}
           >
-            {sentence ? 'Update Sentence' : 'Add new Sentence'}
+           Save Transcription
           </Button>
 
           <Button

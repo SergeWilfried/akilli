@@ -2,12 +2,10 @@ import { Card, Error, Loading } from '@/components/shared';
 import { getAxiosError } from '@/lib/common';
 import axios from 'axios';
 import { useTranslation } from 'next-i18next';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Button } from 'react-daisyui';
 import toast from 'react-hot-toast';
 import { ApiResponse, Task } from 'types';
-import { useInfiniteQuery } from 'react-query';
-import { useInView } from 'react-intersection-observer';
 import ConfirmationDialog from '../shared/ConfirmationDialog';
 import React from 'react';
 import { sentences_detailed } from '@prisma/client';
@@ -18,6 +16,7 @@ import {
   MicrophoneIcon,
 } from '@heroicons/react/24/outline';
 import RecordVoiceTranscript from './RecordVoiceTranscript';
+import useSentences from '../../hooks/useSentences';
 interface AllTranscriptsProps {
   task: Task;
   fromDataset: boolean;
@@ -27,12 +26,13 @@ const AllSentences = (props: AllTranscriptsProps) => {
   const { task, fromDataset } = props;
 
   const [askConfirmation, setAskConfirmation] = useState(false);
-  const { inView } = useInView();
+
   const [visible, setVisible] = useState(false);
   const [confirmTitle, setTitle] = useState(`${t('leave-team')} ${task?.name}`);
   const [confirmText, setConfimText] = useState(`${t('leave-team')}`);
   const [selectedSentence, setSelectedSentence] =
     useState<sentences_detailed>();
+    const {isLoading, isError, transcripts } = useSentences(task ? task.id! : '','4','8', task?.language);
   const [desiredAction, setDesiredAction] = useState<
     'update' | 'delete' | 'use' | 'record'
   >('delete');
@@ -42,52 +42,16 @@ const AllSentences = (props: AllTranscriptsProps) => {
   );
   // 21-25 parse the page and perPage  from router.query
 
-  // Lines 27-29: Define limit and skip which is used by DummyJSON API for pagination
-  const {
-    isLoading,
-    isError,
-    data,
-    error,
-    isFetchingNextPage,
-    fetchNextPage,
-    hasNextPage,
-  } = useInfiniteQuery(
-    'sentences',
-    async ({ pageParam = '' }) => {
-      await new Promise((res) => setTimeout(res, 1000));
-      if (fromDataset) {
-        const res = await axios.get(
-          `/api/tasks/${task?.id}/sentences?skip=${4}&limit=${8}&cursor=&lang=${
-            task.language
-          }` + pageParam
-        );
-        return res?.data;
-      } else {
-        const res = await axios.get(
-          `/api/tasks/sentences?skip=${4}&limit=${8}&cursor=&lang=${
-            task.language
-          }` + pageParam
-        );
-        return res?.data;
-      }
-    },
-    {
-      getNextPageParam: (lastPage) => lastPage.nextId ?? false,
-    }
-  );
+  
 
-  useEffect(() => {
-    if (inView && hasNextPage) {
-      fetchNextPage();
-    }
-  }, [fetchNextPage, hasNextPage, inView]);
+  
 
   if (isLoading) {
     return <Loading />;
   }
 
   if (isError) {
-    return <Error message={JSON.stringify(error)} />;
+    return <Error message='Something bad happened' />;
   }
 
   const leaveTeam = async (task: Task) => {
@@ -129,6 +93,9 @@ const AllSentences = (props: AllTranscriptsProps) => {
     }
   };
 
+
+
+
   return (
     <>
       <Card>
@@ -162,26 +129,24 @@ const AllSentences = (props: AllTranscriptsProps) => {
               </tr>
             </thead>
             <tbody>
-              {data &&
-                data.pages.map((task) => {
+              {transcripts &&
+                transcripts.map((task) => {
                   return (
-                    <React.Fragment key={task.nextId ?? 'lastPage'}>
-                      {task?.data?.sentences?.map(
-                        (sentence: sentences_detailed) => (
+                    <React.Fragment key={task.sentence_id }>
                           <tr
                             key={uuid()}
                             className="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
                           >
                             <td className="px-6 py-3">
-                              {sentence.sentence_id}
+                              {task.sentence_id}
                             </td>
 
-                            <td className="px-6 py-3">{sentence.text}</td>
+                            <td className="px-6 py-3">{task.text}</td>
                             <td className="px-6 py-3">
-                              {sentence.lang?.toLocaleUpperCase()}
+                              {task.lang?.toLocaleUpperCase()}
                             </td>
 
-                            <td className="px-6 py-3">{sentence.username}</td>
+                            <td className="px-6 py-3">{task.username}</td>
 
                             <td className="px-6 py-3">
                               <div className="join">
@@ -197,7 +162,7 @@ const AllSentences = (props: AllTranscriptsProps) => {
                                       setConfimationMessage(
                                         'Add this sentence template in to your project'
                                       );
-                                      setSelectedSentence(sentence);
+                                      setSelectedSentence(task);
                                       setDesiredAction('use');
                                       setAskConfirmation(true);
                                     }}
@@ -212,7 +177,7 @@ const AllSentences = (props: AllTranscriptsProps) => {
                                   shape="circle"
                                   color="secondary"
                                   onClick={() => {
-                                    setSelectedSentence(sentence);
+                                    setSelectedSentence(task);
                                     setDesiredAction('record');
                                     setVisible(!visible);
                                   }}
@@ -225,7 +190,7 @@ const AllSentences = (props: AllTranscriptsProps) => {
                                   shape="circle"
                                   color="error"
                                   onClick={() => {
-                                    setSelectedSentence(sentence);
+                                    setSelectedSentence(task);
                                     setAskConfirmation(true);
                                     setDesiredAction('delete');
                                   }}
@@ -235,14 +200,12 @@ const AllSentences = (props: AllTranscriptsProps) => {
                               </div>
                             </td>
                           </tr>
-                        )
-                      )}
+                      
+                      
                     </React.Fragment>
                   );
                 })}
-              {isFetchingNextPage ? (
-                <div className="loading">Loading...</div>
-              ) : null}
+             
             </tbody>
           </table>
         </Card.Body>

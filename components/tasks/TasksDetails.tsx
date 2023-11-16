@@ -6,19 +6,17 @@ import { useFormik } from 'formik';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { Button } from 'react-daisyui';
+import { Button, Input } from 'react-daisyui';
 import toast from 'react-hot-toast';
 import { type ApiResponse } from 'types';
 import * as Yup from 'yup';
 
 import { AccessControl } from '../shared/AccessControl';
-import useLanguages from '../../hooks/useLanguages';
 import { TaskStatus, tasksType } from '../../lib/permissions';
 
 const TasksDetails = ({ task }: { task: Task }) => {
   const router = useRouter();
   const { t } = useTranslation('common');
-  const { languages } = useLanguages();
 
   const formik = useFormik({
     initialValues: {
@@ -110,21 +108,14 @@ const TasksDetails = ({ task }: { task: Task }) => {
                   </option>
                 ))}
               </select>
-              <select
-                name="language"
-                className="select-bordered select flex-grow"
-                value={formik.values.language ? formik.values.language : ''}
-                onChange={formik.handleChange}
-              >
-                <option value="" disabled>
-                  {t('select-language')}
-                </option>
-                {languages?.map((language) => (
-                  <option key={language.id} value={language.id}>
-                    {language.name}
-                  </option>
-                ))}
-              </select>
+                <Input
+                  name="language"
+                  placeholder={t('task-name')}
+                  value={formik.values.language.toUpperCase()}
+                  onChange={formik.handleChange}
+                />
+
+           
             </div>
           </Card.Body>
           <AccessControl resource="task" actions={['update']}>
