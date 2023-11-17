@@ -43,7 +43,7 @@ const handlePOST = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const handleGET = async (req: NextApiRequest, res: NextApiResponse) => {
   const { id } = JSON.parse(req.body) as { id: string };
-  const file = getFile(id);
+  const file = getFile({ id: id });
   res.status(200).json({ data: file });
 };
 
