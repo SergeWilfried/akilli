@@ -18,7 +18,7 @@ const Transcripts: NextPageWithLayout = () => {
   const router = useRouter();
 
   const { id } = router.query as { id: string };
-  const { isLoading, isError, task } = useTask(id);
+  const { isLoading, isError, task, mutateTasks } = useTask(id);
   const [visible, setVisible] = useState(false);
   const [fromDatasets] = useState(true);
 
@@ -35,6 +35,10 @@ const Transcripts: NextPageWithLayout = () => {
 
   if (!task) {
     return <Error message={t('team-not-found')} />;
+  }
+
+  function handleTranscriptCreated() {
+    mutateTasks()
   }
   return (
     <>
@@ -76,6 +80,7 @@ const Transcripts: NextPageWithLayout = () => {
             task={task}
             desiredAction={undefined}
             sentence={undefined}
+           onConfirm={handleTranscriptCreated}
           />
         )}
       </div>

@@ -31,6 +31,11 @@ const AllFiles = ({ currentTask }: FilesProps) => {
   const [selectedFile, setSelectedFile] = useState<any | null>(null);
   const [confirmTitle] = useState(`${t('leave-team')} ${task?.name}`);
   const [confirmText] = useState(`${t('leave-team')}`);
+  // Refresh UI when a new file is added
+  const handleNewFileAdded = () => {
+    // Add logic to refresh UI here
+    mutateTasks();
+  };
 
   const [desiredAction, setDesiredAction] = useState<
     'update' | 'delete' | 'use'
@@ -184,6 +189,10 @@ const AllFiles = ({ currentTask }: FilesProps) => {
             audioFileUrl={selectedFile?.url}
             sentence={undefined}
             desiredAction={undefined}
+            onConfirm={() => {
+              handleNewFileAdded();
+              
+            }}
           />
         </>
       )}

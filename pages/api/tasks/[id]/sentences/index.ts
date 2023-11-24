@@ -65,7 +65,7 @@ const handlePUT = async (req: NextApiRequest, res: NextApiResponse) => {
   const { id } = req.query as { id: string };
   const { taskId, text } = req.body as { taskId: string; text: string };
 
-  await updateSentence(Number(id), text, taskId);
+  await updateSentence(id, text, taskId);
   res.status(200).json({ data: {} });
 };
 

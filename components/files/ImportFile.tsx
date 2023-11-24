@@ -83,7 +83,8 @@ const ImportFile = ({
   });
   const handleFileChange = async (file: File) => {
     const _id = nanoid();
-    const renamedFile = renameFile(file, _id);
+    const newname = `${_id}.${file.name.split('.').pop()}`;
+    const renamedFile = renameFile(file, newname);
     const { url, key } = await uploadToS3(renamedFile, {
       endpoint: {
         request: {
@@ -251,7 +252,8 @@ export default ImportFile;
 
 export function renameFile(originalFile: File, newName) {
   const blob = originalFile.slice(0, originalFile?.size, originalFile?.type);
-  return new File([blob], `${newName}.${originalFile?.type}`, {
+  console.warn(`originalFile type`, originalFile?.type)
+  return new File([blob], `${newName}`, {
     type: originalFile?.type,
   });
 }

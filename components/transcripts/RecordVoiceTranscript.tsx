@@ -66,16 +66,16 @@ const RecordVoiceTranscript = ({
         }
       );
 
-      const { data: fileCreated } = response.data;
-
-      if (fileCreated) {
+      const data  = response.data;
+      const recentFile = data?.data[0]
+      console.warn(`fILE CREATED`, recentFile)
+      if (data) {
         try {
           const payload = {
             language: values.language,
             text: values.text,
-            fileId: fileCreated?.id,
             taskId: task ? task.id : '',
-            audioFileUrl: urls,
+            fileId: recentFile ? recentFile?.id: '',
             createdAt: new Date(),
           };
         
@@ -104,11 +104,13 @@ const RecordVoiceTranscript = ({
 
   const onFinish = async ({ id, audio }: IOnFinish) => {
     setMessages((prevMessages) => [...prevMessages, { id, audio }]);
-    const fileName = 'audio-recording';
+    const fileName = 'audio-recording.wav';
     const _id = nanoid();
     const file = new File([audio], fileName);
     formik.setFieldValue('file', file)
-    const renamedFile = renameFile(file, _id);
+    const newname = `${_id}.${file.name.split('.').pop()}`;
+
+    const renamedFile = renameFile(file, newname);
 
     const { url, key } = await uploadToS3(renamedFile, {
       endpoint: {

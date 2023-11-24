@@ -135,6 +135,9 @@ const AllTranscripts = (props: AllTranscriptsProps) => {
                   {t('id')}
                 </th>
                 <th scope="col" className="px-6 py-3">
+                  {t('username')}
+                </th>
+                <th scope="col" className="px-6 py-3">
                   {t('text')}
                 </th>
                 <th scope="col" className="px-6 py-3">
@@ -142,7 +145,7 @@ const AllTranscripts = (props: AllTranscriptsProps) => {
                 </th>
 
                 <th scope="col" className="px-6 py-3">
-                  {t('username')}
+                  {t('created-at')}
                 </th>
                 <th scope="col" className="px-6 py-3">
                   {t('actions')}
@@ -160,13 +163,13 @@ const AllTranscripts = (props: AllTranscriptsProps) => {
                           className="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
                         >
                           <td className="px-6 py-3">{sentence.id}</td>
-
+                          <td className="px-6 py-3">{sentence?.username}</td>
                           <td className="px-6 py-3">{sentence.text}</td>
                           <td className="px-6 py-3">
                             {sentence.lang?.toLocaleUpperCase()}
                           </td>
 
-                          <td className="px-6 py-3">{sentence.username}</td>
+                          <td className="px-6 py-3">{new Date(sentence.createdAt).toDateString()}</td>
 
                           <td className="px-6 py-3">
                             <div className="join">

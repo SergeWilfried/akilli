@@ -10,6 +10,7 @@ import { sentences_detailed } from '@prisma/client';
 export async function createSentence(
   taskId: string,
   text: string,
+  username: string,
   languageCode: string
 ): Promise<any> {
   try {
@@ -17,6 +18,7 @@ export async function createSentence(
       data: {
         text,
         lang: languageCode,
+        username,
         task: {
           connect: {
             id: taskId,
@@ -38,7 +40,7 @@ export async function createSentence(
  * @returns the updated sentence
  */
 export async function updateSentence(
-  sentenceId: number,
+  sentenceId: string,
   text: string,
   taskId: string | undefined
 ): Promise<sentences_detailed> {
@@ -62,9 +64,10 @@ export async function updateSentence(
  * @returns the deleted sentence
  */
 export async function deleteSentence(
-  sentenceId?: number
+  sentenceId: string
 ): Promise<sentences_detailed> {
   try {
+    console.warn(`sentence id`, sentenceId);
     const deletedSentence = await prisma.sentences_detailed.delete({
       where: { sentence_id: sentenceId },
       // include: { task: true },
@@ -145,7 +148,7 @@ export async function getAllSentences(
  */
 export async function getSentence(
   taskId: string,
-  sentenceId: number
+  sentenceId: string
 ): Promise<sentences_detailed> {
   try {
     const sentence = await prisma.sentences_detailed.findUnique({

@@ -214,7 +214,7 @@ model Transcript {
 }
 
 model sentences_detailed {
-  sentence_id        Int       @id @default(autoincrement())
+  sentence_id        String   @id @default(uuid())
   lang               String?   @db.VarChar(4)
   text               String?   @db.VarChar(1500)
   username           String?   @db.VarChar(20)

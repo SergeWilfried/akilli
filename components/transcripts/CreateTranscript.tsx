@@ -21,19 +21,20 @@ const CreateTranscript = ({
   audioFileUrl,
   sentence,
   desiredAction,
+  onConfirm,
 }: {
   visible: boolean;
   isVoiceJob: boolean;
   task: Task;
   sentence: sentences_detailed | undefined;
   withDataImport: boolean;
+  onConfirm: () => void | Promise<any>;
   desiredAction: string | undefined;
   audioFileUrl: string | undefined;
   setVisible: (visible: boolean) => void;
 }) => {
   const { t } = useTranslation('common');
   const { mutateTasks } = useTasks();
-  const url = 'https://';
   const formik = useFormik<any>({
     initialValues: {
       language: task?.language ?? '',
@@ -110,6 +111,7 @@ const CreateTranscript = ({
             formik.resetForm();
             setVisible(false);
           }
+          onConfirm();
         } catch (error: any) {
           toast.error(getAxiosError(error));
         }
@@ -138,7 +140,7 @@ const CreateTranscript = ({
             {isVoiceJob && audioFileUrl && (
               <>
                 <audio controls style={{ width: '100%' }}>
-                  <source src={url} type="audio/mpeg" />
+                  <source src={audioFileUrl} type="audio/mpeg" />
                   {t('browser-not-supported')}
                 </audio>
               </>

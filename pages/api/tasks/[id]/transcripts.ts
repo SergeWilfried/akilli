@@ -5,7 +5,6 @@ import {
   deleteTranscript,
   getAllTranscripts,
 } from '../../../../models/transcripts';
-import { getFile } from '../../../../models/file';
 
 export default async function handler(
   req: NextApiRequest,
@@ -78,16 +77,16 @@ const handleDELETE = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const handlePOST = async (req: NextApiRequest, res: NextApiResponse) => {
   const { id } = req.query as { id: string };
-  const { text, audioFileUrl, language } = req.body as {
+  const { text, fileId, language } = req.body as {
     text: string;
     taskId: string;
     language: string;
     userId: string;
-    audioFileUrl: string;
+    fileId: string;
   };
-  const file = await getFile({ url: audioFileUrl });
-  if (file) {
-    const transcript = await createTranscript(id, text, file?.id, language);
+  console.warn('file Id', fileId);
+  if (fileId) {
+    const transcript = await createTranscript(id, text, fileId, language);
     res.status(200).json({ data: transcript });
   } else {
     res.status(400).json({ data: 'File not found' });

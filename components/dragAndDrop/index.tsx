@@ -4,7 +4,7 @@ import { useState } from 'react';
 import SimpleProgressBar from '../shared/SimpleProgressBar';
 import { usePresignedUpload } from 'next-s3-upload';
 import { useSession } from 'next-auth/react';
-
+import { renameFile } from '../files/ImportFile';
 interface DragAndDropProps {
   inputRef: any;
   fields: any;
@@ -25,8 +25,11 @@ export default function DragAndDrop(props: DragAndDropProps) {
     if (e.target.files && e.target.files[0]) {
       for (let i = 0; i < e.target.files['length']; i++) {
         setFiles((prevState: any) => [...prevState, e.target.files[i]]);
+        const file = e.target.files[i];
         const date = new Date().toISOString();
-        const renamedFile = renameFile(e.target.files[i], date);
+        const newname = `${date}.${file.name.split('.').pop()}`;
+
+        const renamedFile = renameFile(file, newname);
         const { url } = await uploadToS3(renamedFile, {
           endpoint: {
             request: {
@@ -103,12 +106,4 @@ export default function DragAndDrop(props: DragAndDropProps) {
       </div>
     </div>
   );
-}
-
-function renameFile(originalFile: File, newName) {
-  const blob = originalFile.slice(0, originalFile?.size, originalFile?.type);
-  const fileExtension = originalFile?.type === 'audio/wav' ? 'wav' : 'mp3';
-  return new File([blob], `${newName}.${fileExtension}`, {
-    type: originalFile?.type,
-  });
 }

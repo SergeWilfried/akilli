@@ -29,29 +29,39 @@ export async function createTask(transcript: any) {
     throw new Error('Failed to create new task');
   }
 }
-export async function addFilesToTask(taskId: string, files: []): Promise<Task> {
+export async function addFilesToTask(taskId: string, files: []): Promise<any> {
   try {
     const task = await prisma.task.findUnique({ where: { id: taskId } });
     if (!task) {
       throw new Error('Task not found');
     }
-
-    const updatedTask = await prisma.task.update({
-      where: { id: taskId },
-      data: {
-        files: {
-          createMany: {
-            data: files.map((file: any) => ({
-              url: file?.url,
-              fileFormat: file.type,
-              contentSize: file.contentSize,
-            })),
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [updatedFiles, storedFiles] = await prisma.$transaction([
+      prisma.task.update({
+        where: { id: taskId },
+        data: {
+          files: {
+            createMany: {
+              data: files.map((file: any) => ({
+                url: file?.url,
+                fileFormat: file.type,
+                contentSize: file.contentSize,
+              })),
+            },
           },
         },
-      },
-    });
+      }),
+      prisma.file.findMany({
+        where: {
+          taskId,
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+      }),
+    ]);
 
-    return updatedTask;
+    return storedFiles;
   } catch (error) {
     console.error(error);
     throw new Error('Failed to add files to task');
