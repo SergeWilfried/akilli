@@ -10,7 +10,6 @@ import AllTranscripts from '@/components/transcripts/Transcripts';
 import { Button } from 'react-daisyui';
 import { useState } from 'react';
 import CreateTranscript from '../../../components/transcripts/CreateTranscript';
-import { readdirSync } from 'fs';
 import ImportFile from '../../../components/files/ImportFile';
 
 const Transcripts: NextPageWithLayout = () => {
@@ -82,8 +81,6 @@ const Transcripts: NextPageWithLayout = () => {
 export async function getServerSideProps({
   locale,
 }: GetServerSidePropsContext) {
-  const userFiles = readdirSync('./datasets/sentences/fr.csv');
-  console.log(userFiles);
 
   return {
     props: {

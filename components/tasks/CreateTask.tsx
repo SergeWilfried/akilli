@@ -103,7 +103,6 @@ const CreateTask = ({
                 value={formik.values.language}
                 onChange={(event) => {
                   formik.handleChange(event);
-                  console.log('language', event.currentTarget);
                 }}
                 required
               >
@@ -122,7 +121,6 @@ const CreateTask = ({
                 value={formik.values.type}
                 onChange={(event) => {
                   formik.handleChange(event);
-                  console.log('type', event.currentTarget);
                 }}
                 required
               >

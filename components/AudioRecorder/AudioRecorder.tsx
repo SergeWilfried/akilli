@@ -26,7 +26,7 @@ const AudioRecorder: React.FC<IProps> = ({ onFinish }) => {
       setVoiceRecorder(mediaRecorder);
       setIsRecording(true);
     } catch (e) {
-      console.log("User didn't allowed us to access the microphone.");
+      throw new Error("Enable microphone access");
     }
   };
 

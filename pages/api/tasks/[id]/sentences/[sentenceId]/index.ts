@@ -42,7 +42,6 @@ const handlePUT = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const handleDELETE = async (req: NextApiRequest, res: NextApiResponse) => {
   const { sentenceId } = req.query as { sentenceId: string };
-  console.log('sentences id ', sentenceId);
   await deleteSentence(sentenceId);
 
   res.status(200).json({ data: {} });

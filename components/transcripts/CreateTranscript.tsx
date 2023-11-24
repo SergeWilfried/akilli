@@ -66,7 +66,6 @@ const CreateTranscript = ({
             }
           );
           const { data: teamCreated } = response.data;
-          console.log(`transcript`, teamCreated);
           if (teamCreated) {
             toast.success(t('transcript-created'));
             mutateTasks();

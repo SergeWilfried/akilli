@@ -35,6 +35,7 @@ const AllTranscripts = (props: AllTranscriptsProps) => {
 
   const [confirmationMessage] = useState(`${t('leave-team-confirmation')}`);
   const [withDataImport] = useState(false);
+  
   // 21-25 parse the page and perPage  from router.query
 
   // Lines 27-29: Define limit and skip which is used by DummyJSON API for pagination
@@ -242,6 +243,7 @@ const AllTranscripts = (props: AllTranscriptsProps) => {
         task={task}
         sentence={undefined}
         desiredAction={undefined}
+        onConfirm={fetchNextPage}
       />
     </>
   );

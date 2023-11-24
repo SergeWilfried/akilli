@@ -38,7 +38,7 @@ export default async function handler(
 
 // Signup the user
 const handlePOST = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { name, email, password, mobileNumber, country, team } = req.body;
+  const { name, email, password, mobileNumber, country } = req.body;
 
   const existingUser = await getUser({ email });
 
@@ -52,7 +52,6 @@ const handlePOST = async (req: NextApiRequest, res: NextApiResponse) => {
       `We currently only accept work email addresses for sign-up. Please use your work email to create an account. If you don't have a work email, feel free to contact our support team for assistance.`
     );
   }
-  console.log(team);
 
   const user = await createUser({
     name,
